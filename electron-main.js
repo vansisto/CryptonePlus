@@ -1,55 +1,86 @@
-const { app, BrowserWindow } = require('electron');
-const fs = require('fs');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
 let mainWindow;
-let logFilePath = path.join(app.getPath('userData'), 'app.log');
+let pendingFiles = [];
 
-function logInfo(message) {
-  fs.appendFileSync(logFilePath, `[${new Date().toISOString()}] INFO: ${message}\n`, 'utf8');
+function initializeApp() {
+  const isFirstInstance = app.requestSingleInstanceLock();
+
+  if (!isFirstInstance) {
+    app.quit();
+  } else {
+    app.on('second-instance', handleSecondInstance);
+    app.on('ready', createFirstInstance);
+    app.on('window-all-closed', handleAllWindowsClosed);
+  }
 }
 
-const isSingleInstance = app.requestSingleInstanceLock();
+function handleSecondInstance(event, commandLine) {
+  const files = extractFilesFromCommandLine(commandLine.slice(1));
+  pendingFiles.push(...files);
 
-if (!isSingleInstance) {
-  app.quit();
-} else {
-  app.on('second-instance', (event, commandLine) => {
-    const files = commandLine.slice(1).filter(arg => !arg.startsWith('--'));
-    if (mainWindow) {
-      if (mainWindow.isMinimized()) mainWindow.restore();
-      mainWindow.focus();
-      mainWindow.webContents.send('files-selected', files);
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.focus();
+
+    if (mainWindow.webContents.isLoading() === false) {
+      sendPendingFilesToRenderer();
     }
-  })
+  }
+}
+function createFirstInstance() {
+  const files = extractFilesFromCommandLine(process.argv.slice(1));
 
-  app.on('ready', () => {
-    const args = process.argv.slice(1);
-    const files = args.filter(arg => arg !== '.');
+  pendingFiles.push(...files);
 
-    logInfo(args)
+  mainWindow = new BrowserWindow({
+    width: 1100,
+    height: 520,
+    resizable: false,
+    icon: path.join(__dirname, 'src', 'assets', 'favicon.ico'),
+    autoHideMenuBar: true,
+    webPreferences: {
+      preload: path.join(__dirname, 'src', 'preload.js'),
+      nodeIntegration: false,
+      contextIsolation: true,
+    },
+  });
 
-    mainWindow = new BrowserWindow({
-      width: 1100,
-      height: 520,
-      resizable: false,
-      webPreferences: {
-        preload: path.join(__dirname, 'preload.js'),
-        nodeIntegration: false,
-        contextIsolation: true,
-      },
-    });
+  mainWindow.loadFile(path.join(__dirname, 'dist', 'cryptone', 'browser', 'index.html'));
 
-    mainWindow.loadFile(path.join(__dirname, 'dist', 'cryptone', 'browser/index.html'));
+  mainWindow.webContents.once('did-finish-load', () => {
+    sendInitialFilesToRenderer();
+  });
 
-    mainWindow.webContents.once('did-finish-load', () => {
-      mainWindow.webContents.send('files-selected', files);
-    })
-  })
-
-  app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit();
+  ipcMain.on('get-pending-files', () => {
+    sendPendingFilesToRenderer();
   });
 }
 
+function handleAllWindowsClosed() {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+}
 
+function sendInitialFilesToRenderer() {
+  if (pendingFiles.length > 0 && mainWindow) {
+    mainWindow.webContents.send('files-selected', pendingFiles);
+    pendingFiles = [];
+  }
+}
+
+function sendPendingFilesToRenderer() {
+  if (mainWindow && !mainWindow.webContents.isLoading() && pendingFiles.length > 0) {
+    mainWindow.webContents.send('files-selected', pendingFiles);
+    pendingFiles = [];
+  } else {
+  }
+}
+
+function extractFilesFromCommandLine(commandLine) {
+  return commandLine.filter(arg => !arg.startsWith('--'));
+}
+
+initializeApp();

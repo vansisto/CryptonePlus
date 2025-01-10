@@ -1,1 +1,32 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: 'Jura';
+  src: url('assets/fonts/Jura-VariableFont_wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body.light-theme {
+  --primary-text-color: #504021;
+  --primary-color: var(--p-neutral-200);
+  --primary-color-hover: #d5cfc2;
+}
+
+body.dark-theme {
+  --primary-text-color: #bc9a4f;
+  --primary-color: var(--p-neutral-700);
+  --primary-color-hover: #474540;
+}
+
+.p-button {
+  background-color: var(--primary-color) !important;
+  color: var(--primary-text-color) !important;
+}
+.p-button:hover {
+  background-color: var(--primary-color-hover) !important;
+}
+
+body {
+  background-color: var(--primary-color) !important;
+  color: var(--primary-text-color) !important;
+  font-family: 'Jura', serif;
+}
