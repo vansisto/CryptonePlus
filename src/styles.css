@@ -6,27 +6,38 @@
 }
 
 body.light-theme {
-  --primary-text-color: #504021;
-  --primary-color: var(--p-neutral-200);
-  --primary-color-hover: #d5cfc2;
+  --second-color: #504021;
+  --primary-color: #c5beb6;
+  --primary-color-hover: #d5ccb9;
 }
 
 body.dark-theme {
-  --primary-text-color: #bc9a4f;
-  --primary-color: var(--p-neutral-700);
-  --primary-color-hover: #474540;
+  --second-color: #bc9a4f;
+  --primary-color: #45433c;
+  --primary-color-hover: #55534b;
 }
 
-.p-button {
+.p-button, .p-select {
   background-color: var(--primary-color) !important;
-  color: var(--primary-text-color) !important;
+  color: var(--second-color) !important;
 }
-.p-button:hover {
+.p-button:hover, .p-select:hover {
   background-color: var(--primary-color-hover) !important;
+}
+
+.p-select {
+  border-color: var(--primary-color-hover) !important;
+}
+.p-select-option-selected {
+  background-color: var(--second-color) !important;
+}
+.p-inputwrapper-focus {
+  outline-color: var(--second-color) !important;
+  box-shadow: 0 0 5px var(--second-color) !important;
 }
 
 body {
   background-color: var(--primary-color) !important;
-  color: var(--primary-text-color) !important;
+  color: var(--second-color) !important;
   font-family: 'Jura', serif;
 }
