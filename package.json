@@ -21,7 +21,6 @@
       "src/preload.js"
     ],
     "extraFiles": [
-      "setup_context_menu.cmd",
       {
         "from": "src/assets/favicon.ico",
         "to": "resources/favicon.ico"
