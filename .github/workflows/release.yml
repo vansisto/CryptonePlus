@@ -26,11 +26,6 @@ jobs:
         with:
           node-version: 22
 
-      - name: Ensure Tag Checkout
-        run: |
-          git fetch --tags
-          git checkout ${{ github.ref }}
-
       - name: Build and Release Electron App
         uses: samuelmeuli/action-electron-builder@v1
         with:
