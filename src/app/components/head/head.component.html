@@ -1,12 +1,18 @@
 <div class="header">
-  <div class="header-left-section">
-    <p-button size="large" [raised]="true" variant="text" icon="pi pi-key" [label]="'GENERATE_KEY_PAIR' | translate" />
-  </div>
-  <div class="header-right-section">
-    <p-select
-      [options]="languages"
-      [(ngModel)]="selectedLanguage"
-      (onChange)="changeLanguage()"
-      optionLabel="language" />
-  </div>
+    <div class="header-left-section">
+        <p-button [label]="'GENERATE_KEY_PAIR' | translate" [raised]="true" [style]="{'width': '300px'}" icon="pi pi-key" size="large"
+                  variant="text"/>
+    </div>
+    <div class="header-right-section">
+        <p-toggleswitch [style]="{'margin': '5px 10px'}" [(ngModel)]="isDarkTheme" (ngModelChange)="onThemeToggle()">
+            <ng-template #handle let-checked="checked">
+                <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-moon' : 'pi-sun']"></i>
+            </ng-template>
+        </p-toggleswitch>
+        <p-select
+                (onChange)="changeLanguage()"
+                [(ngModel)]="selectedLanguage"
+                [options]="languages"
+                optionLabel="language"/>
+    </div>
 </div>
