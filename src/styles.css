@@ -1,1 +1,62 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: 'Jura';
+  src: url('assets/fonts/Jura-VariableFont_wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body.light-theme {
+  --second-color: #504021;
+  --primary-color: #dcd5cf;
+  --primary-color-additional: #ccc2ad;
+  --primary-color-hover: #ccc2ad;
+}
+
+body.dark-theme {
+  --second-color: #bc9a4f;
+  --primary-color: #45433c;
+  --primary-color-additional: #1e1c19;
+  --primary-color-hover: #55534b;
+}
+
+.p-button, .p-select {
+  background-color: var(--primary-color) !important;
+  color: var(--second-color) !important;
+}
+.p-button:hover, .p-select:hover {
+  background-color: var(--primary-color-hover) !important;
+}
+
+.p-select {
+  border-color: var(--second-color) !important;
+}
+.p-select-label {
+  color: var(--second-color) !important;
+}
+.p-select-option-selected {
+  background-color: var(--second-color) !important;
+}
+.p-inputwrapper-focus {
+  outline-color: var(--second-color) !important;
+  box-shadow: 0 0 5px var(--second-color) !important;
+}
+
+body {
+  background-color: var(--primary-color) !important;
+  color: var(--second-color) !important;
+  font-family: 'Jura', serif;
+}
+
+.pi-moon {
+  color: var(--second-color) !important;
+}
+.p-toggleswitch-slider {
+  background-color: var(--primary-color) !important;
+  border-color: var(--second-color) !important;
+}
+.p-toggleswitch-checked .p-toggleswitch-slider {
+  background-color: var(--second-color) !important;
+}
+.p-toggleswitch-handle {
+  background-color: var(--primary-color-additional) !important;
+}

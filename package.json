@@ -1,38 +1,45 @@
 {
   "name": "cryptone",
-  "main": "electron-main.js",
+  "main": "electron.js",
   "description": "Application to encrypt files",
   "author": "Van Sisto",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "electron .",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "build-electron": "ng build --base-href ./ && electron ."
+    "build-start-electron": "ng build --base-href ./ && electron .",
+    "release": "electron-builder --publish always"
   },
   "build": {
     "appId": "com.vansisto.cryptone",
     "productName": "Cryptone",
     "files": [
       "dist/**/*",
-      "electron-main.js",
+      "electron.js",
       "src/preload.js"
     ],
     "extraFiles": [
-      "setup_context_menu.cmd",
       {
-        "from": "public/favicon.ico",
+        "from": "src/assets/favicon.ico",
         "to": "resources/favicon.ico"
       }
     ],
     "directories": {
       "output": "release"
     },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "vansisto",
+        "repo": "CryptonePlus"
+      }
+    ],
     "win": {
       "target": "nsis",
-      "icon": "public/favicon.ico"
+      "icon": "src/assets/favicon.ico"
     },
     "nsis": {
       "oneClick": false,
@@ -41,12 +48,19 @@
       "include": "installer.nsh"
     },
     "mac": {
-      "target": ["dmg", "zip"],
-      "icon": "public/favicon.ico"
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "src/assets/favicon.ico"
     },
     "linux": {
-      "target": ["AppImage", "deb", "snap"],
-      "icon": "public/favicon.ico",
+      "target": [
+        "AppImage",
+        "deb",
+        "snap"
+      ],
+      "icon": "src/assets/favicon.ico",
       "category": "Utility"
     }
   },
@@ -60,6 +74,13 @@
     "@angular/platform-browser": "^19.0.0",
     "@angular/platform-browser-dynamic": "^19.0.0",
     "@angular/router": "^19.0.0",
+    "@ngx-translate/core": "^16.0.4",
+    "@ngx-translate/http-loader": "^16.0.1",
+    "@primeng/themes": "^19.0.5",
+    "electron-updater": "^6.3.9",
+    "primeflex": "^3.3.1",
+    "primeicons": "^7.0.0",
+    "primeng": "^19.0.5",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

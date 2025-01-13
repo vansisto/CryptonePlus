@@ -1,0 +1,17 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.header-left-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-right-section {
+  display: flex;
+  align-items: center;
+}
