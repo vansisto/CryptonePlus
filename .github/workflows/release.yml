@@ -36,4 +36,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          npm run release
+          npx electron-builder --publish always
