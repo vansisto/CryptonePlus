@@ -3,7 +3,7 @@
   "main": "electron.js",
   "description": "Application to encrypt files",
   "author": "Van Sisto",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "scripts": {
     "ng": "ng",
     "start": "electron .",
@@ -46,22 +46,6 @@
       "allowToChangeInstallationDirectory": true,
       "perMachine": true,
       "include": "installer.nsh"
-    },
-    "mac": {
-      "target": [
-        "dmg",
-        "zip"
-      ],
-      "icon": "src/assets/favicon.ico"
-    },
-    "linux": {
-      "target": [
-        "AppImage",
-        "deb",
-        "snap"
-      ],
-      "icon": "src/assets/favicon.ico",
-      "category": "Utility"
     }
   },
   "private": true,
