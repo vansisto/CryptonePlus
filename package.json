@@ -1,9 +1,9 @@
 {
   "name": "cryptone",
-  "main": "electron-main.js",
+  "main": "electron.js",
   "description": "Application to encrypt files",
   "author": "Van Sisto",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scripts": {
     "ng": "ng",
     "start": "electron .",
@@ -17,7 +17,7 @@
     "productName": "Cryptone",
     "files": [
       "dist/**/*",
-      "electron-main.js",
+      "electron.js",
       "src/preload.js"
     ],
     "extraFiles": [
@@ -29,6 +29,13 @@
     "directories": {
       "output": "release"
     },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "vansisto",
+        "repo": "CryptonePlus"
+      }
+    ],
     "win": {
       "target": "nsis",
       "icon": "src/assets/favicon.ico"
@@ -69,6 +76,7 @@
     "@ngx-translate/core": "^16.0.4",
     "@ngx-translate/http-loader": "^16.0.1",
     "@primeng/themes": "^19.0.5",
+    "electron-updater": "^6.3.9",
     "primeflex": "^3.3.1",
     "primeicons": "^7.0.0",
     "primeng": "^19.0.5",
