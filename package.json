@@ -3,7 +3,7 @@
   "main": "electron.js",
   "description": "Application to encrypt files",
   "author": "Van Sisto",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "scripts": {
     "ng": "ng",
     "start": "electron .",
@@ -35,9 +35,7 @@
         "provider": "github",
         "owner": "vansisto",
         "repo": "CryptonePlus",
-        "releaseType": "release",
-        "vPrefixedTagName": true,
-        "draft": false
+        "releaseType": "release"
       }
     ],
     "win": {
