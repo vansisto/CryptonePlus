@@ -1,5 +1,6 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog} = require('electron');
 const path = require('path');
+const {autoUpdater} = require("electron-updater");
 
 let mainWindow;
 let pendingFiles = [];
@@ -29,7 +30,9 @@ function handleSecondInstance(event, commandLine) {
     }
   }
 }
+
 function createFirstInstance() {
+  autoUpdater.checkForUpdatesAndNotify();
   const files = extractFilesFromCommandLine(process.argv.slice(1));
 
   pendingFiles.push(...files);
@@ -84,3 +87,24 @@ function extractFilesFromCommandLine(commandLine) {
 }
 
 initializeApp();
+
+autoUpdater.on('update-available', () => {
+  dialog.showMessageBox({
+    type: 'info',
+    title: 'Update available',
+    message: 'A new version is available. Downloading now...',
+  })
+})
+
+autoUpdater.on('update-downloaded', () => {
+  dialog.showMessageBox({
+    type: 'info',
+    title: 'Update ready',
+    message: 'A new version has been downloaded. Quit and install now?',
+    buttons: ["Yes", "Later"],
+  }).then(result => {
+    if (result.response === 0) {
+      autoUpdater.quitAndInstall();
+    }
+  })
+})
