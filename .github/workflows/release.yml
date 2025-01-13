@@ -23,7 +23,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Ensure Tag Checkout
         run: |
@@ -37,6 +37,6 @@ jobs:
         run: npm run build
 
       - name: Electron Builder (Win + Publish)
-        run: npx electron-builder --win --publish always
+        run: electron-builder -w --publish always
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
