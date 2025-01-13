@@ -13,6 +13,11 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      - name: Switch to Main Branch
+        run: |
+          git fetch origin main
+          git checkout main
+
       - name: Determine Tag
         id: get_version
         run: |
