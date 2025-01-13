@@ -23,7 +23,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 22
+          node-version: 20
 
       - name: Ensure Tag Checkout
         run: |
@@ -36,8 +36,7 @@ jobs:
       - name: Build front
         run: npm run build
 
-      - name: Build and Release Electron App
-        uses: samuelmeuli/action-electron-builder@v1
-        with:
-          github_token: ${{ secrets.GH_TOKEN }}
-          release: true
+      - name: Electron Builder (Win + Publish)
+        run: npx electron-builder --win --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
