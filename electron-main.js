@@ -73,48 +73,79 @@ function handleAllWindowsClosed() {
 
 function sendInitialFilesToRenderer() {
   if (pendingFiles.length > 0 && mainWindow) {
-    mainWindow.webContents.send('files-selected', pendingFiles);
+    const expandedFiles = expandAllPaths(pendingFiles);
+    mainWindow.webContents.send('files-selected', expandedFiles);
     pendingFiles = [];
   }
 }
 
 function sendPendingFilesToRenderer() {
   if (mainWindow && !mainWindow.webContents.isLoading() && pendingFiles.length > 0) {
-    mainWindow.webContents.send('files-selected', pendingFiles);
+    const expandedFiles = expandAllPaths(pendingFiles);
+    mainWindow.webContents.send('files-selected', expandedFiles);
     pendingFiles = [];
   }
 }
 
+function expandAllPaths(paths) {
+  const allFiles = [];
+
+  for (const p of paths) {
+    collectRecursivelyFilePaths(p, allFiles);
+  }
+
+  return allFiles;
+}
+
 function extractFilesFromCommandLine(commandLine) {
-  return commandLine.filter(arg => !arg.startsWith('--'));
+  return commandLine
+    .filter(arg => !arg.startsWith('--'))
+    .filter(arg => arg !== '.');
+}
+
+function collectRecursivelyFilePaths(fileOrFolderPath, filePaths) {
+  const stats = statSync(fileOrFolderPath);
+
+  if (stats.isDirectory()) {
+    const filesInDirectory = readdirSync(fileOrFolderPath);
+    for (const name of filesInDirectory) {
+      const fullPath = path.join(fileOrFolderPath, name);
+      collectRecursivelyFilePaths(fullPath, filePaths);
+    }
+  } else {
+    filePaths.push(fileOrFolderPath);
+  }
+}
+
+function handleUpdates() {
+  autoUpdater.on('update-available', () => {
+    dialog.showMessageBox({
+      type: 'info',
+      title: 'Update available',
+      message: 'A new version is available. Downloading now...',
+    });
+  });
+
+  autoUpdater.on('update-downloaded', () => {
+    dialog.showMessageBox({
+      type: 'info',
+      title: 'Update ready',
+      message: 'A new version has been downloaded. Quit and install now?',
+      buttons: ['Yes', 'Later'],
+    }).then(result => {
+      if (result.response === 0) {
+        autoUpdater.quitAndInstall();
+      }
+    });
+  });
+
+  autoUpdater.on('error', (error) => {
+    dialog.showErrorBox(
+      'Auto Update Error',
+      `An error occurred while updating: ${error == null ? 'unknown' : (error.stack || error).toString()}`
+    );
+  });
 }
 
 initializeApp();
-
-autoUpdater.on('update-available', () => {
-  dialog.showMessageBox({
-    type: 'info',
-    title: 'Update available',
-    message: 'A new version is available. Downloading now...',
-  });
-});
-
-autoUpdater.on('update-downloaded', () => {
-  dialog.showMessageBox({
-    type: 'info',
-    title: 'Update ready',
-    message: 'A new version has been downloaded. Quit and install now?',
-    buttons: ['Yes', 'Later'],
-  }).then(result => {
-    if (result.response === 0) {
-      autoUpdater.quitAndInstall();
-    }
-  });
-});
-
-autoUpdater.on('error', (error) => {
-  dialog.showErrorBox(
-    'Auto Update Error',
-    `An error occurred while updating: ${error == null ? 'unknown' : (error.stack || error).toString()}`
-  );
-});
+handleUpdates();
