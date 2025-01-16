@@ -2,9 +2,12 @@ const { app, BrowserWindow, ipcMain, dialog, shell} = require('electron');
 const path = require('path');
 const { autoUpdater } = require('electron-updater');
 const {writeFileSync, readFileSync, statSync, readdirSync, mkdirSync} = require("node:fs");
+const {generateKeyPairSync} = require("crypto");
 
 let mainWindow;
 let pendingFiles = [];
+const userDataPath = app.getPath('userData');
+const baseKeysPath = path.join(userDataPath, 'CryptoneKeys', 'Offline');
 
 function initializeApp() {
   const isFirstInstance = app.requestSingleInstanceLock();
@@ -73,7 +76,6 @@ function createFirstInstance() {
 
   ipcMain.on('generate-test-file', () => {
     try {
-      const userDataPath = app.getPath('userData');
       const testFilePath = path.join(userDataPath, 'test.txt');
 
       const dataBuffer = Buffer.from([0xAA, 0xBB, 0xCC, 0xDD])
@@ -87,30 +89,43 @@ function createFirstInstance() {
     }
   })
 
-  ipcMain.on('generate-rsa-keypair', (event, folderName) => {
+  ipcMain.on('create-rsa-keypair-folder', (event, folderName) => {
+    console.log("Create rsa keypair folder")
     try {
-      const userDataPath = app.getPath('userData');
-
-      const basePath = path.join(userDataPath, 'CryptoneKeys', 'Offline');
-      mkdirSync(basePath, { recursive: true });
-
-      const finalFolderPath = path.join(basePath, folderName);
+      mkdirSync(baseKeysPath, { recursive: true });
+      const finalFolderPath = path.join(baseKeysPath, folderName);
       mkdirSync(finalFolderPath);
     } catch (err) {
       console.error('Error during folder creation:', err);
     }
-  })
+  });
 
   ipcMain.on('open-keys-folder', (event, exactKeysFolder) => {
     try {
-      const userDataPath = app.getPath('userData');
-      console.log(exactKeysFolder)
-      const fullPath = path.join(...[userDataPath, 'CryptoneKeys', 'Offline', exactKeysFolder].filter(Boolean));
+      const fullPath = path.join(...[baseKeysPath, exactKeysFolder].filter(Boolean));
       shell.openPath(fullPath);
     } catch (err) {
       console.error('Error during open folder:', err);
     }
-  })
+  });
+
+  ipcMain.handle('generate-key-pair', (event, keyPairName) => {
+    const { publicKey, privateKey } = generateKeyPairSync('rsa', {
+      modulusLength: 4096,
+      publicKeyEncoding: {
+        type: 'spki',
+        format: 'pem',
+      },
+      privateKeyEncoding: {
+        type: 'pkcs8',
+        format: 'pem',
+      },
+    });
+
+    const finalKeysFolderPath = path.join(baseKeysPath, keyPairName);
+    writeFileSync(path.join(finalKeysFolderPath, `${keyPairName}.public.key`), publicKey);
+    writeFileSync(path.join(finalKeysFolderPath, `${keyPairName}.private.key`), privateKey);
+  });
 }
 
 function handleAllWindowsClosed() {

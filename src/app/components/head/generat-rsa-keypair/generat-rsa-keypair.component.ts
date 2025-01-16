@@ -23,10 +23,10 @@ import {InputText} from 'primeng/inputtext';
   styleUrl: './generat-rsa-keypair.component.scss'
 })
 export class GeneratRsaKeypairComponent implements OnInit {
+  electron: any = (window as any).electron;
   visible: boolean = false;
   useCustomName: boolean = false;
   customName: string = '';
-  electron: any = (window as any).electron;
   formGroup!: FormGroup;
 
   ngOnInit() {
@@ -40,21 +40,31 @@ export class GeneratRsaKeypairComponent implements OnInit {
   }
 
   onGenerateClick() {
-    let folderName: string;
+    let keyPairName: string = this.buildKeyPairName();
+    this.electron.send('create-rsa-keypair-folder', keyPairName);
+    this.electron.generateKeyPair(keyPairName);
+    this.visible = false;
+    this.electron.send('open-keys-folder', keyPairName);
+  }
+
+  private buildKeyPairName(): string {
+    let keyPairName: string;
     if (!this.useCustomName) {
-      const now = new Date();
-      const pad = (n: number) => n.toString().padStart(2, '0');
-      const yy = now.getFullYear().toString().slice(-2);
-      folderName = `${pad(now.getDate())}-${pad(now.getMonth() + 1)}-${yy}_${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
+      keyPairName = this.buildDateTimeBasedKeyPairName();
     } else {
-      folderName = this.customName.trim()
-      if (!folderName) {
-        return
+      keyPairName = this.customName.trim()
+      if (!keyPairName) {
+        keyPairName = this.buildDateTimeBasedKeyPairName();
       }
     }
 
-    this.electron.send('generate-rsa-keypair', folderName);
-    this.visible = false;
-    this.electron.send('open-keys-folder', folderName);
+    return keyPairName;
+  }
+
+  private buildDateTimeBasedKeyPairName() {
+    const now = new Date();
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const yy = now.getFullYear().toString().slice(-2);
+    return `${pad(now.getDate())}-${pad(now.getMonth() + 1)}-${yy}_${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
   }
 }

@@ -3,6 +3,7 @@ const { ipcRenderer, webUtils } = require('electron');
 window.electron = {
   send: (channel, data) => ipcRenderer.send(channel, data),
   receive: (channel, func) => ipcRenderer.on(channel, (event, ...args) => func(...args)),
+  generateKeyPair: (keyPairName) => ipcRenderer.invoke('generate-key-pair', keyPairName),
 };
 
 window.addEventListener('dragover', (event) => {
