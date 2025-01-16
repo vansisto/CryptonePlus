@@ -1,0 +1,42 @@
+<p-dialog
+  header="Створення пари ключів"
+  [(visible)]="visible"
+  [modal]="true"
+  [closable]="true"
+  [baseZIndex]="10000"
+  [style]="{width: '25rem', cursor: 'default'}"
+>
+  <form [formGroup]="formGroup">
+    <p-checkbox
+      name="customName"
+      formControlName="ownKeyPairName"
+      value="ownKeyPairName"
+      inputId="ownKeyPair"
+      [(ngModel)]="useCustomName"
+      [binary]="true"
+    />
+    <!--suppress XmlInvalidId -->
+    <label for="ownKeyPair" style="margin: 0 0 5px 10px">Встановити власні імена ключів</label>
+  </form>
+
+  <div [class.hidden-field]="!useCustomName" class="mb-3">
+    <p-floatlabel variant="on">
+      <input
+        pInputText
+        id="keyPairName"
+        [(ngModel)]="customName"
+        autocomplete="off"
+        style="width: 100%;"
+      />
+      <label for="keyPairName">Key pair name</label>
+    </p-floatlabel>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      styleClass="generateButton"
+      label="Generate"
+      (onClick)="onGenerateClick()"
+    />
+  </ng-template>
+</p-dialog>

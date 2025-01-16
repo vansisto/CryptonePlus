@@ -1,6 +1,7 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell} = require('electron');
 const path = require('path');
 const { autoUpdater } = require('electron-updater');
+const {writeFileSync, readFileSync, statSync, readdirSync, mkdirSync} = require("node:fs");
 
 let mainWindow;
 let pendingFiles = [];
@@ -61,8 +62,55 @@ function createFirstInstance() {
   });
 
   ipcMain.on('dropped-files', (event, paths) => {
-    event.reply('files-selected', paths);
+    const allFiles = [];
+
+    for (const fileOrFolderPath of paths) {
+      collectRecursivelyFilePaths(fileOrFolderPath, allFiles);
+    }
+
+    event.reply('files-selected', allFiles);
   });
+
+  ipcMain.on('generate-test-file', () => {
+    try {
+      const userDataPath = app.getPath('userData');
+      const testFilePath = path.join(userDataPath, 'test.txt');
+
+      const dataBuffer = Buffer.from([0xAA, 0xBB, 0xCC, 0xDD])
+
+      writeFileSync(testFilePath, dataBuffer);
+
+      const fileBuffer = readFileSync(testFilePath);
+      console.log(fileBuffer);
+    } catch (error) {
+      console.error(error);
+    }
+  })
+
+  ipcMain.on('generate-rsa-keypair', (event, folderName) => {
+    try {
+      const userDataPath = app.getPath('userData');
+
+      const basePath = path.join(userDataPath, 'CryptoneKeys', 'Offline');
+      mkdirSync(basePath, { recursive: true });
+
+      const finalFolderPath = path.join(basePath, folderName);
+      mkdirSync(finalFolderPath);
+    } catch (err) {
+      console.error('Error during folder creation:', err);
+    }
+  })
+
+  ipcMain.on('open-keys-folder', (event, exactKeysFolder) => {
+    try {
+      const userDataPath = app.getPath('userData');
+      console.log(exactKeysFolder)
+      const fullPath = path.join(...[userDataPath, 'CryptoneKeys', 'Offline', exactKeysFolder].filter(Boolean));
+      shell.openPath(fullPath);
+    } catch (err) {
+      console.error('Error during open folder:', err);
+    }
+  })
 }
 
 function handleAllWindowsClosed() {
