@@ -18,7 +18,7 @@
     </div>
     <div class="header-right-section">
         <p-toggleswitch [style]="{'margin': '5px 10px'}" [(ngModel)]="isDarkTheme" (ngModelChange)="onThemeToggle()">
-            <ng-template let-checked="checked">
+            <ng-template #handle let-checked="checked">
                 <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-moon' : 'pi-sun']"></i>
             </ng-template>
         </p-toggleswitch>

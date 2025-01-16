@@ -21,7 +21,6 @@ window.addEventListener('drop', (event) => {
   const filePaths = [];
   for (const file of droppedFiles) {
     const path = webUtils.getPathForFile(file);
-    console.log('Dropped file path (preload):', path);
     filePaths.push(path);
   }
 

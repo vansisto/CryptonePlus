@@ -6,7 +6,7 @@
   [baseZIndex]="10000"
   [style]="{width: '25rem', cursor: 'default'}"
 >
-  <form [formGroup]="formGroup">
+  <form [formGroup]="formGroup" style="cursor: pointer">
     <p-checkbox
       name="customName"
       formControlName="ownKeyPairName"
@@ -16,7 +16,7 @@
       [binary]="true"
     />
     <!--suppress XmlInvalidId -->
-    <label for="ownKeyPair" style="margin: 0 0 5px 10px">Встановити власні імена ключів</label>
+    <label for="ownKeyPair" style="margin: 0 0 5px 10px; cursor: pointer">Встановити власні імена ключів</label>
   </form>
 
   <div [class.hidden-field]="!useCustomName" class="mb-3">

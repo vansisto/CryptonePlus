@@ -1,9 +1,9 @@
 {
   "name": "cryptone",
-  "main": "electron-main.js",
+  "main": "src/core/electron-main.js",
   "description": "Application to encrypt files",
   "author": "Van Sisto",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "scripts": {
     "build": "ng build --base-href ./",
     "start": "electron .",
@@ -14,8 +14,7 @@
     "productName": "Cryptone",
     "files": [
       "dist/**/*",
-      "electron-main.js",
-      "src/preload.js"
+      "src/core/**/*"
     ],
     "extraFiles": [
       {
