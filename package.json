@@ -3,7 +3,7 @@
   "main": "electron-main.js",
   "description": "Application to encrypt files",
   "author": "Van Sisto",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "scripts": {
     "build": "ng build --base-href ./",
     "start": "electron .",

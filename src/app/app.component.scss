@@ -1,0 +1,10 @@
+.dropzone {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+.dropzone.active {
+  background-color: #f0f0f0;
+}

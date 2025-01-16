@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-control',
   imports: [],
   templateUrl: './control.component.html',
-  styleUrl: './control.component.css'
+  styleUrl: './control.component.scss'
 })
 export class ControlComponent {
 
