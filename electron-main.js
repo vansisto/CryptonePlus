@@ -45,8 +45,8 @@ function createFirstInstance() {
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'src', 'preload.js'),
-      nodeIntegration: false,
-      contextIsolation: true,
+      nodeIntegration: true,
+      contextIsolation: false,
     },
   });
 
@@ -58,6 +58,10 @@ function createFirstInstance() {
 
   ipcMain.on('get-pending-files', () => {
     sendPendingFilesToRenderer();
+  });
+
+  ipcMain.on('dropped-files', (event, paths) => {
+    event.reply('files-selected', paths);
   });
 }
 

@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-files-table',
   imports: [],
   templateUrl: './files-table.component.html',
-  styleUrl: './files-table.component.css'
+  styleUrl: './files-table.component.scss'
 })
 export class FilesTableComponent {
 

@@ -21,7 +21,7 @@ import {ThemeService} from "../../services/theme.service";
     NgClass
   ],
   templateUrl: './head.component.html',
-  styleUrl: './head.component.css'
+  styleUrl: './head.component.scss'
 })
 export class HeadComponent {
   languages: Language[] = [
