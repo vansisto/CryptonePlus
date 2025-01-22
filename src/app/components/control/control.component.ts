@@ -1,11 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Button} from 'primeng/button';
 import {TranslatePipe} from '@ngx-translate/core';
 import {FileSizeConverterUtil} from '../../utils/file-size-converter-util';
 import {FilesService} from '../../services/files.service';
 import {TableModule} from 'primeng/table';
 import {CFile} from '../../models/cfile';
-import {AsyncPipe, NgIf} from '@angular/common';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-control',
