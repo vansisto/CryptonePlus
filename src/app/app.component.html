@@ -1,7 +1,6 @@
-<app-head />
-<app-files-table />
-<app-control />
-<router-outlet />
-<ul>
-  <li *ngFor="let file of inputFiles">{{ file }}</li>
-</ul>
+<div class="layout-container">
+  <app-head/>
+  <app-files-table/>
+  <app-control class="footer" />
+  <router-outlet/>
+</div>

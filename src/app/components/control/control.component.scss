@@ -1,0 +1,7 @@
+:host ::ng-deep .p-button {
+  width: 180px !important;
+}
+
+:host ::ng-deep .p-button-danger {
+  color: var(--danger-color) !important;
+}

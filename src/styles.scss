@@ -1,8 +1,6 @@
 @font-face {
   font-family: 'Jura';
   src: url('assets/fonts/Jura-VariableFont_wght.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
 }
 
 body.light-theme {
@@ -17,6 +15,8 @@ body.light-theme {
   --table-color: #2e2d2b;
   --table-row-hover-background: #d5c7b3;
   --table-row-selected-background: #eaeaea;
+
+  --danger-color: #c5310e;
 }
 
 body.dark-theme {
@@ -31,10 +31,19 @@ body.dark-theme {
   --table-color: #ede8e2;
   --table-row-hover-background: #60594d;
   --table-row-selected-background: #dcad6c;
+
+  --danger-color: #d55d2a;
 }
 
 body {
   user-select: none;
+  --p-button-label-font-weight: none;
+
+  --p-button-primary-border-color: var(--second-color);
+  --p-button-primary-hover-border-color: var(--second-color);
+  --p-button-primary-active-border-color: var(--second-color);
+  --p-button-danger-border-color: var(--danger-color);
+  --p-button-danger-hover-border-color: var(--danger-color);
 
   --p-checkbox-border-color: var(--primary-color);
   --p-checkbox-hover-border-color: var(--third-color);

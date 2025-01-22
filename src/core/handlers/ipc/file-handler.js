@@ -21,7 +21,7 @@ function initializeDroppedFilesHandler() {
       };
     })
 
-    event.reply('files-selected', parsedFiles);
+    event.reply('add-files', parsedFiles);
   });
 }
 

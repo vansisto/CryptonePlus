@@ -28,7 +28,7 @@ function sendFilesToRenderer(mainWindow, pendingFiles) {
           size: fs.statSync(filePath).size,
         };
       })
-    mainWindow.webContents.send('files-selected', parsedFiles);
+    mainWindow.webContents.send('add-files', parsedFiles);
     pendingFiles.splice(0, pendingFiles.length);
   }
 }
