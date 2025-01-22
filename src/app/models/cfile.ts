@@ -5,13 +5,15 @@ export class CFile {
   path: string;
   name: string;
   type: string;
-  size: string;
+  formattedSize: string;
+  size: number;
 
-  constructor(path: string, name: string, type: string, size: string) {
+  constructor(path: string, name: string, type: string, size: number) {
     this.path = path;
     this.name = name;
     this.type = type;
     this.size = size;
+    this.formattedSize = FileSizeConverterUtil.formatFileSize(size);
   }
 
   static fromInputFile(inputFile: InputFile): CFile {
@@ -19,7 +21,7 @@ export class CFile {
       inputFile.path,
       inputFile.name,
       inputFile.type,
-      FileSizeConverterUtil.formatFileSize(inputFile.size)
+      inputFile.size,
     )
   }
 }

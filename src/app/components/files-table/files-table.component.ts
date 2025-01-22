@@ -5,6 +5,7 @@ import {InputFile} from '../../interfaces/input-file'
 import {Button} from 'primeng/button';
 import {NgIf} from '@angular/common';
 import {Tooltip} from 'primeng/tooltip';
+import {FileSizeConverterUtil} from '../../utils/file-size-converter-util';
 
 @Component({
   selector: 'app-files-table',
@@ -18,19 +19,21 @@ import {Tooltip} from 'primeng/tooltip';
   styleUrl: './files-table.component.scss'
 })
 export class FilesTableComponent implements OnInit {
-  customers!: CFile[];
+  files!: CFile[];
   selectedFiles: CFile | undefined;
+  totalSize: number = 0;
+  totalSizeField: string = FileSizeConverterUtil.formatFileSize(this.totalSize);
 
   constructor(
     private ngZone: NgZone,
   ) {}
 
   ngOnInit() {
-    this.customers = []
-    this.customers.push(new CFile("/Very/Long/path/to/very/long/file/with/extention.ext", "VeryLongNameWithExtension.ext", "", "312,87 Kb"))
-    this.customers.push(new CFile("/Long/Path/to/Some/File.file", "LongFileName.file", "Encrypted", "512,13 Mb"))
-    this.customers.push(new CFile("/Short/path", "Path", "", "55 b"))
-    this.customers.push(new CFile("/", "Name", "", "55,3 Kb"))
+    this.files = []
+    this.files.push(new CFile("/Very/Long/path/to/very/long/file/with/extention.ext", "VeryLongNameWithExtension.ext", "", 312870))
+    this.files.push(new CFile("/Long/Path/to/Some/File.file", "LongFileName.file", "Encrypted", 512130000))
+    this.files.push(new CFile("/Short/path", "Path", "", 55))
+    this.files.push(new CFile("/", "Name", "", 55130))
 
     const electron = (window as any).electron;
 
@@ -38,25 +41,26 @@ export class FilesTableComponent implements OnInit {
       if (inputFiles) {
         this.ngZone.run(() => {
           inputFiles.forEach(inputFile => {
-            const isDuplicate = this.customers.some(
+            const isDuplicate = this.files.some(
               (existing) => existing.path === inputFile.path
             );
             if (!isDuplicate) {
-              this.customers.push(CFile.fromInputFile(inputFile));
-              const loadedTotalSize = parseInt(sessionStorage.getItem('totalSize') || "0");
-              const updatedTotalSize = loadedTotalSize + inputFile.size;
-              sessionStorage.setItem('totalSize', updatedTotalSize.toString());
+              this.files.push(CFile.fromInputFile(inputFile));
+              this.recalculateTotalSize();
             }
           })
         });
       }
     });
 
+    this.recalculateTotalSize();
     electron.send('get-pending-files');
   }
 
-  removeFile(rowIndex: number) {
-    this.customers.splice(rowIndex, 1);
+  removeFile(file: CFile) {
+    const index = this.files.indexOf(file);
+    this.files.splice(index, 1);
+    this.recalculateTotalSize();
   }
 
   encryptFile(filePath: string) {
@@ -65,5 +69,10 @@ export class FilesTableComponent implements OnInit {
 
   decryptFile(filePath: string) {
 
+  }
+
+  private recalculateTotalSize() {
+    this.totalSize = this.files.reduce((sum: number, file: CFile) => sum + file.size, 0)
+    this.totalSizeField = FileSizeConverterUtil.formatFileSize(this.totalSize);
   }
 }

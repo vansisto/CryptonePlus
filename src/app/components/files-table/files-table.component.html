@@ -1,6 +1,6 @@
 <div class="card" style="margin-top: 20px">
   <p-table
-    [value]="customers"
+    [value]="files"
     [scrollable]="true"
     selectionMode="single"
     [(selection)]="selectedFiles"
@@ -19,7 +19,7 @@
         <th style="min-width:10px"></th>
       </tr>
     </ng-template>
-    <ng-template #body let-cfile let-rowIndex>
+    <ng-template #body let-cfile>
       <tr [pSelectableRow]="cfile">
         <td>
           <p-tableCheckbox [value]="cfile" />
@@ -27,7 +27,7 @@
         <td>{{cfile.path}}</td>
         <td>{{cfile.name}}</td>
         <td style="color: var(--second-color)">{{cfile.type}}</td>
-        <td>{{cfile.size}}</td>
+        <td>{{cfile.formattedSize}}</td>
         <td class="buttons-cell">
           <div style="width: 90px">
             <p-button
@@ -46,7 +46,7 @@
           </div>
         </td>
         <td class="buttons-cell">
-          <p-button icon="pi pi-trash" size="small" variant="text" (onClick)="removeFile(rowIndex)"/>
+          <p-button icon="pi pi-trash" size="small" variant="text" (onClick)="removeFile(cfile)"/>
         </td>
         <td>
           <p-button
@@ -60,4 +60,7 @@
       </tr>
     </ng-template>
   </p-table>
+</div>
+<div id="totalSizeField">
+  <p>Total size: {{totalSizeField}}</p>
 </div>
