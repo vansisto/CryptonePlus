@@ -1,33 +1,48 @@
 <div class="header">
-    <div class="header-left-section">
-        <p-button
-          [label]="'GENERATE_KEY_PAIR' | translate"
-          [raised]="true"
-          [style]="{'width': '300px'}"
-          icon="pi pi-key"
-          size="large"
-          variant="text"
-          (onClick)="generateRSAKeyPair()"
-        />
-      <p-button
-        icon="pi pi-folder"
-        size="large"
-        variant="text"
-        (onClick)="openKeysFolder()"
-      />
-    </div>
-    <div class="header-right-section">
-        <p-toggleswitch [style]="{'margin': '5px 10px'}" [(ngModel)]="isDarkTheme" (ngModelChange)="onThemeToggle()">
-            <ng-template #handle let-checked="checked">
-                <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-moon' : 'pi-sun']"></i>
-            </ng-template>
-        </p-toggleswitch>
-        <p-select
-                (onChange)="changeLanguage()"
-                [(ngModel)]="selectedLanguage"
-                [options]="languages"
-                optionLabel="language"/>
-    </div>
+  <div class="header-left-section">
+    <p-button
+      (onClick)="generateRSAKeyPair()"
+      [label]="'GENERATE_KEY_PAIR' | translate"
+      [raised]="true"
+      [style]="{'width': '300px'}"
+      icon="pi pi-key"
+      size="large"
+      variant="text"
+    />
+    <p-button
+      (onClick)="openKeysFolder()"
+      icon="pi pi-folder"
+      size="large"
+      variant="text"
+    />
+  </div>
+  <div class="header-right-section">
+    <p-toggleswitch (ngModelChange)="onThemeToggle()" [(ngModel)]="isDarkTheme" [style]="{'margin': '5px 10px'}">
+      <ng-template #handle let-checked="checked">
+        <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-moon' : 'pi-sun']"></i>
+      </ng-template>
+    </p-toggleswitch>
+    <p-select
+      (onChange)="changeLanguage()"
+      [(ngModel)]="selectedLanguage"
+      [options]="languages"
+      optionLabel="language"/>
+    <p-button
+      icon="pi pi-question-circle"
+      size="large"
+      severity="secondary"
+      [style]="{'margin': '0 10px'}"
+      (onClick)="showHelp()"
+      pTooltip="Show info"
+      showDelay="1000"
+      hideDelay="300"
+    />
+  </div>
 </div>
 
-<app-generat-rsa-keypair #generateRSAKeyPairComponent />
+<p-dialog header="Info" [modal]="true" [(visible)]="isHelpModalVisible" [style]="{ width: '50rem' }">
+  <div [innerHTML]="'HELP_TEXT' | translate"></div>
+</p-dialog>
+
+
+<app-generat-rsa-keypair #generateRSAKeyPairComponent/>

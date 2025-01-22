@@ -1,5 +1,6 @@
 const {statSync, readdirSync} = require("node:fs");
 const path = require('path');
+const fs = require("fs");
 
 function collectRecursivelyFilePaths(fileOrFolderPath, filePaths) {
   const stats = statSync(fileOrFolderPath);
@@ -18,7 +19,16 @@ function collectRecursivelyFilePaths(fileOrFolderPath, filePaths) {
 function sendFilesToRenderer(mainWindow, pendingFiles) {
   if (pendingFiles && pendingFiles.length > 0 && mainWindow) {
     const expandedFiles = expandAllPaths(pendingFiles);
-    mainWindow.webContents.send('files-selected', expandedFiles);
+    const parsedFiles = expandedFiles
+      .map((filePath) => {
+        return {
+          path: filePath,
+          name: path.parse(filePath).base,
+          type: "",
+          size: fs.statSync(filePath).size,
+        };
+      })
+    mainWindow.webContents.send('files-selected', parsedFiles);
     pendingFiles.splice(0, pendingFiles.length);
   }
 }

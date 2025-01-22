@@ -1,1 +1,63 @@
-<p>files-table works!</p>
+<div class="card" style="margin-top: 20px">
+  <p-table
+    [value]="customers"
+    [scrollable]="true"
+    selectionMode="single"
+    [(selection)]="selectedFiles"
+    scrollHeight="400px"
+    [size]="'small'"
+  >
+    <ng-template #header>
+      <tr>
+        <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
+        <th style="min-width:300px">Path</th>
+        <th style="min-width:100px">Name</th>
+        <th style="min-width:30px">Type</th>
+        <th style="min-width:100px">Size</th>
+        <th style="min-width:30px">Encrypt/Decrypt</th>
+        <th style="min-width:20px">Remove</th>
+        <th style="min-width:10px"></th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-cfile let-rowIndex>
+      <tr [pSelectableRow]="cfile">
+        <td>
+          <p-tableCheckbox [value]="cfile" />
+        </td>
+        <td>{{cfile.path}}</td>
+        <td>{{cfile.name}}</td>
+        <td style="color: var(--second-color)">{{cfile.type}}</td>
+        <td>{{cfile.size}}</td>
+        <td class="buttons-cell">
+          <div style="width: 90px">
+            <p-button
+              icon="pi pi-lock"
+              size="small"
+              variant="text"
+              (onClick)="encryptFile(cfile.path)"
+            />
+            <p-button
+              *ngIf="cfile.type === 'Encrypted'"
+              icon="pi pi-lock-open"
+              size="small"
+              variant="text"
+              (onClick)="decryptFile(cfile.path)"
+            />
+          </div>
+        </td>
+        <td class="buttons-cell">
+          <p-button icon="pi pi-trash" size="small" variant="text" (onClick)="removeFile(rowIndex)"/>
+        </td>
+        <td>
+          <p-button
+            icon="pi pi-share-alt"
+            size="small"
+            variant="text"
+            pTooltip="Share with messenger"
+            showDelay="1000"
+            hideDelay="300"/>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

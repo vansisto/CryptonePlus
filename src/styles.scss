@@ -13,6 +13,10 @@ body.light-theme {
   --primary-color: #dcd5cf;
   --primary-color-additional: #ccc2ad;
   --primary-color-hover: #857a65;
+
+  --table-color: #2e2d2b;
+  --table-row-hover-background: #d5c7b3;
+  --table-row-selected-background: #eaeaea;
 }
 
 body.dark-theme {
@@ -23,6 +27,10 @@ body.dark-theme {
   --primary-color: #45433c;
   --primary-color-additional: #1e1c19;
   --primary-color-hover: #55534b;
+
+  --table-color: #ede8e2;
+  --table-row-hover-background: #60594d;
+  --table-row-selected-background: #dcad6c;
 }
 
 body {
@@ -45,9 +53,17 @@ body {
   --p-floatlabel-focus-color: var(--second-color);
   --p-floatlabel-on-active-background: var(--primary-color);
   --p-focus-ring-shadow: 0 0 0 0.2rem color-mix(in srgb,var(--second-color),transparent 80%);
+
+  --p-datatable-header-cell-color: var(--table-color);
+  --p-datatable-header-cell-background: var(--third-color);
+  --p-datatable-body-cell-selected-border-color: var(--primary-color);
+  --p-datatable-row-background: none !important;
+  --p-datatable-row-hover-background: var(--table-row-hover-background);
+  --p-datatable-row-selected-background: color-mix(in srgb,var(--second-color),transparent 84%);
+  --p-datatable-row-color: var(--table-color)
 }
 
-.p-button, .p-select, .p-dialog {
+.p-button, .p-select, .p-dialog, .p-table {
   background-color: var(--primary-color) !important;
   color: var(--second-color) !important;
 }

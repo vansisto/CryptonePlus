@@ -1,0 +1,17 @@
+td {
+  padding: 0 !important;
+}
+
+.buttons-cell {
+  text-align: center !important;
+
+  div {
+    display: inline-block !important;
+    text-align: left !important;
+  }
+}
+
+::ng-deep .p-checkbox-box {
+  width: 20px !important;
+  height: 20px !important;
+}

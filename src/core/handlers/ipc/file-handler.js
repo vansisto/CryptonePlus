@@ -1,5 +1,7 @@
 const {ipcMain} = require("electron");
 const {collectRecursivelyFilePaths, sendFilesToRenderer} = require("../../utils/file-utils")
+const path = require("path");
+const fs = require("fs");
 
 function initializeDroppedFilesHandler() {
   ipcMain.on('dropped-files', (event, paths) => {
@@ -9,7 +11,17 @@ function initializeDroppedFilesHandler() {
       collectRecursivelyFilePaths(fileOrFolderPath, allFiles);
     }
 
-    event.reply('files-selected', allFiles);
+    const parsedFiles = allFiles
+      .map((filePath) => {
+      return {
+        path: filePath,
+        name: path.parse(filePath).base,
+        type: "",
+        size: fs.statSync(filePath).size,
+      };
+    })
+
+    event.reply('files-selected', parsedFiles);
   });
 }
 

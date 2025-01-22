@@ -9,6 +9,8 @@ import {ToggleSwitch} from "primeng/toggleswitch";
 import {NgClass} from "@angular/common";
 import {ThemeService} from "../../services/theme.service";
 import {GeneratRsaKeypairComponent} from './generat-rsa-keypair/generat-rsa-keypair.component';
+import {Dialog} from 'primeng/dialog';
+import {Tooltip} from 'primeng/tooltip';
 
 @Component({
   selector: 'app-head',
@@ -20,7 +22,9 @@ import {GeneratRsaKeypairComponent} from './generat-rsa-keypair/generat-rsa-keyp
     Select,
     ToggleSwitch,
     NgClass,
-    GeneratRsaKeypairComponent
+    GeneratRsaKeypairComponent,
+    Dialog,
+    Tooltip,
   ],
   templateUrl: './head.component.html',
   styleUrl: './head.component.scss'
@@ -34,6 +38,7 @@ export class HeadComponent {
   ];
   selectedLanguage: Language;
   isDarkTheme: any;
+  isHelpModalVisible: boolean = false;
 
   constructor(private translate: TranslateService,
               private themeService: ThemeService,) {
@@ -62,5 +67,9 @@ export class HeadComponent {
 
   openKeysFolder() {
     this.electron.send('open-keys-folder', null);
+  }
+
+  showHelp() {
+    this.isHelpModalVisible = true;
   }
 }
