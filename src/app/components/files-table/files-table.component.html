@@ -1,1 +1,63 @@
-<p>files-table works!</p>
+<div class="card" style="margin-top: 20px; max-height: 40vh">
+  <p-table
+    [value]="files"
+    [scrollable]="true"
+    [(selection)]="selectedFiles"
+    (selectionChange)="onSelectionChange($event)"
+    scrollHeight="55vh"
+    [size]="'small'"
+  >
+    <ng-template #header>
+      <tr>
+        <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
+        <th style="min-width:350px">{{'TABLE_HEADERS.PATH' | translate}}</th>
+        <th style="min-width:150px">{{'TABLE_HEADERS.NAME' | translate}}</th>
+        <th style="min-width:30px">{{ 'TABLE_HEADERS.TYPE' | translate }}</th>
+        <th style="min-width:100px">{{ 'TABLE_HEADERS.SIZE' | translate }}</th>
+        <th style="min-width:30px">{{ 'TABLE_HEADERS.ENCRYPT_DECRYPT' | translate }}</th>
+        <th style="min-width:20px"></th>
+        <th style="min-width:10px"></th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-cfile>
+      <tr [pSelectableRow]="cfile">
+        <td>
+          <p-tableCheckbox [value]="cfile" />
+        </td>
+        <td>{{cfile.path}}</td>
+        <td>{{cfile.name}}</td>
+        <td style="color: var(--second-color)">{{cfile.type}}</td>
+        <td>{{cfile.formattedSize}}</td>
+        <td class="buttons-cell">
+          <div style="width: 90px">
+            <p-button
+              icon="pi pi-lock"
+              size="small"
+              variant="text"
+              (onClick)="encryptFile(cfile.path)"
+            />
+            <p-button
+              *ngIf="cfile.type === 'Encrypted'"
+              icon="pi pi-lock-open"
+              size="small"
+              variant="text"
+              (onClick)="decryptFile(cfile.path)"
+            />
+          </div>
+        </td>
+        <td class="buttons-cell">
+          <p-button icon="pi pi-minus-circle" size="small" variant="text" (onClick)="removeFile(cfile)"/>
+        </td>
+        <td>
+          <p-button
+            icon="pi pi-send"
+            size="small"
+            variant="text"
+            [pTooltip]="'TOOLTIPS.SEND_WITH_MESSENGER' | translate"
+            showDelay="1000"
+            hideDelay="300"/>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

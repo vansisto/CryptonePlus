@@ -1,0 +1,116 @@
+@font-face {
+  font-family: 'Jura';
+  src: url('assets/fonts/Jura-VariableFont_wght.ttf') format('truetype');
+}
+
+body.light-theme {
+  --second-color: #504021;
+  --second-color-additional: #755c31;
+  --third-color: #ffde86;
+  --third-color-additional: #bc9a4f;
+  --primary-color: #dcd5cf;
+  --primary-color-additional: #ccc2ad;
+  --primary-color-hover: #857a65;
+
+  --table-color: #2e2d2b;
+  --table-row-hover-background: #d5c7b3;
+  --table-row-selected-background: #eaeaea;
+
+  --danger-color: #c5310e;
+}
+
+body.dark-theme {
+  --second-color: #bc9a4f;
+  --second-color-additional: #ffde86;
+  --third-color: #bc9a4f;
+  --third-color-additional: #ffde86;
+  --primary-color: #45433c;
+  --primary-color-additional: #1e1c19;
+  --primary-color-hover: #55534b;
+
+  --table-color: #ede8e2;
+  --table-row-hover-background: #60594d;
+  --table-row-selected-background: #dcad6c;
+
+  --danger-color: #d55d2a;
+}
+
+body {
+  user-select: none;
+  --p-button-label-font-weight: none;
+
+  --p-button-primary-border-color: var(--second-color);
+  --p-button-primary-hover-border-color: var(--second-color);
+  --p-button-primary-active-border-color: var(--second-color);
+  --p-button-danger-border-color: var(--danger-color);
+  --p-button-danger-hover-border-color: var(--danger-color);
+
+  --p-checkbox-border-color: var(--primary-color);
+  --p-checkbox-hover-border-color: var(--third-color);
+  --p-checkbox-checked-background: var(--third-color);
+  --p-checkbox-checked-border-color: var(--third-color);
+  --p-checkbox-checked-hover-background: var(--third-color-additional);
+  --p-checkbox-checked-hover-border-color: var(--third-color);
+  --p-checkbox-background: var(--primary-color-additional);
+
+  --p-inputtext-border-color: var(--primary-color-additional);
+  --p-inputtext-hover-border-color: var(--third-color-additional);
+  --p-inputtext-focus-border-color: var(--third-color-additional);
+  --p-inputtext-background: var(--primary-color);
+  --p-inputtext-color: var(--second-color);
+  --p-inputtext-focus-ring-shadow: var(--third-color);
+  --p-floatlabel-focus-color: var(--second-color);
+  --p-floatlabel-on-active-background: var(--primary-color);
+  --p-focus-ring-shadow: 0 0 0 0.2rem color-mix(in srgb,var(--second-color),transparent 80%);
+
+  --p-datatable-header-cell-color: var(--table-color);
+  --p-datatable-header-cell-background: var(--third-color);
+  --p-datatable-body-cell-selected-border-color: var(--primary-color);
+  --p-datatable-row-background: none !important;
+  --p-datatable-row-hover-background: var(--table-row-hover-background);
+  --p-datatable-row-selected-background: color-mix(in srgb,var(--second-color),transparent 84%);
+  --p-datatable-row-selected-color: var(--table-color);
+  --p-datatable-row-color: var(--table-color)
+}
+
+.p-button, .p-select, .p-dialog, .p-table {
+  background-color: var(--primary-color) !important;
+  color: var(--second-color) !important;
+}
+.p-button:hover, .p-select:hover {
+  background-color: var(--primary-color-hover) !important;
+}
+
+.p-select {
+  border-color: var(--second-color) !important;
+}
+.p-select-label {
+  color: var(--second-color) !important;
+}
+.p-select-option-selected {
+  background-color: var(--second-color) !important;
+}
+.p-inputwrapper-focus {
+  outline-color: var(--second-color) !important;
+  box-shadow: 0 0 5px var(--second-color) !important;
+}
+
+body {
+  background-color: var(--primary-color) !important;
+  color: var(--second-color) !important;
+  font-family: 'Jura', serif;
+}
+
+.pi-moon {
+  color: var(--second-color) !important;
+}
+.p-toggleswitch-slider {
+  background-color: var(--primary-color) !important;
+  border-color: var(--second-color) !important;
+}
+.p-toggleswitch-checked .p-toggleswitch-slider {
+  background-color: var(--second-color) !important;
+}
+.p-toggleswitch-handle {
+  background-color: var(--primary-color-additional) !important;
+}

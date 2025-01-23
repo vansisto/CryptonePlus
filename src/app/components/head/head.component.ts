@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {Button} from 'primeng/button';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {DropdownModule} from 'primeng/dropdown';
@@ -8,6 +8,9 @@ import {Select} from 'primeng/select';
 import {ToggleSwitch} from "primeng/toggleswitch";
 import {NgClass} from "@angular/common";
 import {ThemeService} from "../../services/theme.service";
+import {GeneratRsaKeypairComponent} from './generat-rsa-keypair/generat-rsa-keypair.component';
+import {Dialog} from 'primeng/dialog';
+import {Tooltip} from 'primeng/tooltip';
 
 @Component({
   selector: 'app-head',
@@ -18,18 +21,24 @@ import {ThemeService} from "../../services/theme.service";
     FormsModule,
     Select,
     ToggleSwitch,
-    NgClass
+    NgClass,
+    GeneratRsaKeypairComponent,
+    Dialog,
+    Tooltip,
   ],
   templateUrl: './head.component.html',
-  styleUrl: './head.component.css'
+  styleUrl: './head.component.scss'
 })
 export class HeadComponent {
+  @ViewChild('generateRSAKeyPairComponent') generatRsaKeypairComponent: GeneratRsaKeypairComponent | undefined;
+  electron: any = (window as any).electron;
   languages: Language[] = [
     {language: "UA"},
     {language: "EN"}
   ];
   selectedLanguage: Language;
   isDarkTheme: any;
+  isHelpModalVisible: boolean = false;
 
   constructor(private translate: TranslateService,
               private themeService: ThemeService,) {
@@ -49,5 +58,18 @@ export class HeadComponent {
 
   onThemeToggle() {
     this.themeService.toggleTheme();
+  }
+
+  generateRSAKeyPair() {
+    this.generatRsaKeypairComponent!.open();
+    this.electron.send('generate-test-file', null)
+  }
+
+  openKeysFolder() {
+    this.electron.send('open-keys-folder', null);
+  }
+
+  showHelp() {
+    this.isHelpModalVisible = true;
   }
 }
