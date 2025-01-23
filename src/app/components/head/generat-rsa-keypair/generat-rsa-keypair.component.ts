@@ -6,6 +6,7 @@ import {Button} from 'primeng/button';
 import {PrimeTemplate} from 'primeng/api';
 import {FloatLabel} from 'primeng/floatlabel';
 import {InputText} from 'primeng/inputtext';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-generat-rsa-keypair',
@@ -17,7 +18,8 @@ import {InputText} from 'primeng/inputtext';
     ReactiveFormsModule,
     FloatLabel,
     InputText,
-    Button
+    Button,
+    TranslatePipe
   ],
   templateUrl: './generat-rsa-keypair.component.html',
   styleUrl: './generat-rsa-keypair.component.scss'

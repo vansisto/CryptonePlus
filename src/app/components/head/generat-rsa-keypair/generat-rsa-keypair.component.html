@@ -1,5 +1,5 @@
 <p-dialog
-  header="Створення пари ключів"
+  [header]="'DIALOGS.GENERATE_KEY_PAIR.HEADER' | translate"
   [(visible)]="visible"
   [modal]="true"
   [closable]="true"
@@ -16,7 +16,7 @@
       [binary]="true"
     />
     <!--suppress XmlInvalidId -->
-    <label for="ownKeyPair" style="margin: 0 0 5px 10px; cursor: pointer">Встановити власні імена ключів</label>
+    <label for="ownKeyPair" style="margin: 0 0 5px 10px; cursor: pointer">{{'DIALOGS.GENERATE_KEY_PAIR.OWN_KEY_PAIR_NAME_CHECKBOX' | translate}}</label>
   </form>
 
   <div [class.hidden-field]="!useCustomName" class="mb-3">
@@ -28,14 +28,14 @@
         autocomplete="off"
         style="width: 100%;"
       />
-      <label for="keyPairName">Key pair name</label>
+      <label for="keyPairName">{{'DIALOGS.GENERATE_KEY_PAIR.KEY_PAIR_NAME_LABEL' | translate}}</label>
     </p-floatlabel>
   </div>
 
   <ng-template pTemplate="footer">
     <p-button
       styleClass="generateButton"
-      label="Generate"
+      [label]="'DIALOGS.GENERATE_KEY_PAIR.GENERATE_BUTTON' | translate"
       (onClick)="onGenerateClick()"
     />
   </ng-template>
