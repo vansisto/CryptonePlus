@@ -1,6 +1,7 @@
 import {Component, NgZone, OnInit} from '@angular/core';
 import {CFile} from '../../models/cfile';
 import {TableModule} from 'primeng/table';
+import {TranslatePipe} from '@ngx-translate/core';
 import {InputFile} from '../../interfaces/input-file'
 import {Button} from 'primeng/button';
 import {NgIf} from '@angular/common';
@@ -13,7 +14,8 @@ import {FilesService} from '../../services/files.service';
     TableModule,
     Button,
     NgIf,
-    Tooltip
+    Tooltip,
+    TranslatePipe
   ],
   templateUrl: './files-table.component.html',
   styleUrl: './files-table.component.scss'
@@ -35,7 +37,7 @@ export class FilesTableComponent implements OnInit {
     })
 
     const initial: CFile[] = [
-      new CFile("/Very/Long/path/to/very/long/file.ext", "VeryLongName.ext", "", 312870),
+      new CFile("/Veeeeeeeeeeeeeeeeeery/Long/path/to/very/long/file.ext", "VeeeeeeeeeeeeeeeryLongName.ext", "", 312870),
       new CFile("/Long/Path/to/Some/File.file", "LongFileName.file", "Encrypted", 512130000),
       new CFile("/Short/path", "Path", "", 55),
       new CFile("/", "Name", "", 55130)

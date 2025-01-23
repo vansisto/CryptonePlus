@@ -1,66 +1,72 @@
 <div class="grid" style="width: 99%">
   <div class="col-4">
-    <p-button (onClick)="addFiles()" [label]="'Add files'" [style]="{'width': '200px'}" size="large"/>
+    <p-button (onClick)="addFiles()" [label]="'CONTROL_SECTION.ADD_FILES_BUTTON' | translate" [style]="{'width': '200px'}" size="large"/>
   </div>
-  <div class="col-2"></div>
   <div class="col-2 total-size text-right">
-    Total size: {{totalSizeFormatted}}
+    {{ 'CONTROL_SECTION.TOTAL_SIZE_LABEL' | translate:{ totalSize: totalSizeFormatted } }}
   </div>
-  <div class="col-2">
-    <p-button icon="pi pi-trash" severity="danger" label="Remove all" />
+  <div class="col-3">
+    <p-button
+      icon="pi pi-minus-circle"
+      severity="danger"
+      [label]="'CONTROL_SECTION.REMOVE_ALL_BUTTON' | translate"
+      (onClick)="removeAll()"
+    />
   </div>
-  <div class="col-2">
-    <p-button icon="pi pi-share-alt" label="Share all" />
-  </div>
-</div>
-
-<div class="grid" style="width: 99%">
-  <div class="col-8"></div>
-  <div class="col-2">
-    <p-button icon="pi pi-lock" size="small" label="Encrypt all" />
-  </div>
-  <div class="col-2">
-    <p-button icon="pi pi-lock-open" size="small" label="Decrypt all" />
+  <div class="col-3">
+    <p-button icon="pi pi-send" [label]="'CONTROL_SECTION.SEND_ALL_BUTTON' | translate" />
   </div>
 </div>
 
 <div class="grid" style="width: 99%">
-  <div class="col-8"></div>
-  <div class="col-2">
+  <div class="col-6"></div>
+  <div class="col-3">
+    <p-button icon="pi pi-lock" size="small" [label]="'CONTROL_SECTION.ENCRYPT_ALL_BUTTON' | translate" />
+  </div>
+  <div class="col-3">
+    <p-button icon="pi pi-lock-open" size="small" [label]="'CONTROL_SECTION.DECRYPT_ALL_BUTTON' | translate" />
+  </div>
+</div>
+
+<div class="grid" style="width: 99%">
+  <div class="col-6"></div>
+  <div class="col-3">
     <p-button
       *ngIf="selectedFiles.length > 0"
       icon="pi pi-lock"
       size="small"
-      label="Encrypt selected"
+      [style]="{'background-color': 'var(--second-color)'}"
+      [label]="'CONTROL_SECTION.ENCRYPT_SELECTED_BUTTON' | translate"
     />
   </div>
-  <div class="col-2">
+  <div class="col-3">
     <p-button
       *ngIf="selectedFiles.length > 0"
       icon="pi pi-lock-open"
       size="small"
-      label="Decrypt selected"
+      [label]="'CONTROL_SECTION.DECRYPT_SELECTED_BUTTON' | translate"
     />
   </div>
 </div>
 
 <div class="grid" style="width: 99%">
-  <div class="col-8"></div>
-  <div class="col-2">
+  <div class="col-6"></div>
+  <div class="col-3">
     <p-button
       *ngIf="selectedFiles.length > 0"
-      icon="pi pi-trash"
+      icon="pi pi-minus-circle"
       size="small"
-      label="Remove selected"
+      [label]="'CONTROL_SECTION.REMOVE_SELECTED_BUTTON' | translate"
+      (onClick)="removeSelected()"
       severity="danger"
     />
   </div>
-  <div class="col-2">
+  <div class="col-3">
     <p-button
       *ngIf="selectedFiles.length > 0"
-      icon="pi pi-share-alt"
+      icon="pi pi-send"
       size="small"
-      label="Share selected"
+      [label]="'CONTROL_SECTION.SEND_SELECTED_BUTTON' | translate"
     />
   </div>
 </div>

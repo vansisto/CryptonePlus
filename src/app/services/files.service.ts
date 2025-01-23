@@ -37,4 +37,19 @@ export class FilesService {
   getTotalSize(): number {
     return this.filesSubject.value.reduce((sum, file) => sum + file.size, 0);
   }
+
+  removeAllFiles(): void {
+    this.filesSubject.next([]);
+  }
+
+  removeSelected() {
+    const selectedFiles = this.selectedFilesSubject.value;
+    const allFiles = this.filesSubject.value;
+
+    const updatedFiles = allFiles.filter(
+      file => !selectedFiles.some(selected => selected.path === file.path)
+    );
+    this.filesSubject.next(updatedFiles);
+    this.selectedFilesSubject.next([]);
+  }
 }

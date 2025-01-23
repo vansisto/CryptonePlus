@@ -69,6 +69,7 @@ body {
   --p-datatable-row-background: none !important;
   --p-datatable-row-hover-background: var(--table-row-hover-background);
   --p-datatable-row-selected-background: color-mix(in srgb,var(--second-color),transparent 84%);
+  --p-datatable-row-selected-color: var(--table-color);
   --p-datatable-row-color: var(--table-color)
 }
 

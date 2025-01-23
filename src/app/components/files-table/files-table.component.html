@@ -10,12 +10,12 @@
     <ng-template #header>
       <tr>
         <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
-        <th style="min-width:300px">Path</th>
-        <th style="min-width:100px">Name</th>
-        <th style="min-width:30px">Type</th>
-        <th style="min-width:100px">Size</th>
-        <th style="min-width:30px">Encrypt/Decrypt</th>
-        <th style="min-width:20px">Remove</th>
+        <th style="min-width:350px">{{'TABLE_HEADERS.PATH' | translate}}</th>
+        <th style="min-width:150px">{{'TABLE_HEADERS.NAME' | translate}}</th>
+        <th style="min-width:30px">{{ 'TABLE_HEADERS.TYPE' | translate }}</th>
+        <th style="min-width:100px">{{ 'TABLE_HEADERS.SIZE' | translate }}</th>
+        <th style="min-width:30px">{{ 'TABLE_HEADERS.ENCRYPT_DECRYPT' | translate }}</th>
+        <th style="min-width:20px"></th>
         <th style="min-width:10px"></th>
       </tr>
     </ng-template>
@@ -46,14 +46,14 @@
           </div>
         </td>
         <td class="buttons-cell">
-          <p-button icon="pi pi-trash" size="small" variant="text" (onClick)="removeFile(cfile)"/>
+          <p-button icon="pi pi-minus-circle" size="small" variant="text" (onClick)="removeFile(cfile)"/>
         </td>
         <td>
           <p-button
-            icon="pi pi-share-alt"
+            icon="pi pi-send"
             size="small"
             variant="text"
-            pTooltip="Share with messenger"
+            [pTooltip]="'TOOLTIPS.SEND_WITH_MESSENGER' | translate"
             showDelay="1000"
             hideDelay="300"/>
         </td>

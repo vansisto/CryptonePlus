@@ -16,10 +16,10 @@ function collectRecursivelyFilePaths(fileOrFolderPath, filePaths) {
   }
 }
 
-function sendFilesToRenderer(mainWindow, pendingFiles) {
-  if (pendingFiles && pendingFiles.length > 0 && mainWindow) {
-    const expandedFiles = expandAllPaths(pendingFiles);
-    const parsedFiles = expandedFiles
+function sendFilesToRenderer(mainWindow, files) {
+  if (files && files.length > 0 && mainWindow) {
+    const expandedFiles = expandAllPaths(files);
+    const mappedFilesToCFiles = expandedFiles
       .map((filePath) => {
         return {
           path: filePath,
@@ -28,8 +28,8 @@ function sendFilesToRenderer(mainWindow, pendingFiles) {
           size: fs.statSync(filePath).size,
         };
       })
-    mainWindow.webContents.send('add-files', parsedFiles);
-    pendingFiles.splice(0, pendingFiles.length);
+    mainWindow.webContents.send('add-files', mappedFilesToCFiles);
+    files.splice(0, files.length);
   }
 }
 

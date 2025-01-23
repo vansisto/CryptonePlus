@@ -19,6 +19,7 @@ import {NgIf} from '@angular/common';
   styleUrl: './control.component.scss'
 })
 export class ControlComponent implements OnInit {
+  electron: any = (window as any).electron;
   selectedFiles: CFile[] = [];
 
   constructor(
@@ -28,17 +29,24 @@ export class ControlComponent implements OnInit {
 
   ngOnInit() {
     this.filesService.selectedFiles$.subscribe(files => {
-      console.log("Files: " + files);
       this.selectedFiles = files as CFile[];
     })
   }
 
   addFiles(): void {
-
+    this.electron.openFileDialog();
   }
 
   get totalSizeFormatted() {
     const totalSize = this.filesService.getTotalSize();
     return FileSizeConverterUtil.formatFileSize(totalSize);
+  }
+
+  removeAll() {
+    this.filesService.removeAllFiles();
+  }
+
+  removeSelected() {
+    this.filesService.removeSelected();
   }
 }
