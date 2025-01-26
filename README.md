@@ -6,3 +6,25 @@
 - 🟢 Low: Minor tasks or enhancements. These can be addressed when higher-priority issues are resolved.
 - 🔵 Optional: Tasks that are not essential. They can be addressed if time permits but have minimal impact on the project.
 - 🟣 Lowest Priority: Non-essential or purely cosmetic tasks. These can be considered only if all other priorities are completed and there is additional time or interest.
+
+## Run locally
+### Prerequisites
+- nodejs v22
+
+### 1. Install packages
+```shell 
+  npm install 
+```
+
+### 2. Build 
+```shell
+  npm run build
+```
+
+### 2. Start
+```shell
+  npm run start
+```
+
+## Encrypting logic
+![](./CryptoneCipher.png)
