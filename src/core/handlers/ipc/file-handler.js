@@ -1,6 +1,6 @@
 const {ipcMain, dialog} = require("electron");
 const {collectRecursivelyFilePaths, sendFilesToRenderer} = require("../../utils/file-utils")
-const {isCryptoneEncoded} = require("../crypto/file-crypter-handler")
+const {isCryptoneEncoded} = require("../../utils/file-utils")
 const path = require("path");
 const fs = require("fs");
 
