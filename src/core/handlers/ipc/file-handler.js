@@ -1,5 +1,6 @@
 const {ipcMain, dialog} = require("electron");
 const {collectRecursivelyFilePaths, sendFilesToRenderer} = require("../../utils/file-utils")
+const {isCryptoneEncoded} = require("../crypto/file-crypter-handler")
 const path = require("path");
 const fs = require("fs");
 
@@ -17,7 +18,7 @@ function extractCFilesRecursively(paths) {
       return {
         path: filePath,
         name: path.parse(filePath).base,
-        type: "",
+        encrypted: isCryptoneEncoded(filePath),
         size: fs.statSync(filePath).size,
       };
     });

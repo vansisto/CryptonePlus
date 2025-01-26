@@ -26,7 +26,7 @@
         </td>
         <td>{{cfile.path}}</td>
         <td>{{cfile.name}}</td>
-        <td style="color: var(--second-color)">{{cfile.type}}</td>
+        <td style="color: var(--second-color)">{{cfile.encrypted ? "Encrypted" : ""}}</td>
         <td>{{cfile.formattedSize}}</td>
         <td class="buttons-cell">
           <div style="width: 90px">
@@ -34,14 +34,14 @@
               icon="pi pi-lock"
               size="small"
               variant="text"
-              (onClick)="encryptFile(cfile.path)"
+              (onClick)="encryptFile(cfile)"
             />
             <p-button
-              *ngIf="cfile.type === 'Encrypted'"
+              *ngIf="cfile.encrypted"
               icon="pi pi-lock-open"
               size="small"
               variant="text"
-              (onClick)="decryptFile(cfile.path)"
+              (onClick)="decryptFile(cfile)"
             />
           </div>
         </td>

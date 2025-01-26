@@ -21,6 +21,7 @@ import {FilesService} from '../../services/files.service';
   styleUrl: './files-table.component.scss'
 })
 export class FilesTableComponent implements OnInit {
+  electron = (window as any).electron;
   files!: CFile[];
   selectedFiles: CFile | undefined;
 
@@ -35,14 +36,6 @@ export class FilesTableComponent implements OnInit {
         this.files = files;
       })
     })
-
-    const initial: CFile[] = [
-      new CFile("/Veeeeeeeeeeeeeeeeeery/Long/path/to/very/long/file.ext", "VeeeeeeeeeeeeeeeryLongName.ext", "", 312870),
-      new CFile("/Long/Path/to/Some/File.file", "LongFileName.file", "Encrypted", 512130000),
-      new CFile("/Short/path", "Path", "", 55),
-      new CFile("/", "Name", "", 55130)
-    ];
-    this.filesService.setFiles(initial);
 
     const electron = (window as any).electron;
 
@@ -68,12 +61,12 @@ export class FilesTableComponent implements OnInit {
     this.filesService.removeFile(file);
   }
 
-  encryptFile(filePath: string) {
-
+  encryptFile(cfile: CFile) {
+    this.electron.encryptFile(cfile, "pass", "C:\\Users\\vansi\\AppData\\Roaming\\cryptone\\CryptoneKeys\\Offline\\test\\test.public.key");
   }
 
-  decryptFile(filePath: string) {
-
+  decryptFile(cfile: CFile) {
+    this.electron.decryptFile(cfile, "pass", "C:\\Users\\vansi\\AppData\\Roaming\\cryptone\\CryptoneKeys\\Offline\\test\\test.private.key");
   }
 
   onSelectionChange(selectedFiles: CFile[]) {

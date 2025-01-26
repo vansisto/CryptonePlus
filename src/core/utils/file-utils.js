@@ -1,6 +1,7 @@
 const {statSync, readdirSync} = require("node:fs");
 const path = require('path');
 const fs = require("fs");
+const {isCryptoneEncoded} = require("../handlers/crypto/file-crypter-handler")
 
 function collectRecursivelyFilePaths(fileOrFolderPath, filePaths) {
   const stats = statSync(fileOrFolderPath);
@@ -24,7 +25,7 @@ function sendFilesToRenderer(mainWindow, files) {
         return {
           path: filePath,
           name: path.parse(filePath).base,
-          type: "",
+          encrypted: isCryptoneEncoded(filePath),
           size: fs.statSync(filePath).size,
         };
       })
