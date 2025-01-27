@@ -1,10 +1,12 @@
-const {ipcMain, dialog} = require("electron");
+const {ipcMain, dialog, app} = require("electron");
 const {collectRecursivelyFilePaths, sendFilesToRenderer} = require("../../utils/file-utils")
 const {isCryptoneEncoded} = require("../../utils/file-utils")
 const path = require("path");
 const fs = require("fs");
 
 const ADD_FILES_CHANNEL = 'add-files';
+const userDataPath = app.getPath('userData');
+const baseKeysPath = path.join(userDataPath, 'CryptoneKeys', 'Offline');
 
 function extractCFilesRecursively(paths) {
   const allFiles = [];
@@ -63,11 +65,36 @@ function initializeOpenFileDialogHandler(mainWindow) {
   });
 }
 
+function initializeSelectKeyDialogHandler() {
+  ipcMain.handle('select-key-dialog', (event, isPublic) => {
+    return dialog
+      .showOpenDialog({
+        properties: ['openFile'],
+        defaultPath: baseKeysPath,
+        filters: [
+          {
+            name: isPublic ? 'Cryptone public key' : 'Cryptone private key',
+            extensions: [ isPublic ? 'crtn.public.key' : 'crtn.private.key']
+          },
+        ],
+      })
+      .then((result) => {
+        if (!result.canceled) {
+          return result.filePaths[0]
+        }
+      })
+      .catch((err) => {
+        console.error('Error opening key selection dialog:', err);
+      });
+  });
+}
+
 function initializeFileHandlers(mainWindow, pendingFiles) {
   initializeDidFinishLoadHandler(mainWindow, pendingFiles);
   initializeGetPendingFilesHandler(mainWindow, pendingFiles);
   initializeDroppedFilesHandler();
   initializeOpenFileDialogHandler(mainWindow);
+  initializeSelectKeyDialogHandler();
 }
 
 module.exports = {initializeFileHandlers}

@@ -15,10 +15,6 @@ export class FilesService {
     return this.filesSubject.value;
   }
 
-  setFiles(files: CFile[]) {
-    this.filesSubject.next(files);
-  }
-
   updateSelectedFiles(selectedFiles: any[]) {
     this.selectedFilesSubject.next(selectedFiles);
   }
@@ -32,6 +28,10 @@ export class FilesService {
     const currentFiles = this.filesSubject.value;
     const updatedFiles = currentFiles.filter(file => file.path !== fileToRemove.path);
     this.filesSubject.next(updatedFiles);
+
+    const currentSelectedFiles = this.selectedFilesSubject.value;
+    const updatedSelectedFiles = currentSelectedFiles.filter(file => file.path !== fileToRemove.path);
+    this.selectedFilesSubject.next(updatedSelectedFiles);
   }
 
   getTotalSize(): number {
@@ -40,6 +40,7 @@ export class FilesService {
 
   removeAllFiles(): void {
     this.filesSubject.next([]);
+    this.selectedFilesSubject.next([]);
   }
 
   removeSelected() {
@@ -49,7 +50,7 @@ export class FilesService {
     const updatedFiles = allFiles.filter(
       file => !selectedFiles.some(selected => selected.path === file.path)
     );
-    this.filesSubject.next(updatedFiles);
     this.selectedFilesSubject.next([]);
+    this.filesSubject.next(updatedFiles);
   }
 }

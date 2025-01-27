@@ -3,7 +3,7 @@
     [value]="files"
     [scrollable]="true"
     [(selection)]="selectedFiles"
-    (selectionChange)="onSelectionChange($event)"
+    (selectionChange)="onSelectionChange(selectedFiles)"
     scrollHeight="55vh"
     [size]="'small'"
   >
@@ -25,7 +25,7 @@
           <p-tableCheckbox [value]="cfile" />
         </td>
         <td>{{cfile.path}}</td>
-        <td>{{cfile.name}}</td>
+        <td>&nbsp;&nbsp;{{cfile.name}}</td>
         <td style="color: var(--second-color)">{{cfile.encrypted ? "Encrypted" : ""}}</td>
         <td>{{cfile.formattedSize}}</td>
         <td class="buttons-cell">

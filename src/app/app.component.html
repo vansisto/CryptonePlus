@@ -4,3 +4,52 @@
   <app-control class="footer" />
   <router-outlet/>
 </div>
+
+<p-dialog header="Encrypt data" [(visible)]="encryptDialogVisible" [modal]="true" [style]="{ width: '25rem' }">
+  <div class="grid" style="margin-top: 5px">
+    <p-floatlabel variant="on" class="col-10">
+      <input
+        pInputText
+        id="public_key_path_label"
+        [(ngModel)]="publicKeyPath"
+        autocomplete="off"
+        [style]="{'width': '100%'}"
+        style="direction: rtl; unicode-bidi: embed;"
+      />
+      <label for="public_key_path_label">Public key path</label>
+    </p-floatlabel>
+    <p-button
+      (onClick)="openKeysFolder()"
+      icon="pi pi-folder"
+      class="col-2"
+    />
+  </div>
+<!--choose public key dialog-->
+<!--  password input-->
+<!--  delete original file checkbox - default = false-->
+<!--  encrypt button-->
+</p-dialog>
+
+<p-dialog header="Decrypt data" [(visible)]="decryptDialogVisible" [modal]="true" [style]="{ width: '25rem' }">
+  <div class="grid" style="margin-top: 5px">
+    <p-floatlabel variant="on" class="col-10">
+      <input
+        pInputText
+        id="private_key_path_label"
+        [(ngModel)]="privateKeyPath"
+        autocomplete="off"
+        [style]="{'width': '100%'}"
+        style="direction: rtl; unicode-bidi: embed;"
+      />
+      <label for="private_key_path_label">Private key path</label>
+    </p-floatlabel>
+    <p-button
+      (onClick)="openKeysFolder(false)"
+      icon="pi pi-folder"
+      class="col-2"
+    />
+  </div>
+  <!--  password input-->
+  <!--  delete original file checkbox - default = true-->
+  <!--  decrypt button-->
+</p-dialog>

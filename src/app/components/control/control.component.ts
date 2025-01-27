@@ -6,6 +6,7 @@ import {FilesService} from '../../services/files.service';
 import {TableModule} from 'primeng/table';
 import {CFile} from '../../models/cfile';
 import {NgIf} from '@angular/common';
+import {EncryptDialogService} from '../../services/encrypt-dialog.service';
 
 @Component({
   selector: 'app-control',
@@ -20,16 +21,22 @@ import {NgIf} from '@angular/common';
 })
 export class ControlComponent implements OnInit {
   electron: any = (window as any).electron;
+  allFiles: CFile[] = [];
   selectedFiles: CFile[] = [];
 
   constructor(
-    private filesService: FilesService
+    private filesService: FilesService,
+    private encryptDialogService: EncryptDialogService,
   ) {
   }
 
   ngOnInit() {
     this.filesService.selectedFiles$.subscribe(files => {
       this.selectedFiles = files as CFile[];
+    })
+
+    this.filesService.files$.subscribe(files => {
+      this.allFiles = files as CFile[];
     })
   }
 
@@ -48,5 +55,13 @@ export class ControlComponent implements OnInit {
 
   removeSelected() {
     this.filesService.removeSelected();
+  }
+
+  showEncryptDialog() {
+    this.encryptDialogService.showEncryptDialog();
+  }
+
+  showDecryptDialog() {
+    this.encryptDialogService.showDecryptDialog();
   }
 }

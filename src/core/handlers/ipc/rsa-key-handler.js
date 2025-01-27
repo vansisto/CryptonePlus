@@ -21,8 +21,8 @@ function initializeGenerateKeyPairHandler() {
     });
 
     const finalKeysFolderPath = path.join(baseKeysPath, keyPairName);
-    writeFileSync(path.join(finalKeysFolderPath, `${keyPairName}.public.key`), publicKey);
-    writeFileSync(path.join(finalKeysFolderPath, `${keyPairName}.private.key`), privateKey);
+    writeFileSync(path.join(finalKeysFolderPath, `${keyPairName}.crtn.public.key`), publicKey);
+    writeFileSync(path.join(finalKeysFolderPath, `${keyPairName}.crtn.private.key`), privateKey);
   })
 }
 
@@ -59,7 +59,6 @@ function initializeGenerateTestFileHandler() {
       writeFileSync(testFilePath, dataBuffer);
 
       const fileBuffer = readFileSync(testFilePath);
-      console.log(fileBuffer);
     } catch (error) {
       console.error(error);
     }
