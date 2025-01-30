@@ -27,8 +27,7 @@ export class ControlComponent implements OnInit {
   constructor(
     private filesService: FilesService,
     private encryptDialogService: EncryptDialogService,
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.filesService.selectedFiles$.subscribe(files => {
@@ -57,11 +56,27 @@ export class ControlComponent implements OnInit {
     this.filesService.removeSelected();
   }
 
-  showEncryptDialog() {
+  showEncryptDialog(type: string) {
+    switch (type) {
+      case 'ALL': this.filesService.addFilesToEncrypt(this.allFiles); break;
+      case 'SELECTED': this.filesService.addFilesToEncrypt(this.selectedFiles); break;
+    }
     this.encryptDialogService.showEncryptDialog();
   }
 
-  showDecryptDialog() {
+  showDecryptDialog(type: string) {
+    switch (type) {
+      case 'ALL': this.filesService.addFilesToDecrypt(this.allFiles); break;
+      case 'SELECTED': this.filesService.addFilesToDecrypt(this.selectedFiles); break;
+    }
     this.encryptDialogService.showDecryptDialog();
+  }
+
+  containEncrypted(): boolean {
+    return this.allFiles.some(file => file.encrypted);
+  }
+
+  selectedContainEncrypted(): boolean {
+    return this.selectedFiles.some(file => file.encrypted);
   }
 }

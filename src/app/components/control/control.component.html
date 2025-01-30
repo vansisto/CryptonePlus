@@ -31,16 +31,16 @@
       icon="pi pi-lock"
       size="small"
       [label]="'CONTROL_SECTION.ENCRYPT_ALL_BUTTON' | translate"
-      (onClick)="showEncryptDialog()"
+      (onClick)="showEncryptDialog('ALL')"
     />
   </div>
   <div class="col-3">
     <p-button
-      *ngIf="allFiles.length > 0"
+      *ngIf="allFiles.length > 0 && containEncrypted()"
       icon="pi pi-lock-open"
       size="small"
       [label]="'CONTROL_SECTION.DECRYPT_ALL_BUTTON' | translate"
-      (onClick)="showDecryptDialog()"
+      (onClick)="showDecryptDialog('ALL')"
     />
   </div>
 </div>
@@ -54,16 +54,16 @@
       size="small"
       [style]="{'background-color': 'var(--second-color)'}"
       [label]="'CONTROL_SECTION.ENCRYPT_SELECTED_BUTTON' | translate"
-      (onClick)="showEncryptDialog()"
+      (onClick)="showEncryptDialog('SELECTED')"
     />
   </div>
   <div class="col-3">
     <p-button
-      *ngIf="selectedFiles.length > 0"
+      *ngIf="selectedFiles.length > 0 && selectedContainEncrypted()"
       icon="pi pi-lock-open"
       size="small"
       [label]="'CONTROL_SECTION.DECRYPT_SELECTED_BUTTON' | translate"
-      (onClick)="showDecryptDialog()"
+      (onClick)="showDecryptDialog('SELECTED')"
     />
   </div>
 </div>

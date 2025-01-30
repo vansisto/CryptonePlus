@@ -1,12 +1,3 @@
-:host ::ng-deep .generateButton {
-  background-color: var(--primary-color-additional) !important;
-  border: none !important;
-
-  &:hover {
-    background-color: var(--primary-color-hover) !important;
-  }
-}
-
 .hidden-field {
   opacity: 0;
 

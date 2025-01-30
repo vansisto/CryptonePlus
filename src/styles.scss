@@ -114,3 +114,13 @@ body {
 .p-toggleswitch-handle {
   background-color: var(--primary-color-additional) !important;
 }
+
+.footerButton {
+  background-color: var(--primary-color-additional) !important;
+  border: none !important;
+
+  &:hover {
+    background-color: var(--primary-color-hover) !important;
+  }
+}
+

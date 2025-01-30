@@ -1,0 +1,38 @@
+<p-dialog header="Encrypt data" [(visible)]="encryptDialogVisible" [modal]="true" [style]="{ width: '25rem', height: '21rem' }">
+  <div class="grid" style="margin-top: 5px">
+    <p-floatlabel variant="on" class="col-10">
+      <input
+        pInputText
+        id="public_key_path_label"
+        [(ngModel)]="keyPath"
+        autocomplete="off"
+        [style]="{'width': '100%'}"
+        style="direction: rtl; unicode-bidi: embed;"
+      />
+      <label for="public_key_path_label">Public key path</label>
+    </p-floatlabel>
+    <p-button
+      (onClick)="openKeysFolder()"
+      icon="pi pi-folder"
+      class="col-2"
+    />
+  </div>
+
+  <p-floatlabel variant="on">
+    <p-password id="password_encrypt_label" [(ngModel)]="password" autocomplete="off" [inputStyle]="{'width': '100%'}" [style]="{'width': '100%'}" />
+    <label for="password_encrypt_label">Password</label>
+  </p-floatlabel>
+
+  <div style="margin-top:5px">
+    <p-checkbox [binary]="true" [(ngModel)]="doDeleteOriginalFile" inputId="deleteOriginalFile" />
+    <label for="deleteOriginalFile" class="ml-2">Delete original file</label>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      styleClass="footerButton"
+      [label]="'Encrypt'"
+      (onClick)="encrypt()"
+    />
+  </ng-template>
+</p-dialog>

@@ -19,7 +19,6 @@ import {EncryptDialogService} from '../../services/encrypt-dialog.service';
     NgIf,
     Tooltip,
     TranslatePipe,
-    Toast
   ],
   providers: [MessageService],
   templateUrl: './files-table.component.html',
@@ -33,7 +32,6 @@ export class FilesTableComponent implements OnInit {
   constructor(
     private ngZone: NgZone,
     private filesService: FilesService,
-    private messageService: MessageService,
     private encryptDialogService: EncryptDialogService,
   ) {}
 
@@ -76,30 +74,12 @@ export class FilesTableComponent implements OnInit {
   }
 
   encryptFile(cfile: CFile) {
-    // this.messageService.add({ severity: 'info', summary: 'Info', detail: 'File encryption started...' })
-    // const encryptionResult: Promise<any> = this.electron.encryptFile(cfile, "pass", "C:\\Users\\vansi\\AppData\\Roaming\\cryptone\\CryptoneKeys\\Offline\\test\\test.public.key");
-    //
-    // encryptionResult.then(result => {
-    //   const toast = result.success
-    //     ? {severity: 'success', summary: 'Encrypted'}
-    //     : {severity: 'error', summary: 'Error'};
-    //   this.messageService.add({ severity: toast.severity, summary: toast.summary, detail: result.message })
-    // })
-
+    this.filesService.addFileToEncrypt(cfile);
     this.encryptDialogService.showEncryptDialog();
   }
 
   decryptFile(cfile: CFile) {
-    // this.messageService.add({ severity: 'info', summary: 'Info', detail: 'File decryption started...' })
-    // const decryptionResult: Promise<any> = this.electron.decryptFile(cfile, "pass", "C:\\Users\\vansi\\AppData\\Roaming\\cryptone\\CryptoneKeys\\Offline\\test\\test.private.key");
-    //
-    // decryptionResult.then(result => {
-    //   const toast = result.success
-    //     ? {severity: 'success', summary: 'Decrypted'}
-    //     : {severity: 'error', summary: 'Error'};
-    //   this.messageService.add({ severity: toast.severity, summary: toast.summary, detail: result.message })
-    // })
-
+    this.filesService.addFileToDecrypt(cfile);
     this.encryptDialogService.showDecryptDialog();
   }
 

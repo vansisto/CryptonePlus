@@ -19,4 +19,12 @@ export class EncryptDialogService {
   showDecryptDialog() {
     this.decryptDialogVisibleSubject.next(true);
   }
+
+  hideEncryptDialog() {
+    this.encryptDialogVisibleSubject.next(false);
+  }
+
+  hideDecryptDialog() {
+    this.decryptDialogVisibleSubject.next(false);
+  }
 }
