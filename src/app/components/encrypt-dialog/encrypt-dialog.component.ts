@@ -29,7 +29,7 @@ import {FilesService} from '../../services/files.service';
 export class EncryptDialogComponent implements OnInit {
   electron = (window as any).electron;
   encryptDialogVisible: boolean = false;
-  doDeleteOriginalFile: boolean = false;
+  deleteAfter: boolean = false;
   keyPath: string = "";
   password: string = "";
 
@@ -47,21 +47,11 @@ export class EncryptDialogComponent implements OnInit {
 
   encrypt() {
     this.messageService.add({ severity: 'info', summary: 'Info', detail: 'File encryption started...' })
-    this.filesService
-      .encrypt(this.password, this.keyPath)
+    this.filesService.encryptFiles(this.password, this.keyPath, this.deleteAfter)
       .then(result => {
         this.showResultToast(result);
-        if (this.doDeleteOriginalFile) {
-          this.filesService.deleteFilesToEncrypt()
-            .then(() => {
-              this.filesService.removeDeletedFilesFromTable();
-              this.filesService.clearFilesToEncryptFromMemory();
-            });
-        } else {
-          this.filesService.clearFilesToEncryptFromMemory();
-        }
+        this.encryptDialogService.hideEncryptDialog();
       });
-    this.encryptDialogService.hideEncryptDialog();
   }
 
   openKeysFolder(isPublic: boolean = true) {
@@ -71,19 +61,19 @@ export class EncryptDialogComponent implements OnInit {
   }
 
   private showResultToast(result: {
-    encryptedCount: number;
+    okCount: number;
     failCount: number;
     failedFiles: CFile[]
   }) {
       const hasFailed = result.failCount > 0;
-      const allFailed = result.failCount > 0 && result.encryptedCount === 0;
+      const allFailed = result.failCount > 0 && result.okCount === 0;
       let summary = 'Success';
       let severity = 'success';
       let message = 'Files encrypted successfully';
       if (hasFailed) {
         summary = 'Warning';
         severity = 'warn';
-        message = `Files encrypted [${result.encryptedCount}].
+        message = `Files encrypted [${result.okCount}].
         Files failed [${result.failCount}].
         Failed files ${JSON.stringify(result.failedFiles.map(cfile => cfile.name))}`
       }
@@ -93,5 +83,9 @@ export class EncryptDialogComponent implements OnInit {
         message = 'Files have not been encrypted';
       }
       this.messageService.add({severity: severity, summary: summary, detail: message});
+  }
+
+  clearFilesToProcess() {
+    this.filesService.filesToProcess = [];
   }
 }

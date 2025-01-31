@@ -58,16 +58,16 @@ export class ControlComponent implements OnInit {
 
   showEncryptDialog(type: string): void {
     switch (type) {
-      case 'ALL': this.filesService.addFilesToEncrypt(this.allFiles); break;
-      case 'SELECTED': this.filesService.addFilesToEncrypt(this.selectedFiles); break;
+      case 'ALL': this.filesService.addFilesToProcess(this.allFiles); break;
+      case 'SELECTED': this.filesService.addFilesToProcess(this.selectedFiles); break;
     }
     this.encryptDialogService.showEncryptDialog();
   }
 
   showDecryptDialog(type: string): void {
     switch (type) {
-      case 'ALL': this.filesService.addFilesToDecrypt(this.allFiles); break;
-      case 'SELECTED': this.filesService.addFilesToDecrypt(this.selectedFiles); break;
+      case 'ALL': this.filesService.addFilesToProcess(this.allFiles); break;
+      case 'SELECTED': this.filesService.addFilesToProcess(this.selectedFiles); break;
     }
     this.encryptDialogService.showDecryptDialog();
   }

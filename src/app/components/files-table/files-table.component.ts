@@ -73,13 +73,13 @@ export class FilesTableComponent implements OnInit {
     this.filesService.removeFile(file);
   }
 
-  encryptFile(cfile: CFile) {
-    this.filesService.addFileToEncrypt(cfile);
+  showEncryptDialog(cfile: CFile) {
+    this.filesService.addFileToProcess(cfile);
     this.encryptDialogService.showEncryptDialog();
   }
 
-  decryptFile(cfile: CFile) {
-    this.filesService.addFileToDecrypt(cfile);
+  showDecryptDialog(cfile: CFile) {
+    this.filesService.addFileToProcess(cfile);
     this.encryptDialogService.showDecryptDialog();
   }
 

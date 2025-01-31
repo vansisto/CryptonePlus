@@ -1,4 +1,10 @@
-<p-dialog header="Decrypt data" [(visible)]="dialogVisible" [modal]="true" [style]="{ width: '25rem', height: '21rem' }">
+<p-dialog
+  header="Decrypt data"
+  [(visible)]="dialogVisible"
+  [modal]="true"
+  [style]="{ width: '25rem', height: '21rem' }"
+  (onHide)="clearFilesToProcess()"
+>
   <div class="grid" style="margin-top: 5px">
     <p-floatlabel variant="on" class="col-10">
       <input
@@ -31,7 +37,7 @@
   </p-floatlabel>
 
   <div style="margin-top:5px">
-    <p-checkbox [binary]="true" [(ngModel)]="doDeleteEncryptedFile" inputId="deleteEncryptedFile" />
+    <p-checkbox [binary]="true" [(ngModel)]="deleteAfter" inputId="deleteEncryptedFile" />
     <label for="deleteEncryptedFile" class="ml-2">Delete original file</label>
   </div>
 

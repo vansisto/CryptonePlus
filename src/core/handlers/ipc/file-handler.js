@@ -97,6 +97,12 @@ function initializeDeleteFilesHandler() {
   })
 }
 
+function initializeIsFileExistsHandler() {
+  ipcMain.handle('file-exists', (event, cfile) => {
+    return fs.existsSync(cfile.path);
+  })
+}
+
 function initializeFileHandlers(mainWindow, pendingFiles) {
   initializeDidFinishLoadHandler(mainWindow, pendingFiles);
   initializeGetPendingFilesHandler(mainWindow, pendingFiles);
@@ -104,6 +110,7 @@ function initializeFileHandlers(mainWindow, pendingFiles) {
   initializeOpenFileDialogHandler(mainWindow);
   initializeSelectKeyDialogHandler();
   initializeDeleteFilesHandler();
+  initializeIsFileExistsHandler();
 }
 
 module.exports = {initializeFileHandlers}

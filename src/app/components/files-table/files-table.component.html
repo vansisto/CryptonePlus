@@ -34,14 +34,14 @@
               icon="pi pi-lock"
               size="small"
               variant="text"
-              (onClick)="encryptFile(cfile)"
+              (onClick)="showEncryptDialog(cfile)"
             />
             <p-button
               *ngIf="cfile.encrypted"
               icon="pi pi-lock-open"
               size="small"
               variant="text"
-              (onClick)="decryptFile(cfile)"
+              (onClick)="showDecryptDialog(cfile)"
             />
           </div>
         </td>

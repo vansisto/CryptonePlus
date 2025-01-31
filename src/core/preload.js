@@ -8,6 +8,7 @@ window.electron = {
   encryptFile: (cfile, password, publicKeyPath) => ipcRenderer.invoke('encrypt-file', cfile, password, publicKeyPath),
   decryptFile: (cfile, password, privateKeyPath) => ipcRenderer.invoke('decrypt-file', cfile, password, privateKeyPath),
   isEncryptedFile: (cfile) => ipcRenderer.invoke('is-encrypted-file', cfile),
+  fileExists: (cfile) => ipcRenderer.invoke('file-exists', cfile),
   selectKeyDialog: (isPublic) => ipcRenderer.invoke('select-key-dialog', isPublic),
   deleteFiles: (cfiles) => ipcRenderer.invoke('delete-files', cfiles),
 };

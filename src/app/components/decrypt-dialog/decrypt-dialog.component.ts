@@ -30,7 +30,7 @@ export class DecryptDialogComponent implements OnInit {
   electron = (window as any).electron;
   keyPath: string = "";
   password: string = "";
-  doDeleteEncryptedFile: boolean = true;
+  deleteAfter: boolean = true;
   dialogVisible: boolean = false;
 
   constructor(
@@ -53,37 +53,27 @@ export class DecryptDialogComponent implements OnInit {
 
   decrypt() {
     this.messageService.add({ severity: 'info', summary: 'Info', detail: 'File decryption started...' })
-    this.filesService
-      .decrypt(this.password, this.keyPath)
+    this.filesService.decryptFiles(this.password, this.keyPath, this.deleteAfter)
       .then(result => {
         this.showResultToast(result);
-        if (this.doDeleteEncryptedFile) {
-          this.filesService.deleteFilesToDecrypt()
-            .then(() => {
-              this.filesService.removeDeletedFilesFromTable();
-              this.filesService.clearFilesToDecryptFromMemory();
-            });
-        } else {
-          this.filesService.clearFilesToDecryptFromMemory();
-        }
-      })
-    this.encryptDialogService.hideDecryptDialog();
+        this.encryptDialogService.hideDecryptDialog();
+      });
   }
 
   private showResultToast(result: {
-    decryptedCount: number;
+    okCount: number;
     failCount: number;
     failedFiles: CFile[]
   }) {
     const hasFailed = result.failCount > 0;
-    const allFailed = result.failCount > 0 && result.decryptedCount === 0;
+    const allFailed = result.failCount > 0 && result.okCount === 0;
     let summary = 'Success';
     let severity = 'success';
     let message = 'Files decrypted successfully';
     if (hasFailed) {
       summary = 'Warning';
       severity = 'warn';
-      message = `Files decrypted [${result.decryptedCount}].
+      message = `Files decrypted [${result.okCount}].
       Files failed [${result.failCount}].
       Failed files ${JSON.stringify(result.failedFiles.map(cfile => cfile.name))}`
     }
@@ -93,5 +83,9 @@ export class DecryptDialogComponent implements OnInit {
       message = 'Files have not been decrypted';
     }
     this.messageService.add({severity: severity, summary: summary, detail: message});
+  }
+
+  clearFilesToProcess() {
+    this.filesService.filesToProcess = [];
   }
 }

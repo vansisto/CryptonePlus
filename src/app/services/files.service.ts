@@ -9,14 +9,9 @@ export class FilesService {
   private selectedFilesSubject: BehaviorSubject<CFile[]> = new BehaviorSubject<CFile[]>([]);
   allFiles$: Observable<CFile[]> = this.allFilesSubject.asObservable();
   selectedFiles$: Observable<CFile[]> = this.selectedFilesSubject.asObservable();
-  filesToEncrypt: CFile[] = [];
-  filesToDecrypt: CFile[] = [];
+  filesToProcess: CFile[] = [];
 
   constructor() { }
-
-  getAllFiles(): CFile[] {
-    return this.allFilesSubject.value;
-  }
 
   updateSelectedFiles(selectedFiles: any[]): void {
     this.selectedFilesSubject.next(selectedFiles);
@@ -57,60 +52,44 @@ export class FilesService {
     this.allFilesSubject.next(updatedFiles);
   }
 
-  addFilesToEncrypt(newFiles: CFile[]): void {
-    const uniqueFiles = newFiles.filter(file =>
-      !this.filesToEncrypt.some(existing => existing.path === file.path)
-    );
-
-    this.filesToEncrypt = [...this.filesToEncrypt, ...uniqueFiles];
-  }
-
-  addFileToEncrypt(newFile: CFile): void {
-    const exists = this.filesToEncrypt.some(existing => existing.path === newFile.path);
+  addFileToProcess(newFile: CFile): void {
+    const exists = this.filesToProcess.some(existing => existing.path === newFile.path);
     if (!exists) {
-      this.filesToEncrypt.push(newFile);
+      this.filesToProcess.push(newFile);
     }
   }
 
-  addFilesToDecrypt(newFiles: CFile[]): void {
-    const encryptedFiles: CFile[] = newFiles.filter(file => file.encrypted);
-    const uniqueFiles = encryptedFiles.filter(file =>
-      !this.filesToDecrypt.some(existing => existing.path === file.path)
-    );
-
-    this.filesToDecrypt = [...this.filesToDecrypt, ...uniqueFiles];
-  }
-
-  addFileToDecrypt(newFile: CFile): void {
-    const exists = this.filesToDecrypt.some(existing => existing.path === newFile.path);
-    if (newFile.encrypted && !exists) {
-      this.filesToDecrypt.push(newFile);
-    }
+  addFilesToProcess(newFiles: CFile[]): void {
+    newFiles.forEach((file: CFile) => {
+      this.filesToProcess.push(file);
+    })
   }
 
   async encrypt(password: string, keyPath: string): Promise<{
-    encryptedCount: number;
+    okCount: number;
     failCount: number;
     failedFiles: CFile[]
   }> {
-    let encryptedCount = 0;
+    let okCount = 0;
     let failCount = 0;
     const failedFiles: CFile[] = [];
 
-    const promises = this.filesToEncrypt.map((cfile: CFile) => {
-      return this.electron.encryptFile(cfile, password, keyPath).then((result: { success: boolean; message: string }) => {
-        if (!result.success) {
-          failCount++;
-          failedFiles.push(cfile);
-        } else {
-          encryptedCount++;
-        }
+    const promises = this.filesToProcess
+      .map((cfile: CFile) => {
+        return this.electron.encryptFile(cfile, password, keyPath)
+          .then((result: { success: boolean; message: string }) => {
+            if (!result.success) {
+              failCount++;
+              failedFiles.push(cfile);
+            } else {
+              okCount++;
+            }
+          });
       });
-    });
 
     return Promise.all(promises).then(() => {
       return {
-        encryptedCount,
+        okCount,
         failCount,
         failedFiles
       };
@@ -118,57 +97,90 @@ export class FilesService {
   }
 
   async decrypt(password: string, keyPath: string): Promise<{
-    decryptedCount: number;
+    okCount: number;
     failCount: number;
     failedFiles: CFile[]
   }> {
-    let decryptedCount = 0;
+    let okCount = 0;
     let failCount = 0;
     const failedFiles: CFile[] = [];
 
-    const promises = this.filesToDecrypt.map((cfile: CFile) => {
-      return this.electron.decryptFile(cfile, password, keyPath)
-        .then((result: { success: boolean; message: string }) => {
-          if (!result.success) {
-            failCount++;
-            failedFiles.push(cfile);
-          } else {
-            decryptedCount++;
-          }
-        });
-    });
+    const promises = this.filesToProcess
+      .filter(file => file.encrypted)
+      .map((cfile: CFile) => {
+        return this.electron.decryptFile(cfile, password, keyPath)
+          .then((result: { success: boolean; message: string }) => {
+            if (!result.success) {
+              failCount++;
+              failedFiles.push(cfile);
+            } else {
+              okCount++;
+            }
+          });
+      });
 
     return Promise.all(promises).then(() => {
       return {
-        decryptedCount,
+        okCount,
         failCount,
         failedFiles
       }
     });
   }
 
-  async deleteFilesToEncrypt(): Promise<void> {
-    return this.electron.deleteFiles(this.filesToEncrypt);
+  deleteProcessedFilesExcept(failedFiles: CFile[]) {
+    const filesToDelete: CFile[] = this.filesToProcess.filter(file =>
+      !failedFiles.some(failed => failed.path === file.path)
+    );
+
+    this.electron.deleteFiles(filesToDelete)
+      .then(() => this.revalidateFilesExisting());
   }
 
-  async deleteFilesToDecrypt(): Promise<void> {
-    return this.electron.deleteFiles(this.filesToDecrypt);
-  }
-
-  removeDeletedFilesFromTable(): void {
-    this.filesToEncrypt.forEach((cfile: CFile) => {
-      this.removeFile(cfile);
+  encryptFiles(password: string, keyPath: string, deleteAfter: boolean): Promise<{ okCount: number, failCount: number, failedFiles: CFile[] }> {
+    return new Promise((resolve) => {
+      this.encrypt(password, keyPath)
+        .then(result => {
+          if (deleteAfter) {
+            this.deleteProcessedFilesExcept(result.failedFiles);
+          }
+          resolve(result);
+        });
     })
-    this.filesToDecrypt.forEach((cfile: CFile) => {
-      this.removeFile(cfile);
+  }
+
+  decryptFiles(password: string, keyPath: string, deleteAfter: boolean): Promise<{ okCount: number, failCount: number, failedFiles: CFile[] }> {
+    return new Promise((resolve) => {
+      this.decrypt(password, keyPath)
+        .then(result => {
+          if (deleteAfter) {
+            const notEncryptedFiles = this.filesToProcess.filter(file => !file.encrypted);
+            const excludedFiles: CFile[] = [...result.failedFiles, ...notEncryptedFiles];
+            this.deleteProcessedFilesExcept(excludedFiles);
+          }
+          resolve(result);
+        })
     })
   }
 
-  clearFilesToEncryptFromMemory(): void {
-    this.filesToEncrypt = []
-  }
+  async revalidateFilesExisting(): Promise<void> {
+    const checks = this.allFilesSubject.value.map(async (cfile) => {
+      const exists = await this.electron.fileExists(cfile);
+      return { cfile, exists };
+    });
 
-  clearFilesToDecryptFromMemory(): void {
-    this.filesToDecrypt = [];
+    const checkedFiles = await Promise.all(checks);
+
+    const updatedFiles = checkedFiles
+      .filter(result => result.exists)
+      .map(result => result.cfile);
+
+    this.allFilesSubject.next(updatedFiles);
+
+    const updatedSelected: CFile[] = this.selectedFilesSubject.value
+      .filter(selectedCFile =>
+        updatedFiles.some(cfile => cfile.path === selectedCFile.path)
+      );
+    this.selectedFilesSubject.next(updatedSelected);
   }
 }
