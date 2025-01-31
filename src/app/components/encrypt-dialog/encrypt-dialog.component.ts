@@ -7,9 +7,9 @@ import {FormsModule} from "@angular/forms";
 import {InputText} from "primeng/inputtext";
 import {Password} from "primeng/password";
 import {MessageService, PrimeTemplate} from "primeng/api";
-import {EncryptDialogService} from '../../services/encrypt-dialog.service';
+import {CryptoDialogService} from '../../services/crypto-dialog.service';
 import {CFile} from '../../models/cfile';
-import {FilesService} from '../../services/files.service';
+import {FileEncryptionService} from '../../services/file-encryption.service';
 
 @Component({
   selector: 'app-encrypt-dialog',
@@ -34,9 +34,9 @@ export class EncryptDialogComponent implements OnInit {
   password: string = "";
 
   constructor(
-    private encryptDialogService: EncryptDialogService,
+    private encryptDialogService: CryptoDialogService,
     private messageService: MessageService,
-    private filesService: FilesService,
+    private fileEncryptionService: FileEncryptionService
   ) {}
 
   ngOnInit(): void {
@@ -47,7 +47,7 @@ export class EncryptDialogComponent implements OnInit {
 
   encrypt() {
     this.messageService.add({ severity: 'info', summary: 'Info', detail: 'File encryption started...' })
-    this.filesService.encryptFiles(this.password, this.keyPath, this.deleteAfter)
+    this.fileEncryptionService.encryptFiles(this.password, this.keyPath, this.deleteAfter)
       .then(result => {
         this.showResultToast(result);
         this.encryptDialogService.hideEncryptDialog();
@@ -86,6 +86,6 @@ export class EncryptDialogComponent implements OnInit {
   }
 
   clearFilesToProcess() {
-    this.filesService.filesToProcess = [];
+    this.fileEncryptionService.pendingCryptingFiles = [];
   }
 }

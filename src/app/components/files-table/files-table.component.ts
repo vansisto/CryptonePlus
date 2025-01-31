@@ -7,7 +7,8 @@ import {Button} from 'primeng/button';
 import {NgIf} from '@angular/common';
 import {FilesService} from '../../services/files.service';
 import {MessageService} from 'primeng/api';
-import {EncryptDialogService} from '../../services/encrypt-dialog.service';
+import {CryptoDialogService} from '../../services/crypto-dialog.service';
+import {FileEncryptionService} from '../../services/file-encryption.service';
 
 @Component({
   selector: 'app-files-table',
@@ -29,7 +30,8 @@ export class FilesTableComponent implements OnInit {
   constructor(
     private ngZone: NgZone,
     private filesService: FilesService,
-    private encryptDialogService: EncryptDialogService,
+    private fileEncryptionService: FileEncryptionService,
+    private encryptDialogService: CryptoDialogService,
   ) {}
 
   ngOnInit() {
@@ -53,7 +55,7 @@ export class FilesTableComponent implements OnInit {
               .some(f => f.path === inputFile.path);
             if (!exists) {
               const newCFile = CFile.fromInputFile(inputFile);
-              this.filesService.addFile(newCFile);
+              this.filesService.addFileToAll(newCFile);
 
               if (this.selectedFiles) {
                 this.selectedFiles = this.selectedFiles.filter(
@@ -70,16 +72,16 @@ export class FilesTableComponent implements OnInit {
   }
 
   removeFile(file: CFile) {
-    this.filesService.removeFile(file);
+    this.filesService.removeFileFromAll(file);
   }
 
   showEncryptDialog(cfile: CFile) {
-    this.filesService.addFileToProcess(cfile);
+    this.fileEncryptionService.addFileToPending(cfile);
     this.encryptDialogService.showEncryptDialog();
   }
 
   showDecryptDialog(cfile: CFile) {
-    this.filesService.addFileToProcess(cfile);
+    this.fileEncryptionService.addFileToPending(cfile);
     this.encryptDialogService.showDecryptDialog();
   }
 

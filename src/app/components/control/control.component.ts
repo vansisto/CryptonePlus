@@ -6,7 +6,8 @@ import {FilesService} from '../../services/files.service';
 import {TableModule} from 'primeng/table';
 import {CFile} from '../../models/cfile';
 import {NgIf} from '@angular/common';
-import {EncryptDialogService} from '../../services/encrypt-dialog.service';
+import {CryptoDialogService} from '../../services/crypto-dialog.service';
+import {FileEncryptionService} from '../../services/file-encryption.service';
 
 @Component({
   selector: 'app-control',
@@ -26,7 +27,8 @@ export class ControlComponent implements OnInit {
 
   constructor(
     private filesService: FilesService,
-    private encryptDialogService: EncryptDialogService,
+    private encryptDialogService: CryptoDialogService,
+    private fileEncryptionService: FileEncryptionService
   ) {}
 
   ngOnInit() {
@@ -58,16 +60,16 @@ export class ControlComponent implements OnInit {
 
   showEncryptDialog(type: string): void {
     switch (type) {
-      case 'ALL': this.filesService.addFilesToProcess(this.allFiles); break;
-      case 'SELECTED': this.filesService.addFilesToProcess(this.selectedFiles); break;
+      case 'ALL': this.fileEncryptionService.addFilesToPending(this.allFiles); break;
+      case 'SELECTED': this.fileEncryptionService.addFilesToPending(this.selectedFiles); break;
     }
     this.encryptDialogService.showEncryptDialog();
   }
 
   showDecryptDialog(type: string): void {
     switch (type) {
-      case 'ALL': this.filesService.addFilesToProcess(this.allFiles); break;
-      case 'SELECTED': this.filesService.addFilesToProcess(this.selectedFiles); break;
+      case 'ALL': this.fileEncryptionService.addFilesToPending(this.allFiles); break;
+      case 'SELECTED': this.fileEncryptionService.addFilesToPending(this.selectedFiles); break;
     }
     this.encryptDialogService.showDecryptDialog();
   }

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { EncryptDialogService } from './encrypt-dialog.service';
+import { CryptoDialogService } from './crypto-dialog.service';
 
 describe('EncryptDialogService', () => {
-  let service: EncryptDialogService;
+  let service: CryptoDialogService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(EncryptDialogService);
+    service = TestBed.inject(CryptoDialogService);
   });
 
   it('should be created', () => {

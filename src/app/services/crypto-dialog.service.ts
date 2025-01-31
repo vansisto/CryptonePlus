@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class EncryptDialogService {
+export class CryptoDialogService {
   private encryptDialogVisibleSubject = new BehaviorSubject<boolean>(false);
   private decryptDialogVisibleSubject = new BehaviorSubject<boolean>(false);
   encryptDialogVisible$ = this.encryptDialogVisibleSubject.asObservable()
