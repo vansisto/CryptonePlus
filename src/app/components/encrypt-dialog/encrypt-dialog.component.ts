@@ -34,9 +34,9 @@ export class EncryptDialogComponent implements OnInit {
   password: string = "";
 
   constructor(
-    private encryptDialogService: CryptoDialogService,
-    private messageService: MessageService,
-    private fileEncryptionService: FileEncryptionService
+    private readonly encryptDialogService: CryptoDialogService,
+    private readonly messageService: MessageService,
+    private readonly fileEncryptionService: FileEncryptionService
   ) {}
 
   ngOnInit(): void {

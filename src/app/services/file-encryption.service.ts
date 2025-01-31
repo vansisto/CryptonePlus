@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {CFile} from '../models/cfile';
-import { FilesService } from './files.service';
+import {FilesService} from './files.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,82 +10,34 @@ export class FileEncryptionService {
   pendingCryptingFiles: CFile[] = [];
 
   constructor(
-    private filesService: FilesService,
-  ) { }
-
-  encryptFiles(password: string, keyPath: string, deleteAfter: boolean): Promise<{ okCount: number, failCount: number, failedFiles: CFile[] }> {
-    return new Promise((resolve) => {
-      this.encrypt(password, keyPath)
-        .then(result => {
-          if (deleteAfter) {
-            this.deleteProcessedFilesExcludingFailed(result.failedFiles);
-          }
-          resolve(result);
-        });
-    });
+    private readonly filesService: FilesService,
+  ) {
   }
 
-  async encrypt(password: string, keyPath: string): Promise<{ okCount: number; failCount: number; failedFiles: CFile[] }> {
-    let okCount = 0;
-    let failCount = 0;
-    const failedFiles: CFile[] = [];
-
-    const promises = this.pendingCryptingFiles
-      .map((cfile: CFile) => {
-        return this.electron.encryptFile(cfile, password, keyPath)
-          .then((result: { success: boolean; message: string }) => {
-            if (!result.success) {
-              failCount++;
-              failedFiles.push(cfile);
-            } else {
-              okCount++;
-            }
-          });
-      });
-
-    return Promise.all(promises)
-      .then(() => {
-        return {okCount, failCount, failedFiles};
-      });
+  async encryptFiles(password: string, keyPath: string, deleteAfter: boolean): Promise<{
+    okCount: number,
+    failCount: number,
+    failedFiles: CFile[]
+  }> {
+    const result = await this.processPending(true, password, keyPath);
+    if (deleteAfter) {
+      this.deleteProcessedFilesExcludingFailed(result.failedFiles);
+    }
+    return result;
   }
 
-  decryptFiles(password: string, keyPath: string, deleteAfter: boolean): Promise<{ okCount: number, failCount: number, failedFiles: CFile[] }> {
-    return new Promise((resolve) => {
-      this.decrypt(password, keyPath)
-        .then(result => {
-          if (deleteAfter) {
-            const notEncryptedFiles = this.pendingCryptingFiles.filter(file => !file.encrypted);
-            const excludedFiles: CFile[] = [...result.failedFiles, ...notEncryptedFiles];
-            this.deleteProcessedFilesExcludingFailed(excludedFiles);
-          }
-          resolve(result);
-        });
-    });
-  }
-
-  async decrypt(password: string, keyPath: string): Promise<{ okCount: number; failCount: number; failedFiles: CFile[] }> {
-    let okCount = 0;
-    let failCount = 0;
-    const failedFiles: CFile[] = [];
-
-    const promises = this.pendingCryptingFiles
-      .filter(file => file.encrypted)
-      .map((cfile: CFile) => {
-        return this.electron.decryptFile(cfile, password, keyPath)
-          .then((result: { success: boolean; message: string }) => {
-            if (!result.success) {
-              failCount++;
-              failedFiles.push(cfile);
-            } else {
-              okCount++;
-            }
-          });
-      });
-
-    return Promise.all(promises)
-      .then(() => {
-        return {okCount, failCount, failedFiles}
-      });
+  async decryptFiles(password: string, keyPath: string, deleteAfter: boolean): Promise<{
+    okCount: number,
+    failCount: number,
+    failedFiles: CFile[]
+  }> {
+    const result = await this.processPending(false, password, keyPath);
+    if (deleteAfter) {
+      const notEncryptedFiles = this.pendingCryptingFiles.filter(f => !f.encrypted);
+      const excludedFiles = [...result.failedFiles, ...notEncryptedFiles];
+      this.deleteProcessedFilesExcludingFailed(excludedFiles);
+    }
+    return result;
   }
 
   addFileToPending(newFile: CFile): void {
@@ -96,18 +48,50 @@ export class FileEncryptionService {
   }
 
   addFilesToPending(newFiles: CFile[]): void {
-    newFiles.forEach((file: CFile) => {
+    newFiles.forEach(file => {
       if (!this.pendingCryptingFiles.some(existing => existing.path === file.path)) {
         this.pendingCryptingFiles.push(file);
       }
-    })
+    });
   }
 
   deleteProcessedFilesExcludingFailed(failedFiles: CFile[]) {
-    const filesToDelete: CFile[] = this.pendingCryptingFiles.filter(file =>
-      !failedFiles.some(failed => failed.path === file.path)
+    const filesToDelete: CFile[] = this.pendingCryptingFiles.filter(
+      file => !failedFiles.some(failed => failed.path === file.path)
     );
 
     this.electron.deleteFiles(filesToDelete).then(() => this.filesService.syncFilesWithFileSystem());
+  }
+
+  private async processPending(isEncrypt: boolean, password: string, keyPath: string): Promise<{
+    okCount: number;
+    failCount: number;
+    failedFiles: CFile[]
+  }> {
+    let okCount = 0;
+    let failCount = 0;
+    const failedFiles: CFile[] = [];
+
+    const files = isEncrypt
+      ? this.pendingCryptingFiles
+      : this.pendingCryptingFiles.filter(file => file.encrypted);
+
+    const actionFunction = isEncrypt
+      ? (cfile: CFile) => this.electron.encryptFile(cfile, password, keyPath)
+      : (cFile: CFile) => this.electron.decryptFile(cFile, password, keyPath);
+
+    const promises = files.map(cfile => {
+      return actionFunction(cfile).then((result: { success: boolean; message: string }) => {
+        if (!result.success) {
+          failCount++;
+          failedFiles.push(cfile);
+        } else {
+          okCount++;
+        }
+      });
+    });
+
+    await Promise.all(promises);
+    return {okCount, failCount, failedFiles};
   }
 }

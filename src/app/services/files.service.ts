@@ -5,12 +5,10 @@ import {CFile} from '../models/cfile';
 @Injectable({providedIn: 'root'})
 export class FilesService {
   electron: any = (window as any).electron;
-  private allFilesSubject: BehaviorSubject<CFile[]> = new BehaviorSubject<CFile[]>([]);
-  private selectedFilesSubject: BehaviorSubject<CFile[]> = new BehaviorSubject<CFile[]>([]);
+  private readonly allFilesSubject: BehaviorSubject<CFile[]> = new BehaviorSubject<CFile[]>([]);
+  private readonly selectedFilesSubject: BehaviorSubject<CFile[]> = new BehaviorSubject<CFile[]>([]);
   allFiles$: Observable<CFile[]> = this.allFilesSubject.asObservable();
   selectedFiles$: Observable<CFile[]> = this.selectedFilesSubject.asObservable();
-
-  constructor() { }
 
   updateSelectedFiles(selectedFiles: CFile[]): void {
     this.selectedFilesSubject.next(selectedFiles);
@@ -22,10 +20,6 @@ export class FilesService {
   }
 
   removeFileFromAll(fileToRemove: CFile): void {
-    // const currentSelectedFiles = this.selectedFilesSubject.value;
-    // const selectedFilesWithoutRemoved = currentSelectedFiles.filter(file => file.path !== fileToRemove.path);
-    // this.selectedFilesSubject.next(selectedFilesWithoutRemoved);
-
     const currentFiles = this.allFilesSubject.value;
     const allFilesWithoutRemoved = currentFiles.filter(file => file.path !== fileToRemove.path);
     this.allFilesSubject.next(allFilesWithoutRemoved);
@@ -60,12 +54,6 @@ export class FilesService {
       .map(result => result.cfile);
 
     this.allFilesSubject.next(updatedFiles);
-    //
-    // const updatedSelected: CFile[] = this.selectedFilesSubject.value
-    //   .filter(selectedCFile =>
-    //     updatedFiles.some(cfile => cfile.path === selectedCFile.path)
-    //   );
-    // this.selectedFilesSubject.next(updatedSelected);
     this.syncSelectedFiles();
   }
 

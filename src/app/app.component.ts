@@ -34,7 +34,7 @@ export class AppComponent {
   title = 'Cryptone';
 
   constructor(
-    private themeService: ThemeService,
+    private readonly themeService: ThemeService,
   ) {
     this.themeService.loadTheme()
   }

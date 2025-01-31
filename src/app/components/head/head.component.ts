@@ -40,8 +40,8 @@ export class HeadComponent {
   isDarkTheme: any;
   isHelpModalVisible: boolean = false;
 
-  constructor(private translate: TranslateService,
-              private themeService: ThemeService,) {
+  constructor(private readonly translate: TranslateService,
+              private readonly themeService: ThemeService,) {
     const storedLanguage = localStorage.getItem('language');
     this.selectedLanguage = storedLanguage
       ? (JSON.parse(storedLanguage) as Language)

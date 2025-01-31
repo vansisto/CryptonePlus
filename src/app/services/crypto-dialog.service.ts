@@ -5,8 +5,8 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class CryptoDialogService {
-  private encryptDialogVisibleSubject = new BehaviorSubject<boolean>(false);
-  private decryptDialogVisibleSubject = new BehaviorSubject<boolean>(false);
+  private readonly encryptDialogVisibleSubject = new BehaviorSubject<boolean>(false);
+  private readonly decryptDialogVisibleSubject = new BehaviorSubject<boolean>(false);
   encryptDialogVisible$ = this.encryptDialogVisibleSubject.asObservable()
   decryptDialogVisible$ = this.decryptDialogVisibleSubject.asObservable()
 

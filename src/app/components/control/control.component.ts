@@ -26,9 +26,9 @@ export class ControlComponent implements OnInit {
   selectedFiles!: CFile[];
 
   constructor(
-    private filesService: FilesService,
-    private encryptDialogService: CryptoDialogService,
-    private fileEncryptionService: FileEncryptionService
+    private readonly filesService: FilesService,
+    private readonly encryptDialogService: CryptoDialogService,
+    private readonly fileEncryptionService: FileEncryptionService
   ) {}
 
   ngOnInit() {
