@@ -89,12 +89,21 @@ function initializeSelectKeyDialogHandler() {
   });
 }
 
+function initializeDeleteFilesHandler() {
+  ipcMain.handle('delete-files', (event, cfiles) => {
+    cfiles.forEach((file) => {
+      fs.rmSync(file.path)
+    })
+  })
+}
+
 function initializeFileHandlers(mainWindow, pendingFiles) {
   initializeDidFinishLoadHandler(mainWindow, pendingFiles);
   initializeGetPendingFilesHandler(mainWindow, pendingFiles);
   initializeDroppedFilesHandler();
   initializeOpenFileDialogHandler(mainWindow);
   initializeSelectKeyDialogHandler();
+  initializeDeleteFilesHandler();
 }
 
 module.exports = {initializeFileHandlers}

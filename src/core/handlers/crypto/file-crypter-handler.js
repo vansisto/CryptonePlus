@@ -23,12 +23,20 @@ function initializeFileCrypterHandler(mainWindow) {
     const fileMetadata = buildFileMetadata(cfile);
 
     const outputFilePath = buildEncodedFilePath(cfile);
-    const finalBuffer = encryptFile(rsaPublicKey, fileBuffer, password, fileMetadata);
 
-    fs.writeFileSync(outputFilePath, finalBuffer);
-    return {
-      success: true,
-      message: 'File encrypted',
+    try {
+      const finalBuffer = encryptFile(rsaPublicKey, fileBuffer, password, fileMetadata);
+
+      fs.writeFileSync(outputFilePath, finalBuffer);
+      return {
+        success: true,
+        message: 'File encrypted',
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Encryption error',
+      };
     }
   });
 
@@ -41,14 +49,22 @@ function initializeFileCrypterHandler(mainWindow) {
       success: false,
       message: 'File is not Cryptone Encrypted',
     }
-    const {originalFileNameBuffer, decryptedFileContent} = decryptFile(cfile, privateKeyPath, password);
 
-    const outputFilePath = buildDecodedFilePath(cfile, originalFileNameBuffer);
-    fs.writeFileSync(outputFilePath, decryptedFileContent);
+    try {
+      const {originalFileNameBuffer, decryptedFileContent} = decryptFile(cfile, privateKeyPath, password);
 
-    return {
-      success: true,
-      message: 'File decrypted',
+      const outputFilePath = buildDecodedFilePath(cfile, originalFileNameBuffer);
+      fs.writeFileSync(outputFilePath, decryptedFileContent);
+
+      return {
+        success: true,
+        message: 'File decrypted',
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Decryption error',
+      };
     }
   });
 

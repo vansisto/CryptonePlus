@@ -51,8 +51,17 @@ export class EncryptDialogComponent implements OnInit {
       .encrypt(this.password, this.keyPath)
       .then(result => {
         this.showResultToast(result);
-        this.filesService.clearFilesToEncrypt();
+        if (this.doDeleteOriginalFile) {
+          this.filesService.deleteFilesToEncrypt()
+            .then(() => {
+              this.filesService.removeDeletedFilesFromTable();
+              this.filesService.clearFilesToEncryptFromMemory();
+            });
+        } else {
+          this.filesService.clearFilesToEncryptFromMemory();
+        }
       });
+    this.encryptDialogService.hideEncryptDialog();
   }
 
   openKeysFolder(isPublic: boolean = true) {
@@ -74,14 +83,15 @@ export class EncryptDialogComponent implements OnInit {
       if (hasFailed) {
         summary = 'Warning';
         severity = 'warn';
-        message = `Files encrypted [${result.encryptedCount}]. Files failed [${result.failCount}]. Failed files [${JSON.stringify(result.failedFiles)}]`
+        message = `Files encrypted [${result.encryptedCount}].
+        Files failed [${result.failCount}].
+        Failed files ${JSON.stringify(result.failedFiles.map(cfile => cfile.name))}`
       }
       if (allFailed) {
         summary = 'Error';
-        severity = 'danger';
+        severity = 'error';
         message = 'Files have not been encrypted';
       }
-      this.encryptDialogService.hideEncryptDialog();
       this.messageService.add({severity: severity, summary: summary, detail: message});
   }
 }

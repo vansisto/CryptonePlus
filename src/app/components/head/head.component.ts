@@ -62,7 +62,6 @@ export class HeadComponent {
 
   generateRSAKeyPair() {
     this.generatRsaKeypairComponent!.open();
-    this.electron.send('generate-test-file', null)
   }
 
   openKeysFolder() {

@@ -5,10 +5,8 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {InputFile} from '../../interfaces/input-file'
 import {Button} from 'primeng/button';
 import {NgIf} from '@angular/common';
-import {Tooltip} from 'primeng/tooltip';
 import {FilesService} from '../../services/files.service';
 import {MessageService} from 'primeng/api';
-import {Toast} from 'primeng/toast';
 import {EncryptDialogService} from '../../services/encrypt-dialog.service';
 
 @Component({
@@ -17,7 +15,6 @@ import {EncryptDialogService} from '../../services/encrypt-dialog.service';
     TableModule,
     Button,
     NgIf,
-    Tooltip,
     TranslatePipe,
   ],
   providers: [MessageService],
@@ -26,7 +23,7 @@ import {EncryptDialogService} from '../../services/encrypt-dialog.service';
 })
 export class FilesTableComponent implements OnInit {
   electron = (window as any).electron;
-  files!: CFile[];
+  allFiles!: CFile[];
   selectedFiles: CFile[] = [];
 
   constructor(
@@ -36,10 +33,14 @@ export class FilesTableComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.filesService.files$.subscribe(files => {
+    this.filesService.allFiles$.subscribe(files => {
       this.ngZone.run(() => {
-        this.files = files;
+        this.allFiles = files;
       })
+    })
+
+    this.filesService.selectedFiles$.subscribe(files => {
+      this.selectedFiles = files;
     })
 
     const electron = (window as any).electron;
@@ -48,8 +49,7 @@ export class FilesTableComponent implements OnInit {
       if (inputFiles) {
         this.ngZone.run(() => {
           inputFiles.forEach(inputFile => {
-            const exists = this.filesService
-              .getFiles()
+            const exists = this.allFiles
               .some(f => f.path === inputFile.path);
             if (!exists) {
               const newCFile = CFile.fromInputFile(inputFile);

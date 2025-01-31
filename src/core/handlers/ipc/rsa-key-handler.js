@@ -49,24 +49,7 @@ function initializeCreateRSAKeyPairFolderHandler() {
   });
 }
 
-function initializeGenerateTestFileHandler() {
-  ipcMain.on('generate-test-file', () => {
-    try {
-      const testFilePath = path.join(userDataPath, 'test.txt');
-
-      const dataBuffer = Buffer.from([0xAA, 0xBB, 0xCC, 0xDD])
-
-      writeFileSync(testFilePath, dataBuffer);
-
-      const fileBuffer = readFileSync(testFilePath);
-    } catch (error) {
-      console.error(error);
-    }
-  });
-}
-
 function initializeRsaKeysHandlers() {
-  initializeGenerateTestFileHandler();
   initializeCreateRSAKeyPairFolderHandler();
   initializeOpenKeysFolderHandler();
   initializeGenerateKeyPairHandler();

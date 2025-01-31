@@ -9,6 +9,7 @@ window.electron = {
   decryptFile: (cfile, password, privateKeyPath) => ipcRenderer.invoke('decrypt-file', cfile, password, privateKeyPath),
   isEncryptedFile: (cfile) => ipcRenderer.invoke('is-encrypted-file', cfile),
   selectKeyDialog: (isPublic) => ipcRenderer.invoke('select-key-dialog', isPublic),
+  deleteFiles: (cfiles) => ipcRenderer.invoke('delete-files', cfiles),
 };
 
 window.addEventListener('dragover', (event) => {
