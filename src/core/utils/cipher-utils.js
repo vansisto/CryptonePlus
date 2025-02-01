@@ -1,7 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 const { generateRandomUUIDCryptoneFileName } = require('./file-utils');
-
 const crypto = require('crypto');
 
 const AES_ALGORITHM = 'aes-256-cbc';

@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require("fs");
 const {randomUUID} = require("crypto");
 
+const READ_FLAG = 'r';
 const FILE_TYPE_ENDING = '==CRTF==';
 const FILE_TYPE_ENDING_SIZE = FILE_TYPE_ENDING.length;
 
@@ -64,9 +65,16 @@ function generateRandomUUIDCryptoneFileName(dirPath) {
 
 function isCryptoneEncoded(filePath) {
   if (!fs.existsSync(filePath)) return false;
-  const fileData = fs.readFileSync(filePath);
-  const endBytes = fileData.slice(fileData.length - FILE_TYPE_ENDING_SIZE);
-  return endBytes.toString('ascii') === FILE_TYPE_ENDING;
+  const stats = fs.statSync(filePath);
+  if (stats.size < FILE_TYPE_ENDING_SIZE) return false;
+
+  const fileDescriptor = fs.openSync(filePath, READ_FLAG);
+  const buffer = Buffer.alloc(FILE_TYPE_ENDING_SIZE);
+
+  fs.readSync(fileDescriptor, buffer, 0, FILE_TYPE_ENDING_SIZE, stats.size - FILE_TYPE_ENDING_SIZE);
+  fs.closeSync(fileDescriptor);
+
+  return buffer.toString('ascii') === FILE_TYPE_ENDING;
 }
 
 module.exports = {

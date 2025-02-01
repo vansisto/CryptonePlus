@@ -39,6 +39,6 @@ function handleSecondInstance(event, commandLine) {
   initializeSecondInstanceHandler(mainWindow, pendingFiles, commandLine);
 }
 
-initializeUpdateHandlers()
+initializeUpdateHandlers();
 initializeApp();
-initializeFileCrypterHandler()
+initializeFileCrypterHandler();
