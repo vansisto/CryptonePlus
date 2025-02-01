@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { generateRandomUUIDCryptoneFileName } = require('./file-utils');
 const crypto = require('crypto');
+const { pipeline } = require('stream');
 
 const AES_ALGORITHM = 'aes-256-cbc';
 const KEY_LENGTH = 32;
@@ -26,7 +27,7 @@ async function decryptFile(privateKeyPath, cfile, password) {
   const rsaPrivateKey = fs.readFileSync(privateKeyPath);
   const decryptedMetadata = decryptMetadataWithRSA(cfile, rsaPrivateKey);
   const {iv, salt, originalFileNameBuffer} = parseEncryptedMetadata(decryptedMetadata);
-  await decryptContentWithAESToFile(cfile, password, salt, iv, originalFileNameBuffer);
+  return await decryptContentWithAESToFile(cfile, password, salt, iv, originalFileNameBuffer);
 }
 
 async function encryptContentWithAESToFile(cfile, outputStream, password, fileMetadata) {
@@ -46,16 +47,30 @@ async function encryptContentWithAESToFile(cfile, outputStream, password, fileMe
 }
 
 async function decryptContentWithAESToFile(cfile, password, salt, iv, originalFileNameBuffer) {
-  await new Promise((resolve, reject) => {
-    const {contentStart, contentEnd} = buildFileContentRange(cfile);
-    const readStream = fs.createReadStream(cfile.path, {start: contentStart, end: contentEnd});
-    const {decipher, writeStream} = createDecryptionPipelineComponents(password, salt, iv, cfile, originalFileNameBuffer);
+  return await new Promise((resolve, reject) => {
+    const { contentStart, contentEnd } = buildFileContentRange(cfile);
+    const readStream = fs.createReadStream(cfile.path, { start: contentStart, end: contentEnd });
+    const { decipher, writeStream } = createDecryptionPipelineComponents(password, salt, iv, cfile, originalFileNameBuffer);
 
-    readStream
-      .on('close', resolve)
-      .on('error', reject)
-      .pipe(decipher)
-      .pipe(writeStream);
+    pipeline(
+      readStream,
+      decipher,
+      writeStream,
+      (err) => {
+        if (err) {
+          const outFilePath = buildDecodedFilePath(cfile, originalFileNameBuffer);
+          if (fs.existsSync(outFilePath)) {
+            try {
+              fs.rmSync(outFilePath);
+            } catch (rmErr) {
+              console.error('Error while removing output file:', rmErr);
+            }
+          }
+          return reject(err);
+        }
+        resolve();
+      }
+    );
   });
 }
 

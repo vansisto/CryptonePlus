@@ -26,11 +26,44 @@
     "SHOW_INFO": "Show info"
   },
   "DIALOGS": {
+    "PASSWORD": "Password",
+    "DELETE_ORIGINAL_FILE_LABEL": "Delete original file",
     "GENERATE_KEY_PAIR": {
       "HEADER": "Generating key pair",
       "OWN_KEY_PAIR_NAME_CHECKBOX": "Set own key pair name",
       "KEY_PAIR_NAME_LABEL": "Key pair name",
       "GENERATE_BUTTON": "Generate"
+    },
+    "ENCRYPT": {
+      "TITLE": "Encrypt files",
+      "KEY_PATH_LABEL": "Public key path",
+      "BUTTON": "Encrypt"
+    },
+    "DECRYPT": {
+      "TITLE": "Decrypt files",
+      "KEY_PATH_LABEL": "Private key path",
+      "BUTTON": "Decrypt"
+    }
+  },
+  "TOASTS": {
+    "SUCCESS_TITLE": "Success",
+    "WARNING_TITLE": "Warning",
+    "ERROR_TITLE": "Error",
+    "ENCRYPT": {
+      "SUCCESS_MESSAGE": "Files encrypted successfully",
+      "STARTED_MESSAGE": "File encryption started...",
+      "FILES_DONE_MESSAGE": "Files encrypted",
+      "FILES_FAILED_MESSAGE": "Files failed",
+      "FAILED_FILES_MESSAGE": "Failed files",
+      "ERROR_MESSAGE": "Files have not been encrypted"
+    },
+    "DECRYPT": {
+      "SUCCESS_MESSAGE": "Files decrypted successfully",
+      "STARTED_MESSAGE": "File decryption started...",
+      "FILES_DONE_MESSAGE": "Files decrypted",
+      "FILES_FAILED_MESSAGE": "Files failed",
+      "FAILED_FILES_MESSAGE": "Failed files",
+      "ERROR_MESSAGE": "Files have not been decrypted"
     }
   }
 }

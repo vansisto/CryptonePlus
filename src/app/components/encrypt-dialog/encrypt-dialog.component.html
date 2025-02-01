@@ -1,5 +1,5 @@
 <p-dialog
-  header="Encrypt data"
+  [header]="'DIALOGS.ENCRYPT.TITLE' | translate"
   [(visible)]="encryptDialogVisible"
   [modal]="true"
   [style]="{ width: '25rem', height: '21rem' }"
@@ -15,7 +15,7 @@
         [style]="{'width': '100%'}"
         style="direction: rtl; unicode-bidi: embed;"
       />
-      <label for="public_key_path_label">Public key path</label>
+      <label for="public_key_path_label">{{'DIALOGS.ENCRYPT.KEY_PATH_LABEL' | translate}}</label>
     </p-floatlabel>
     <p-button
       (onClick)="openKeysFolder()"
@@ -26,18 +26,18 @@
 
   <p-floatlabel variant="on">
     <p-password id="password_encrypt_label" [(ngModel)]="password" autocomplete="off" [inputStyle]="{'width': '100%'}" [style]="{'width': '100%'}" />
-    <label for="password_encrypt_label">Password</label>
+    <label for="password_encrypt_label">{{'DIALOGS.PASSWORD' | translate}}</label>
   </p-floatlabel>
 
   <div style="margin-top:5px">
     <p-checkbox [binary]="true" [(ngModel)]="deleteAfter" inputId="deleteOriginalFile" />
-    <label for="deleteOriginalFile" class="ml-2">Delete original file</label>
+    <label for="deleteOriginalFile" class="ml-2">{{'DIALOGS.DELETE_ORIGINAL_FILE_LABEL' | translate}}</label>
   </div>
 
   <ng-template pTemplate="footer">
     <p-button
       styleClass="footerButton"
-      [label]="'Encrypt'"
+      [label]="'DIALOGS.ENCRYPT.BUTTON' | translate"
       (onClick)="encrypt()"
     />
   </ng-template>

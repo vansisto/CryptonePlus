@@ -26,11 +26,44 @@
     "SHOW_INFO": "Показати довідку"
   },
   "DIALOGS": {
+    "PASSWORD": "Пароль",
+    "DELETE_ORIGINAL_FILE_LABEL": "Видалити оригінальний файл",
     "GENERATE_KEY_PAIR": {
       "HEADER": "Генерування пари ключів",
       "OWN_KEY_PAIR_NAME_CHECKBOX": "Встановити власне ім'я пари ключів",
       "KEY_PAIR_NAME_LABEL": "Ім'я пари ключів",
       "GENERATE_BUTTON": "Згенерувати"
+    },
+    "ENCRYPT": {
+      "TITLE": "Зашифрувати файли",
+      "KEY_PATH_LABEL": "Шлях до публічного ключа",
+      "BUTTON": "Шифрувати"
+    },
+    "DECRYPT": {
+      "TITLE": "Дешифрувати файли",
+      "KEY_PATH_LABEL": "Шлях до приватного ключа",
+      "BUTTON": "Дешифрувати"
+    }
+  },
+  "TOASTS": {
+    "SUCCESS_TITLE": "Успіх",
+    "WARNING_TITLE": "Попередження",
+    "ERROR_TITLE": "Помилка",
+    "ENCRYPT": {
+      "SUCCESS_MESSAGE": "Файли успішно зашифровані",
+      "STARTED_MESSAGE": "Початок шифрування файлів...",
+      "FILES_DONE_MESSAGE": "Файлів зашифровано",
+      "FILES_FAILED_MESSAGE": "Файлів не зашифровано",
+      "FAILED_FILES_MESSAGE": "Файли з помилками",
+      "ERROR_MESSAGE": "Не вдалося зашифрувати файли"
+    },
+    "DECRYPT": {
+      "SUCCESS_MESSAGE": "Файли успішно дешифровані",
+      "STARTED_MESSAGE": "Початок дешифрування файлів...",
+      "FILES_DONE_MESSAGE": "Файлів розшифровано",
+      "FILES_FAILED_MESSAGE": "Файлів не дешифровано",
+      "FAILED_FILES_MESSAGE": "Файли з помилками",
+      "ERROR_MESSAGE": "Не вдалося дешифрувати файли"
     }
   }
 }

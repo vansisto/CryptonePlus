@@ -1,5 +1,5 @@
 <p-dialog
-  header="Decrypt data"
+  [header]="'DIALOGS.DECRYPT.TITLE' | translate"
   [(visible)]="dialogVisible"
   [modal]="true"
   [style]="{ width: '25rem', height: '21rem' }"
@@ -15,7 +15,7 @@
         [style]="{'width': '100%'}"
         style="direction: rtl; unicode-bidi: embed;"
       />
-      <label for="private_key_path_label">Private key path</label>
+      <label for="private_key_path_label">{{'DIALOGS.DECRYPT.KEY_PATH_LABEL' | translate}}</label>
     </p-floatlabel>
     <p-button
       (onClick)="openKeysFolder(false)"
@@ -33,18 +33,18 @@
       [inputStyle]="{'width': '100%'}"
       [style]="{'width': '100%'}"
     />
-    <label for="password_decrypt_label">Password</label>
+    <label for="password_decrypt_label">{{'DIALOGS.PASSWORD' | translate}}</label>
   </p-floatlabel>
 
   <div style="margin-top:5px">
     <p-checkbox [binary]="true" [(ngModel)]="deleteAfter" inputId="deleteEncryptedFile" />
-    <label for="deleteEncryptedFile" class="ml-2">Delete original file</label>
+    <label for="deleteEncryptedFile" class="ml-2">{{'DIALOGS.DELETE_ORIGINAL_FILE_LABEL' | translate}}</label>
   </div>
 
   <ng-template pTemplate="footer">
     <p-button
       styleClass="footerButton"
-      [label]="'Decrypt'"
+      [label]="'DIALOGS.DECRYPT.BUTTON' | translate"
       (onClick)="decrypt()"
     />
   </ng-template>
