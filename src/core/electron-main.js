@@ -6,6 +6,7 @@ const {initializeUpdateHandlers, checkForUpdatesAndNotify} = require("./handlers
 const {initializeMainWindow} = require("./handlers/app/main-instance-handler")
 const {initializeSecondInstanceHandler} = require("./handlers/app/second-instance-handler")
 const {handleAllWindowsClosed} = require("./handlers/app/close-handler")
+const {initializeFileCrypterHandler} = require("./handlers/crypto/file-crypter-handler");
 
 let mainWindow;
 let pendingFiles = [];
@@ -38,5 +39,6 @@ function handleSecondInstance(event, commandLine) {
   initializeSecondInstanceHandler(mainWindow, pendingFiles, commandLine);
 }
 
-initializeUpdateHandlers()
+initializeUpdateHandlers();
 initializeApp();
+initializeFileCrypterHandler();

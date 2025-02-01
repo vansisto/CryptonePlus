@@ -1,6 +1,11 @@
 const {statSync, readdirSync} = require("node:fs");
 const path = require('path');
 const fs = require("fs");
+const {randomUUID} = require("crypto");
+
+const READ_FLAG = 'r';
+const FILE_TYPE_ENDING = '==CRTF==';
+const FILE_TYPE_ENDING_SIZE = FILE_TYPE_ENDING.length;
 
 function collectRecursivelyFilePaths(fileOrFolderPath, filePaths) {
   const stats = statSync(fileOrFolderPath);
@@ -24,7 +29,7 @@ function sendFilesToRenderer(mainWindow, files) {
         return {
           path: filePath,
           name: path.parse(filePath).base,
-          type: "",
+          encrypted: isCryptoneEncoded(filePath),
           size: fs.statSync(filePath).size,
         };
       })
@@ -49,8 +54,33 @@ function extractFilesFromCommandLine(commandLine) {
     .filter(arg => arg !== '.');
 }
 
+function generateRandomUUIDCryptoneFileName(dirPath) {
+  const uuidFileName = `${randomUUID()}.crtn`;
+  const fullPath = path.join(dirPath, uuidFileName);
+  if (!fs.existsSync(fullPath)) {
+    return uuidFileName;
+  }
+  return generateRandomUUIDCryptoneFileName(dirPath);
+}
+
+function isCryptoneEncoded(filePath) {
+  if (!fs.existsSync(filePath)) return false;
+  const stats = fs.statSync(filePath);
+  if (stats.size < FILE_TYPE_ENDING_SIZE) return false;
+
+  const fileDescriptor = fs.openSync(filePath, READ_FLAG);
+  const buffer = Buffer.alloc(FILE_TYPE_ENDING_SIZE);
+
+  fs.readSync(fileDescriptor, buffer, 0, FILE_TYPE_ENDING_SIZE, stats.size - FILE_TYPE_ENDING_SIZE);
+  fs.closeSync(fileDescriptor);
+
+  return buffer.toString('ascii') === FILE_TYPE_ENDING;
+}
+
 module.exports = {
   collectRecursivelyFilePaths,
   sendFilesToRenderer,
-  extractFilesFromCommandLine
+  extractFilesFromCommandLine,
+  generateRandomUUIDCryptoneFileName,
+  isCryptoneEncoded,
 }

@@ -1,0 +1,51 @@
+<p-dialog
+  [header]="'DIALOGS.DECRYPT.TITLE' | translate"
+  [(visible)]="dialogVisible"
+  [modal]="true"
+  [style]="{ width: '25rem', height: '21rem' }"
+  (onHide)="clearFilesToProcess()"
+>
+  <div class="grid" style="margin-top: 5px">
+    <p-floatlabel variant="on" class="col-10">
+      <input
+        pInputText
+        id="private_key_path_label"
+        [(ngModel)]="keyPath"
+        autocomplete="off"
+        [style]="{'width': '100%'}"
+        style="direction: rtl; unicode-bidi: embed;"
+      />
+      <label for="private_key_path_label">{{'DIALOGS.DECRYPT.KEY_PATH_LABEL' | translate}}</label>
+    </p-floatlabel>
+    <p-button
+      (onClick)="openKeysFolder(false)"
+      icon="pi pi-folder"
+      class="col-2"
+    />
+  </div>
+
+  <p-floatlabel variant="on">
+    <p-password
+      id="password_decrypt_label"
+      [feedback]="false"
+      [(ngModel)]="password"
+      autocomplete="off"
+      [inputStyle]="{'width': '100%'}"
+      [style]="{'width': '100%'}"
+    />
+    <label for="password_decrypt_label">{{'DIALOGS.PASSWORD' | translate}}</label>
+  </p-floatlabel>
+
+  <div style="margin-top:5px">
+    <p-checkbox [binary]="true" [(ngModel)]="deleteAfter" inputId="deleteEncryptedFile" />
+    <label for="deleteEncryptedFile" class="ml-2">{{'DIALOGS.DELETE_ORIGINAL_FILE_LABEL' | translate}}</label>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      styleClass="footerButton"
+      [label]="'DIALOGS.DECRYPT.BUTTON' | translate"
+      (onClick)="decrypt()"
+    />
+  </ng-template>
+</p-dialog>

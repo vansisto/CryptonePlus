@@ -5,8 +5,10 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {InputFile} from '../../interfaces/input-file'
 import {Button} from 'primeng/button';
 import {NgIf} from '@angular/common';
-import {Tooltip} from 'primeng/tooltip';
 import {FilesService} from '../../services/files.service';
+import {MessageService} from 'primeng/api';
+import {CryptoDialogService} from '../../services/crypto-dialog.service';
+import {FileEncryptionService} from '../../services/file-encryption.service';
 
 @Component({
   selector: 'app-files-table',
@@ -14,69 +16,81 @@ import {FilesService} from '../../services/files.service';
     TableModule,
     Button,
     NgIf,
-    Tooltip,
-    TranslatePipe
+    TranslatePipe,
   ],
+  providers: [MessageService],
   templateUrl: './files-table.component.html',
   styleUrl: './files-table.component.scss'
 })
 export class FilesTableComponent implements OnInit {
-  files!: CFile[];
-  selectedFiles: CFile | undefined;
+  electron = (window as any).electron;
+  allFiles!: CFile[];
+  selectedFiles: CFile[] = [];
 
   constructor(
-    private ngZone: NgZone,
-    private filesService: FilesService,
+    private readonly ngZone: NgZone,
+    private readonly filesService: FilesService,
+    private readonly fileEncryptionService: FileEncryptionService,
+    private readonly encryptDialogService: CryptoDialogService,
   ) {}
 
   ngOnInit() {
-    this.filesService.files$.subscribe(files => {
+    this.subscribeToAllFiles();
+    this.subscribeToSelectedFiles();
+    this.setupElectronHandlers();
+    this.electron.send('get-pending-files');
+  }
+
+  private subscribeToAllFiles(): void {
+    this.filesService.allFiles$.subscribe(files => {
       this.ngZone.run(() => {
-        this.files = files;
-      })
-    })
-
-    const initial: CFile[] = [
-      new CFile("/Veeeeeeeeeeeeeeeeeery/Long/path/to/very/long/file.ext", "VeeeeeeeeeeeeeeeryLongName.ext", "", 312870),
-      new CFile("/Long/Path/to/Some/File.file", "LongFileName.file", "Encrypted", 512130000),
-      new CFile("/Short/path", "Path", "", 55),
-      new CFile("/", "Name", "", 55130)
-    ];
-    this.filesService.setFiles(initial);
-
-    const electron = (window as any).electron;
-
-    electron.receive('add-files', (inputFiles: InputFile[]) => {
-      if (inputFiles) {
-        this.ngZone.run(() => {
-          inputFiles.forEach(inputFile => {
-            const exists = this.filesService
-              .getFiles()
-              .some(f => f.path === inputFile.path);
-            if (!exists) {
-              this.filesService.addFile(CFile.fromInputFile(inputFile));
-            }
-          })
-        });
-      }
+        this.allFiles = files;
+      });
     });
+  }
 
-    electron.send('get-pending-files');
+  private subscribeToSelectedFiles(): void {
+    this.filesService.selectedFiles$.subscribe(files => {
+      this.selectedFiles = files;
+    });
   }
 
   removeFile(file: CFile) {
-    this.filesService.removeFile(file);
+    this.filesService.removeFileFromAll(file);
   }
 
-  encryptFile(filePath: string) {
-
+  showEncryptDialog(cfile: CFile) {
+    this.fileEncryptionService.addFileToPending(cfile);
+    this.encryptDialogService.showEncryptDialog();
   }
 
-  decryptFile(filePath: string) {
-
+  showDecryptDialog(cfile: CFile) {
+    this.fileEncryptionService.addFileToPending(cfile);
+    this.encryptDialogService.showDecryptDialog();
   }
 
   onSelectionChange(selectedFiles: CFile[]) {
     this.filesService.updateSelectedFiles(selectedFiles);
+  }
+
+  private setupElectronHandlers(): void {
+    this.electron.receive('add-files', (inputFiles: InputFile[]) => this.addFiles(inputFiles));
+  }
+
+  private addFiles(inputFiles: InputFile[]) {
+    if (!inputFiles) return;
+
+    this.ngZone.run(() => {
+      inputFiles.forEach(inputFile => this.addFile(inputFile));
+    });
+  }
+
+  private addFile(inputFile: InputFile) {
+    const exists = this.allFiles.some(f => f.path === inputFile.path);
+    if (!exists) {
+      const newCFile = CFile.fromInputFile(inputFile);
+      this.filesService.addFileToAll(newCFile);
+      this.selectedFiles = this.selectedFiles.filter(file => file.path !== newCFile.path);
+    }
   }
 }

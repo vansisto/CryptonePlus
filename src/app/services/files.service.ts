@@ -4,52 +4,63 @@ import {CFile} from '../models/cfile';
 
 @Injectable({providedIn: 'root'})
 export class FilesService {
-  private filesSubject: BehaviorSubject<CFile[]> = new BehaviorSubject<CFile[]>([]);
-  private selectedFilesSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  files$: Observable<CFile[]> = this.filesSubject.asObservable();
-  selectedFiles$: Observable<CFile[] | null> = this.selectedFilesSubject.asObservable();
+  electron: any = (window as any).electron;
+  private readonly allFilesSubject: BehaviorSubject<CFile[]> = new BehaviorSubject<CFile[]>([]);
+  private readonly selectedFilesSubject: BehaviorSubject<CFile[]> = new BehaviorSubject<CFile[]>([]);
+  allFiles$: Observable<CFile[]> = this.allFilesSubject.asObservable();
+  selectedFiles$: Observable<CFile[]> = this.selectedFilesSubject.asObservable();
 
-  constructor() { }
-
-  getFiles(): CFile[] {
-    return this.filesSubject.value;
-  }
-
-  setFiles(files: CFile[]) {
-    this.filesSubject.next(files);
-  }
-
-  updateSelectedFiles(selectedFiles: any[]) {
+  updateSelectedFiles(selectedFiles: CFile[]): void {
     this.selectedFilesSubject.next(selectedFiles);
   }
 
-  addFile(newFile: CFile): void {
-    const currentFiles: CFile[] = this.filesSubject.value;
-    this.filesSubject.next([...currentFiles, newFile]);
+  addFileToAll(newFile: CFile): void {
+    const currentFiles: CFile[] = this.allFilesSubject.value;
+    this.allFilesSubject.next([...currentFiles, newFile]);
   }
 
-  removeFile(fileToRemove: CFile) {
-    const currentFiles = this.filesSubject.value;
-    const updatedFiles = currentFiles.filter(file => file.path !== fileToRemove.path);
-    this.filesSubject.next(updatedFiles);
+  removeFileFromAll(fileToRemove: CFile): void {
+    const currentFiles = this.allFilesSubject.value;
+    const allFilesWithoutRemoved = currentFiles.filter(file => file.path !== fileToRemove.path);
+    this.allFilesSubject.next(allFilesWithoutRemoved);
+
+    this.syncSelectedFiles();
   }
 
   getTotalSize(): number {
-    return this.filesSubject.value.reduce((sum, file) => sum + file.size, 0);
+    return this.allFilesSubject.value.reduce((sum, file) => sum + file.size, 0);
   }
 
   removeAllFiles(): void {
-    this.filesSubject.next([]);
+    this.allFilesSubject.next([]);
+    this.selectedFilesSubject.next([]);
   }
 
-  removeSelected() {
-    const selectedFiles = this.selectedFilesSubject.value;
-    const allFiles = this.filesSubject.value;
+  removeSelected(): void {
+    this.selectedFilesSubject.value
+      .forEach((file: CFile): void => this.removeFileFromAll(file));
+  }
 
-    const updatedFiles = allFiles.filter(
-      file => !selectedFiles.some(selected => selected.path === file.path)
+  async syncFilesWithFileSystem(): Promise<void> {
+    const checks = this.allFilesSubject.value.map(async (cfile) => {
+      const exists = await this.electron.fileExists(cfile);
+      return { cfile, exists };
+    });
+
+    const checkedFiles = await Promise.all(checks);
+
+    const updatedFiles = checkedFiles
+      .filter(result => result.exists)
+      .map(result => result.cfile);
+
+    this.allFilesSubject.next(updatedFiles);
+    this.syncSelectedFiles();
+  }
+
+  private syncSelectedFiles() {
+    const newSelected = this.selectedFilesSubject.value.filter(selected =>
+      this.allFilesSubject.value.some(file => file.path === selected.path)
     );
-    this.filesSubject.next(updatedFiles);
-    this.selectedFilesSubject.next([]);
+    this.selectedFilesSubject.next(newSelected);
   }
 }

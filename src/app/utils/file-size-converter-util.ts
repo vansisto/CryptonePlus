@@ -1,6 +1,4 @@
 export class FileSizeConverterUtil {
-  constructor() { }
-
   static formatFileSize(sizeBytes: number): string {
     if (sizeBytes < 1024) {
       return sizeBytes + ' B';
