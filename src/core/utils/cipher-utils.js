@@ -116,7 +116,7 @@ function buildEncodedFilePath(cfile) {
 
 function buildDecodedFilePath(cfile, originalFileNameBuffer) {
   const outputDir = path.dirname(cfile.path);
-  const originalFileName = originalFileNameBuffer.toString('utf8');
+  const originalFileName = originalFileNameBuffer.toString();
   return path.join(outputDir, originalFileName);
 }
 

@@ -26,5 +26,11 @@
   npm run start
 ```
 
+## Build executables
+For Windows:
+```shell
+  electron-builder --win
+```
+
 ## Encrypting logic
 ![](./CryptoneCipher.png)

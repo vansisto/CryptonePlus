@@ -8,7 +8,7 @@ import {Select} from 'primeng/select';
 import {ToggleSwitch} from "primeng/toggleswitch";
 import {NgClass} from "@angular/common";
 import {ThemeService} from "../../services/theme.service";
-import {GeneratRsaKeypairComponent} from './generat-rsa-keypair/generat-rsa-keypair.component';
+import {GenerateRsaKeypairComponent} from './generate-rsa-keypair/generate-rsa-keypair.component';
 import {Dialog} from 'primeng/dialog';
 import {Tooltip} from 'primeng/tooltip';
 
@@ -22,7 +22,7 @@ import {Tooltip} from 'primeng/tooltip';
     Select,
     ToggleSwitch,
     NgClass,
-    GeneratRsaKeypairComponent,
+    GenerateRsaKeypairComponent,
     Dialog,
     Tooltip,
   ],
@@ -30,7 +30,7 @@ import {Tooltip} from 'primeng/tooltip';
   styleUrl: './head.component.scss'
 })
 export class HeadComponent {
-  @ViewChild('generateRSAKeyPairComponent') generatRsaKeypairComponent: GeneratRsaKeypairComponent | undefined;
+  @ViewChild('generateRSAKeyPairComponent') generateRsaKeypairComponent: GenerateRsaKeypairComponent | undefined;
   electron: any = (window as any).electron;
   languages: Language[] = [
     {language: "UA"},
@@ -61,7 +61,7 @@ export class HeadComponent {
   }
 
   generateRSAKeyPair() {
-    this.generatRsaKeypairComponent!.open();
+    this.generateRsaKeypairComponent!.open();
   }
 
   openKeysFolder() {

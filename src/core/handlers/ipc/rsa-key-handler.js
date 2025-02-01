@@ -21,8 +21,8 @@ function initializeGenerateKeyPairHandler() {
     });
 
     const finalKeysFolderPath = path.join(baseKeysPath, keyPairName);
-    writeFileSync(path.join(finalKeysFolderPath, `${keyPairName}.crtn.public.key`), publicKey);
-    writeFileSync(path.join(finalKeysFolderPath, `${keyPairName}.crtn.private.key`), privateKey);
+    writeFileSync(path.join(finalKeysFolderPath, `${keyPairName}.crtn_public_key`), publicKey);
+    writeFileSync(path.join(finalKeysFolderPath, `${keyPairName}.crtn_private_key`), privateKey);
   })
 }
 

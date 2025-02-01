@@ -74,7 +74,7 @@ function initializeSelectKeyDialogHandler() {
         filters: [
           {
             name: isPublic ? 'Cryptone public key' : 'Cryptone private key',
-            extensions: [ isPublic ? 'crtn.public.key' : 'crtn.private.key']
+            extensions: [ isPublic ? 'crtn_public_key' : 'crtn_private_key']
           },
         ],
       })
