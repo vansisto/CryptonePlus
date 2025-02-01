@@ -11,47 +11,86 @@ const IV_SIZE = 16;
 const SALT_SIZE = 32;
 const RSA_BLOCK_SIZE = 512;
 
-function encryptFile(rsaPublicKey, fileBuffer, password, fileMetadata) {
-  const rsaEncryptedMetadata = crypto.publicEncrypt(rsaPublicKey, Buffer.concat([fileMetadata.iv, fileMetadata.salt, fileMetadata.fileNameBuffer]));
-  const aesEncryptedContent = encryptContentWithAES(fileBuffer, password, fileMetadata.iv, fileMetadata.salt);
-  const endingBuffer = Buffer.from(FILE_TYPE_ENDING, 'ascii');
+async function encryptFile(cfile, publicKeyPath, password) {
+  const fileMetadata = buildFileMetadata(cfile);
+  const outputFilePath = buildEncodedFilePath(cfile);
+  const outputStream = fs.createWriteStream(outputFilePath);
 
-  return Buffer.concat([
-    rsaEncryptedMetadata,
-    aesEncryptedContent,
-    endingBuffer
-  ]);
+  const rsaEncryptedMetadata = encryptMetadataWithRSA(publicKeyPath, fileMetadata, cfile);
+  outputStream.write(rsaEncryptedMetadata);
+
+  await encryptContentWithAESToFile(cfile, outputStream, password, fileMetadata);
 }
 
-function decryptFile(cfile, privateKeyPath, password) {
-  const {rsaEncryptedMetadata, aesEncryptedContent} = parseEncodedFile(cfile);
+async function decryptFile(privateKeyPath, cfile, password) {
   const rsaPrivateKey = fs.readFileSync(privateKeyPath);
-  const decryptedMetadata = crypto.privateDecrypt(rsaPrivateKey, rsaEncryptedMetadata);
-
+  const decryptedMetadata = decryptMetadataWithRSA(cfile, rsaPrivateKey);
   const {iv, salt, originalFileNameBuffer} = parseEncryptedMetadata(decryptedMetadata);
-
-  const decryptedFileContent = decryptContentWithAES(aesEncryptedContent, password, iv, salt);
-  return {originalFileNameBuffer, decryptedFileContent};
+  await decryptContentWithAESToFile(cfile, password, salt, iv, originalFileNameBuffer);
 }
 
-function encryptContentWithAES(fileBuffer, password, iv, salt) {
-  const key = crypto.scryptSync(password, salt, KEY_LENGTH);
-  const cipher = crypto.createCipheriv(AES_ALGORITHM, key, iv);
+async function encryptContentWithAESToFile(cfile, outputStream, password, fileMetadata) {
+  await new Promise((resolve, reject) => {
+    const aesKey = crypto.scryptSync(password, fileMetadata.salt, KEY_LENGTH);
+    const {cipher, readStream} = createEncryptionPipelineComponents(aesKey, fileMetadata, cfile);
 
-  return Buffer.concat([
-    cipher.update(fileBuffer),
-    cipher.final()
-  ]);
+    readStream
+      .on('close', () => {
+        outputStream.end(Buffer.from(FILE_TYPE_ENDING, 'ascii'));
+        resolve();
+      })
+      .on('error', reject)
+      .pipe(cipher)
+      .pipe(outputStream, {end: false});
+  });
 }
 
-function decryptContentWithAES(encryptedBuffer, password, iv, salt) {
-  const key = crypto.scryptSync(password, salt, KEY_LENGTH);
-  const decipher = crypto.createDecipheriv(AES_ALGORITHM, key, iv);
+async function decryptContentWithAESToFile(cfile, password, salt, iv, originalFileNameBuffer) {
+  await new Promise((resolve, reject) => {
+    const {contentStart, contentEnd} = buildFileContentRange(cfile);
+    const readStream = fs.createReadStream(cfile.path, {start: contentStart, end: contentEnd});
+    const {decipher, writeStream} = createDecryptionPipelineComponents(password, salt, iv, cfile, originalFileNameBuffer);
 
-  return Buffer.concat([
-    decipher.update(encryptedBuffer),
-    decipher.final()
-  ]);
+    readStream
+      .on('close', resolve)
+      .on('error', reject)
+      .pipe(decipher)
+      .pipe(writeStream);
+  });
+}
+
+function encryptMetadataWithRSA(publicKeyPath, fileMetadata, cfile) {
+  const rsaPublicKey = fs.readFileSync(publicKeyPath);
+  return crypto.publicEncrypt(
+    rsaPublicKey,
+    Buffer.concat([
+      fileMetadata.iv,
+      fileMetadata.salt,
+      Buffer.from(cfile.name, 'utf8')
+    ])
+  );
+}
+
+function decryptMetadataWithRSA(cfile, rsaPrivateKey) {
+  const fileDescriptor = fs.openSync(cfile.path, 'r');
+  const rsaMetaBuffer = Buffer.alloc(RSA_BLOCK_SIZE);
+  fs.readSync(fileDescriptor, rsaMetaBuffer, 0, RSA_BLOCK_SIZE, 0);
+  fs.closeSync(fileDescriptor);
+  return crypto.privateDecrypt(rsaPrivateKey, rsaMetaBuffer);
+}
+
+function createEncryptionPipelineComponents(aesKey, fileMetadata, cfile) {
+  const cipher = crypto.createCipheriv(AES_ALGORITHM, aesKey, fileMetadata.iv);
+  const readStream = fs.createReadStream(cfile.path);
+  return {cipher, readStream};
+}
+
+function createDecryptionPipelineComponents(password, salt, iv, cfile, originalFileNameBuffer) {
+  const aesKey = crypto.scryptSync(password, salt, KEY_LENGTH);
+  const decipher = crypto.createDecipheriv(AES_ALGORITHM, aesKey, iv);
+  const outputFilePath = buildDecodedFilePath(cfile, originalFileNameBuffer);
+  const writeStream = fs.createWriteStream(outputFilePath);
+  return {decipher, writeStream};
 }
 
 function buildEncodedFilePath(cfile) {
@@ -66,12 +105,11 @@ function buildDecodedFilePath(cfile, originalFileNameBuffer) {
   return path.join(outputDir, originalFileName);
 }
 
-function parseEncodedFile(cfile) {
-  let fileBuffer = fs.readFileSync(cfile.path);
-  fileBuffer = fileBuffer.slice(0, fileBuffer.length - FILE_TYPE_ENDING_SIZE);
-  const rsaEncryptedMetadata = fileBuffer.slice(0, RSA_BLOCK_SIZE);
-  const aesEncryptedContent = fileBuffer.slice(RSA_BLOCK_SIZE);
-  return {rsaEncryptedMetadata, aesEncryptedContent};
+function buildFileContentRange(cfile) {
+  const fileSize = fs.statSync(cfile.path).size;
+  const contentStart = RSA_BLOCK_SIZE;
+  const contentEnd = fileSize - FILE_TYPE_ENDING_SIZE - 1;
+  return {contentStart, contentEnd};
 }
 
 function parseEncryptedMetadata(decryptedMetadata) {
@@ -89,9 +127,6 @@ function buildFileMetadata(cfile) {
 }
 
 module.exports = {
-  buildFileMetadata,
   encryptFile,
   decryptFile,
-  buildEncodedFilePath,
-  buildDecodedFilePath,
 }
