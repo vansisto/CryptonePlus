@@ -19,7 +19,7 @@ export class ThemeService {
   }
 
   loadTheme(): void {
-    const savedTheme = localStorage.getItem('theme') || 'light-theme';
+    const savedTheme = localStorage.getItem('theme') ?? 'light-theme';
     document.body.classList.add(savedTheme);
     this.isDarkTheme = savedTheme === 'dark-theme';
   }

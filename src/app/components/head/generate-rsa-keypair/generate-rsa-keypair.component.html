@@ -19,7 +19,7 @@
     <label for="ownKeyPair" style="margin: 0 0 5px 10px; cursor: pointer">{{'DIALOGS.GENERATE_KEY_PAIR.OWN_KEY_PAIR_NAME_CHECKBOX' | translate}}</label>
   </form>
 
-  <div [class.hidden-field]="!useCustomName" class="mb-3">
+  <div [class.hidden-field]="!useCustomName" class="mb-3" style="margin-top: 5px">
     <p-floatlabel variant="on">
       <input
         pInputText
@@ -34,7 +34,7 @@
 
   <ng-template pTemplate="footer">
     <p-button
-      styleClass="generateButton"
+      styleClass="footerButton"
       [label]="'DIALOGS.GENERATE_KEY_PAIR.GENERATE_BUTTON' | translate"
       (onClick)="onGenerateClick()"
     />

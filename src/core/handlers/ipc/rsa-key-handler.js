@@ -15,14 +15,14 @@ function initializeGenerateKeyPairHandler() {
         format: 'pem',
       },
       privateKeyEncoding: {
-        type: 'pkcs8',
+        type: 'pkcs1',
         format: 'pem',
       },
     });
 
     const finalKeysFolderPath = path.join(baseKeysPath, keyPairName);
-    writeFileSync(path.join(finalKeysFolderPath, `${keyPairName}.public.key`), publicKey);
-    writeFileSync(path.join(finalKeysFolderPath, `${keyPairName}.private.key`), privateKey);
+    writeFileSync(path.join(finalKeysFolderPath, `${keyPairName}.crtn_public_key`), publicKey);
+    writeFileSync(path.join(finalKeysFolderPath, `${keyPairName}.crtn_private_key`), privateKey);
   })
 }
 
@@ -49,25 +49,7 @@ function initializeCreateRSAKeyPairFolderHandler() {
   });
 }
 
-function initializeGenerateTestFileHandler() {
-  ipcMain.on('generate-test-file', () => {
-    try {
-      const testFilePath = path.join(userDataPath, 'test.txt');
-
-      const dataBuffer = Buffer.from([0xAA, 0xBB, 0xCC, 0xDD])
-
-      writeFileSync(testFilePath, dataBuffer);
-
-      const fileBuffer = readFileSync(testFilePath);
-      console.log(fileBuffer);
-    } catch (error) {
-      console.error(error);
-    }
-  });
-}
-
 function initializeRsaKeysHandlers() {
-  initializeGenerateTestFileHandler();
   initializeCreateRSAKeyPairFolderHandler();
   initializeOpenKeysFolderHandler();
   initializeGenerateKeyPairHandler();

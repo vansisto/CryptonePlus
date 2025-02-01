@@ -9,7 +9,7 @@ import {InputText} from 'primeng/inputtext';
 import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-generat-rsa-keypair',
+  selector: 'app-generate-rsa-keypair',
   imports: [
     Dialog,
     Checkbox,
@@ -21,10 +21,10 @@ import {TranslatePipe} from '@ngx-translate/core';
     Button,
     TranslatePipe
   ],
-  templateUrl: './generat-rsa-keypair.component.html',
-  styleUrl: './generat-rsa-keypair.component.scss'
+  templateUrl: './generate-rsa-keypair.component.html',
+  styleUrl: './generate-rsa-keypair.component.scss'
 })
-export class GeneratRsaKeypairComponent implements OnInit {
+export class GenerateRsaKeypairComponent implements OnInit {
   electron: any = (window as any).electron;
   visible: boolean = false;
   useCustomName: boolean = false;

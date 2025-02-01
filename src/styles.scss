@@ -70,7 +70,11 @@ body {
   --p-datatable-row-hover-background: var(--table-row-hover-background);
   --p-datatable-row-selected-background: color-mix(in srgb,var(--second-color),transparent 84%);
   --p-datatable-row-selected-color: var(--table-color);
-  --p-datatable-row-color: var(--table-color)
+  --p-datatable-row-color: var(--table-color);
+
+  background-color: var(--primary-color) !important;
+  color: var(--second-color) !important;
+  font-family: 'Jura', serif;
 }
 
 .p-button, .p-select, .p-dialog, .p-table {
@@ -95,12 +99,6 @@ body {
   box-shadow: 0 0 5px var(--second-color) !important;
 }
 
-body {
-  background-color: var(--primary-color) !important;
-  color: var(--second-color) !important;
-  font-family: 'Jura', serif;
-}
-
 .pi-moon {
   color: var(--second-color) !important;
 }
@@ -114,3 +112,13 @@ body {
 .p-toggleswitch-handle {
   background-color: var(--primary-color-additional) !important;
 }
+
+.footerButton {
+  background-color: var(--primary-color-additional) !important;
+  border: none !important;
+
+  &:hover {
+    background-color: var(--primary-color-hover) !important;
+  }
+}
+

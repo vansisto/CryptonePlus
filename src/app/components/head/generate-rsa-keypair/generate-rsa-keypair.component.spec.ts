@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GeneratRsaKeypairComponent } from './generat-rsa-keypair.component';
+import { GenerateRsaKeypairComponent } from './generate-rsa-keypair.component';
 
 describe('GeneratRsaKeypairComponent', () => {
-  let component: GeneratRsaKeypairComponent;
-  let fixture: ComponentFixture<GeneratRsaKeypairComponent>;
+  let component: GenerateRsaKeypairComponent;
+  let fixture: ComponentFixture<GenerateRsaKeypairComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GeneratRsaKeypairComponent]
+      imports: [GenerateRsaKeypairComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(GeneratRsaKeypairComponent);
+    fixture = TestBed.createComponent(GenerateRsaKeypairComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
