@@ -7,8 +7,6 @@ const {initializeMainWindow} = require("./handlers/app/main-instance-handler")
 const {initializeSecondInstanceHandler} = require("./handlers/app/second-instance-handler")
 const {handleAllWindowsClosed} = require("./handlers/app/close-handler")
 const {initializeFileCrypterHandler} = require("./handlers/crypto/file-crypter-handler");
-const path = require("path");
-const fs = require("fs");
 
 let mainWindow;
 let pendingFiles = [];
@@ -26,10 +24,6 @@ function initializeApp() {
 }
 
 function createFirstInstance() {
-  const updateModeFile = path.join(app.getPath("userData"), "update-mode");
-  if (fs.existsSync(updateModeFile)) {
-    fs.rmSync(updateModeFile);
-  }
   checkForUpdatesAndNotify();
 
   const files = extractFilesFromCommandLine(process.argv.slice(1));

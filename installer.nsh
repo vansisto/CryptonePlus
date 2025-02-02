@@ -23,4 +23,5 @@ Section "Uninstall"
   DeleteRegKey HKCR "Directory\shell\Cryptone"
   
   skipUninstall:
+  Delete "${UPDATE_MODE_FILE}"
 SectionEnd
