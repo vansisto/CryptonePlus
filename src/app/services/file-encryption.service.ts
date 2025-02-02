@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {CFile} from '../models/cfile';
 import {FilesService} from './files.service';
+import {ArchivatorService} from "./archivator.service";
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +12,32 @@ export class FileEncryptionService {
 
   constructor(
     private readonly filesService: FilesService,
+    private readonly archivatorService: ArchivatorService,
   ) {
   }
 
-  async encryptFiles(password: string, keyPath: string, deleteAfter: boolean): Promise<{
-    okCount: number,
-    failCount: number,
-    failedFiles: CFile[]
-  }> {
+  async encryptFiles(
+      password: string,
+      keyPath: string,
+      deleteAfter: boolean,
+      doArchive: boolean
+  ): Promise<{ okCount: number; failCount: number; failedFiles: CFile[] }> {
+    let cachedFilesToBeDeleted: CFile[] = [];
+
+    if (doArchive) {
+      if (deleteAfter) {
+        cachedFilesToBeDeleted = [...this.pendingCryptingFiles];
+      }
+      const archive: CFile = await this.archivatorService.archive(this.pendingCryptingFiles);
+      this.pendingCryptingFiles = [archive];
+    }
+
     const result = await this.processPending(true, password, keyPath);
+
+    if (doArchive) {
+      this.deleteProcessedFilesExcludingFailed(result.failedFiles);
+      this.pendingCryptingFiles = [...cachedFilesToBeDeleted];
+    }
     if (deleteAfter) {
       this.deleteProcessedFilesExcludingFailed(result.failedFiles);
     }

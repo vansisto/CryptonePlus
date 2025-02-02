@@ -32,6 +32,7 @@ export class EncryptDialogComponent implements OnInit {
   electron = (window as any).electron;
   encryptDialogVisible: boolean = false;
   deleteAfter: boolean = false;
+  doArchive: boolean = false;
   keyPath: string = "";
   password: string = "";
 
@@ -50,11 +51,11 @@ export class EncryptDialogComponent implements OnInit {
 
   encrypt() {
     this.messageService.add({ severity: 'info', summary: 'Info', detail: this.translateService.instant("TOASTS.ENCRYPT.STARTED_MESSAGE") })
-    this.fileEncryptionService.encryptFiles(this.password, this.keyPath, this.deleteAfter)
-      .then(result => {
-        this.showResultToast(result);
-        this.encryptDialogService.hideEncryptDialog();
-      });
+    this.fileEncryptionService.encryptFiles(this.password, this.keyPath, this.deleteAfter, this.doArchive)
+        .then(result => {
+          this.showResultToast(result);
+          this.encryptDialogService.hideEncryptDialog();
+        });
   }
 
   openKeysFolder(isPublic: boolean = true) {
