@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const AdmZip = require('adm-zip')
 
@@ -24,6 +25,23 @@ function archiveFiles(cfiles) {
   })
 }
 
+function unarchiveIfExists(archivePath) {
+  return new Promise((resolve, reject) => {
+    const isArchiveExists = fs.existsSync(archivePath);
+    if (isArchiveExists) {
+      const zip = new AdmZip(archivePath);
+      const zipComment = zip.getZipComment();
+      if (zipComment && zipComment === "crtn") {
+        zip.extractAllTo(path.join(path.dirname(archivePath), 'decrypted'), true);
+        fs.rmSync(archivePath);
+        resolve(true);
+      }
+    }
+    resolve(false);
+  })
+}
+
 module.exports = {
   archiveFiles,
+  unarchiveIfExists,
 }

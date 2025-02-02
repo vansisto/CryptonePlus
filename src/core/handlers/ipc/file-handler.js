@@ -3,7 +3,10 @@ const {collectRecursivelyFilePaths, sendFilesToRenderer} = require("../../utils/
 const {isCryptoneEncoded} = require("../../utils/file-utils")
 const path = require("path");
 const fs = require("fs");
-const {archiveFiles} = require("../../utils/zip-utils");
+const {
+  archiveFiles,
+  unarchiveIfExists
+} = require("../../utils/zip-utils");
 
 const ADD_FILES_CHANNEL = 'add-files';
 const userDataPath = app.getPath('userData');
@@ -110,6 +113,13 @@ function initializeArchiveFilesHandler() {
   })
 }
 
+function initializeUnarchiveIfExistsHandler() {
+  ipcMain.handle('unarchive-if-exists', (event, cfilePath) => {
+    const archivePath = path.join(path.dirname(cfilePath), 'crtn.zip');
+    return unarchiveIfExists(archivePath);
+  })
+}
+
 function initializeFileHandlers(mainWindow, pendingFiles) {
   initializeDidFinishLoadHandler(mainWindow, pendingFiles);
   initializeGetPendingFilesHandler(mainWindow, pendingFiles);
@@ -119,6 +129,7 @@ function initializeFileHandlers(mainWindow, pendingFiles) {
   initializeDeleteFilesHandler();
   initializeIsFileExistsHandler();
   initializeArchiveFilesHandler();
+  initializeUnarchiveIfExistsHandler();
 }
 
 module.exports = {initializeFileHandlers}

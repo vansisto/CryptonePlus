@@ -8,9 +8,9 @@ import {InputText} from "primeng/inputtext";
 import {Password} from "primeng/password";
 import {MessageService, PrimeTemplate} from "primeng/api";
 import {CryptoDialogService} from '../../services/crypto-dialog.service';
-import {CFile} from '../../models/cfile';
 import {FileEncryptionService} from '../../services/file-encryption.service';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {ProcessingResult} from "../../interfaces/processing-result";
 
 @Component({
   selector: 'app-encrypt-dialog',
@@ -64,16 +64,12 @@ export class EncryptDialogComponent implements OnInit {
     });
   }
 
-  private showResultToast(result: {
-    okCount: number;
-    failCount: number;
-    failedFiles: CFile[]
-  }) {
-      const hasFailed = result.failCount > 0;
-      const allFailed = result.failCount > 0 && result.okCount === 0;
-      let summary = this.translateService.instant('TOASTS.SUCCESS_TITLE');
-      let severity = 'success';
-      let message = this.translateService.instant('TOASTS.ENCRYPT.SUCCESS_MESSAGE');
+  private showResultToast(result: ProcessingResult) {
+      const hasFailed: boolean = result.failCount > 0;
+      const allFailed: boolean = result.failCount > 0 && result.okCount === 0;
+      let summary: string = this.translateService.instant('TOASTS.SUCCESS_TITLE');
+      let severity: string = 'success';
+      let message: string = this.translateService.instant('TOASTS.ENCRYPT.SUCCESS_MESSAGE');
       if (hasFailed) {
         summary = this.translateService.instant('TOASTS.WARNING_TITLE');
         severity = 'warn';

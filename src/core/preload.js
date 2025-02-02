@@ -12,6 +12,7 @@ window.electron = {
   selectKeyDialog: (isPublic) => ipcRenderer.invoke('select-key-dialog', isPublic),
   deleteFiles: (cfiles) => ipcRenderer.invoke('delete-files', cfiles),
   archiveFiles: (cfiles) => ipcRenderer.invoke('archive-files', cfiles),
+  unarchiveIfExists: (cfilePath) => ipcRenderer.invoke('unarchive-if-exists', cfilePath),
 };
 
 window.addEventListener('dragover', (event) => {

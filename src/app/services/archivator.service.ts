@@ -12,4 +12,8 @@ export class ArchivatorService {
   async archive(pendingCryptingFiles: CFile[]): Promise<CFile> {
     return await this.electron.archiveFiles(pendingCryptingFiles);
   }
+
+  async extract(inputCFilePath: string): Promise<void> {
+    return await this.electron.unarchiveIfExists(inputCFilePath);
+  }
 }
