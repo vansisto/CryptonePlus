@@ -36,6 +36,7 @@ function initializeUpdateErrorHandler() {
 }
 
 function checkForUpdatesAndNotify() {
+  autoUpdater.disableDifferentialDownload = true;
   autoUpdater.checkForUpdatesAndNotify();
 }
 

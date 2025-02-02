@@ -1,6 +1,6 @@
 !include "MUI2.nsh"
 
-!macro customInit
+Section "Install"
   WriteRegStr HKCR "*\shell\Cryptone" "" "Cryptone"
   WriteRegStr HKCR "*\shell\Cryptone" "Icon" "$INSTDIR\Cryptone.exe"
   WriteRegStr HKCR "*\shell\Cryptone\command" "" '"$INSTDIR\Cryptone.exe" "%1"'
@@ -10,7 +10,7 @@
   WriteRegStr HKCR "Directory\shell\Cryptone\command" "" '"$INSTDIR\Cryptone.exe" "%1"'
 
   WriteUninstaller "$INSTDIR\Uninstall Cryptone.exe"
-!macroend
+SectionEnd
 
 Section "Uninstall"
   DeleteRegKey HKCR "*\shell\Cryptone\command"
