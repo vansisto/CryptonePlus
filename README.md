@@ -31,6 +31,10 @@ For Windows:
 ```shell
   electron-builder --win
 ```
+or
+```shell
+  npx electron-builder -w
+```
 
 ## Encrypting logic
 ![](./CryptoneCipher.png)
