@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {CFile} from '../models/cfile';
 import {FilesService} from './files.service';
+import {ArchivatorService} from "./archivator.service";
+import {ProcessingResult} from "../interfaces/processing-result";
 
 @Injectable({
   providedIn: 'root'
@@ -11,37 +13,46 @@ export class FileEncryptionService {
 
   constructor(
     private readonly filesService: FilesService,
+    private readonly archivatorService: ArchivatorService,
   ) {
   }
 
-  async encryptFiles(password: string, keyPath: string, deleteAfter: boolean): Promise<{
-    okCount: number,
-    failCount: number,
-    failedFiles: CFile[]
-  }> {
-    const result = await this.processPending(true, password, keyPath);
+  async encryptFiles(password: string, keyPath: string, deleteAfter: boolean, doArchive: boolean): Promise<ProcessingResult> {
+    let cachedFilesToBeDeleted: CFile[] = [];
+
+    if (doArchive) {
+      if (deleteAfter) {
+        cachedFilesToBeDeleted = [...this.pendingCryptingFiles];
+      }
+      const archive: CFile = await this.archivatorService.archive(this.pendingCryptingFiles);
+      this.pendingCryptingFiles = [archive];
+    }
+
+    const result: ProcessingResult = await this.processPending(true, password, keyPath);
+
+    if (doArchive) {
+      this.deleteProcessedFilesExcludingFailed(result.failedFiles);
+      this.pendingCryptingFiles = [...cachedFilesToBeDeleted];
+    }
     if (deleteAfter) {
       this.deleteProcessedFilesExcludingFailed(result.failedFiles);
     }
     return result;
   }
 
-  async decryptFiles(password: string, keyPath: string, deleteAfter: boolean): Promise<{
-    okCount: number,
-    failCount: number,
-    failedFiles: CFile[]
-  }> {
-    const result = await this.processPending(false, password, keyPath);
+  async decryptFiles(password: string, keyPath: string, deleteAfter: boolean): Promise<ProcessingResult> {
+    const result: ProcessingResult = await this.processPending(false, password, keyPath);
+    await this.archivatorService.extract(this.pendingCryptingFiles[0].path);
     if (deleteAfter) {
-      const notEncryptedFiles = this.pendingCryptingFiles.filter(f => !f.encrypted);
-      const excludedFiles = [...result.failedFiles, ...notEncryptedFiles];
+      const notEncryptedFiles: CFile[] = this.pendingCryptingFiles.filter(f => !f.encrypted);
+      const excludedFiles: CFile[] = [...result.failedFiles, ...notEncryptedFiles];
       this.deleteProcessedFilesExcludingFailed(excludedFiles);
     }
     return result;
   }
 
   addFileToPending(newFile: CFile): void {
-    const exists = this.pendingCryptingFiles.some(existing => existing.path === newFile.path);
+    const exists: boolean = this.pendingCryptingFiles.some(existing => existing.path === newFile.path);
     if (!exists) {
       this.pendingCryptingFiles.push(newFile);
     }
@@ -63,14 +74,8 @@ export class FileEncryptionService {
     this.electron.deleteFiles(filesToDelete).then(() => this.filesService.syncFilesWithFileSystem());
   }
 
-  private async processPending(isEncrypt: boolean, password: string, keyPath: string): Promise<{
-    okCount: number;
-    failCount: number;
-    failedFiles: CFile[]
-  }> {
-    let okCount = 0;
-    let failCount = 0;
-    const failedFiles: CFile[] = [];
+  private async processPending(isEncrypt: boolean, password: string, keyPath: string): Promise<ProcessingResult> {
+    let processingResult: ProcessingResult = {okCount: 0, failCount: 0, failedFiles: []};
 
     const files = isEncrypt
       ? this.pendingCryptingFiles
@@ -83,15 +88,15 @@ export class FileEncryptionService {
     const promises = files.map(cfile => {
       return actionFunction(cfile).then((result: { success: boolean; message: string }) => {
         if (!result.success) {
-          failCount++;
-          failedFiles.push(cfile);
+          processingResult.failCount++;
+          processingResult.failedFiles.push(cfile);
         } else {
-          okCount++;
+          processingResult.okCount++;
         }
       });
     });
 
     await Promise.all(promises);
-    return {okCount, failCount, failedFiles};
+    return processingResult;
   }
 }
