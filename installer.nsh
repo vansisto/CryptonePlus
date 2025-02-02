@@ -12,10 +12,16 @@
   WriteUninstaller "$INSTDIR\Uninstall Cryptone.exe"
 !macroend
 
-Section "Uninstall"
-  DeleteRegKey HKCR "*\shell\Cryptone\command"
-  DeleteRegKey HKCR "*\shell\Cryptone"
+!macro customUnInstall
+  ${IfNot} ${isUpdated}
+    DeleteRegKey HKCR "*\shell\Cryptone\command"
+	DeleteRegKey HKCR "*\shell\Cryptone"
   
-  DeleteRegKey HKCR "Directory\shell\Cryptone\command"
-  DeleteRegKey HKCR "Directory\shell\Cryptone"
+	DeleteRegKey HKCR "Directory\shell\Cryptone\command"
+	DeleteRegKey HKCR "Directory\shell\Cryptone"
+  ${EndIf}
+!macroend
+
+Section "Uninstall"
+  !insertmacro customUnInstall
 SectionEnd
