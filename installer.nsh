@@ -1,6 +1,8 @@
 !include "MUI2.nsh"
+!include "StdUtils.nsh"
+!include "LogicLib.nsh"
 
-!macro preInit
+Section "Install"
   WriteRegStr HKCR "*\shell\Cryptone" "" "Cryptone"
   WriteRegStr HKCR "*\shell\Cryptone" "Icon" "$INSTDIR\Cryptone.exe"
   WriteRegStr HKCR "*\shell\Cryptone\command" "" '"$INSTDIR\Cryptone.exe" "%1"'
@@ -10,18 +12,14 @@
   WriteRegStr HKCR "Directory\shell\Cryptone\command" "" '"$INSTDIR\Cryptone.exe" "%1"'
 
   WriteUninstaller "$INSTDIR\Uninstall Cryptone.exe"
-!macroend
+SectionEnd
 
-!macro customUnInstall
-  ${IfNot} ${isUpdated}
+Section "Uninstall"
+  ${If} $INSTDIR != ""
     DeleteRegKey HKCR "*\shell\Cryptone\command"
 	DeleteRegKey HKCR "*\shell\Cryptone"
   
 	DeleteRegKey HKCR "Directory\shell\Cryptone\command"
 	DeleteRegKey HKCR "Directory\shell\Cryptone"
   ${EndIf}
-!macroend
-
-Section "Uninstall"
-  !insertmacro customUnInstall
 SectionEnd
