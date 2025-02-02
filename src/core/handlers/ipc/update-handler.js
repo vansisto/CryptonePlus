@@ -1,5 +1,8 @@
 const {autoUpdater} = require("electron-updater");
 const {dialog} = require("electron");
+const path = require("path");
+const fs = require("fs");
+const { app } = require('electron');
 
 function initializeUpdateAvailableHandler() {
   autoUpdater.on('update-available', () => {
@@ -20,6 +23,8 @@ function initializeUpdateDownloadedHandler() {
       buttons: ['Yes', 'Later'],
     }).then(result => {
       if (result.response === 0) {
+        const updateModeFile = path.join(app.getPath("userData"), "update-mode");
+        fs.writeFileSync(updateModeFile, "");
         autoUpdater.quitAndInstall();
       }
     });
@@ -36,7 +41,6 @@ function initializeUpdateErrorHandler() {
 }
 
 function checkForUpdatesAndNotify() {
-  autoUpdater.disableDifferentialDownload = true;
   autoUpdater.checkForUpdatesAndNotify();
 }
 
