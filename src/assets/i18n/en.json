@@ -28,6 +28,7 @@
   "DIALOGS": {
     "PASSWORD": "Password",
     "DELETE_ORIGINAL_FILE_LABEL": "Delete original file",
+    "ARCHIVE_LABEL": "Archive files",
     "GENERATE_KEY_PAIR": {
       "HEADER": "Generating key pair",
       "OWN_KEY_PAIR_NAME_CHECKBOX": "Set own key pair name",

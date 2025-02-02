@@ -3,7 +3,7 @@
   "main": "src/core/electron-main.js",
   "description": "Application to encrypt files",
   "author": "Van Sisto",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "scripts": {
     "build": "ng build --base-href ./",
     "start": "electron .",
@@ -67,6 +67,7 @@
     "@ngx-translate/core": "^16.0.4",
     "@ngx-translate/http-loader": "^16.0.1",
     "@primeng/themes": "^19.0.5",
+    "adm-zip": "^0.5.16",
     "crypto": "^1.0.1",
     "electron-log": "^5.2.4",
     "electron-updater": "^6.3.9",

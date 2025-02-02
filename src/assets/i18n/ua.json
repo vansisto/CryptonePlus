@@ -28,6 +28,7 @@
   "DIALOGS": {
     "PASSWORD": "Пароль",
     "DELETE_ORIGINAL_FILE_LABEL": "Видалити оригінальний файл",
+    "ARCHIVE_LABEL": "Архівувати файли",
     "GENERATE_KEY_PAIR": {
       "HEADER": "Генерування пари ключів",
       "OWN_KEY_PAIR_NAME_CHECKBOX": "Встановити власне ім'я пари ключів",

@@ -2,7 +2,7 @@
   [header]="'DIALOGS.ENCRYPT.TITLE' | translate"
   [(visible)]="encryptDialogVisible"
   [modal]="true"
-  [style]="{ width: '25rem', height: '21rem' }"
+  [style]="{ width: '25rem', height: '22rem' }"
   (onHide)="clearFilesToProcess()"
 >
   <div class="grid" style="margin-top: 5px">
@@ -32,6 +32,11 @@
   <div style="margin-top:5px">
     <p-checkbox [binary]="true" [(ngModel)]="deleteAfter" inputId="deleteOriginalFile" />
     <label for="deleteOriginalFile" class="ml-2">{{'DIALOGS.DELETE_ORIGINAL_FILE_LABEL' | translate}}</label>
+  </div>
+
+  <div style="margin-top:5px">
+    <p-checkbox [binary]="true" [(ngModel)]="doArchive" inputId="archive" />
+    <label for="archive" class="ml-2">{{'DIALOGS.ARCHIVE_LABEL' | translate}}</label>
   </div>
 
   <ng-template pTemplate="footer">
