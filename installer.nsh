@@ -1,6 +1,5 @@
 !include "MUI2.nsh"
-!include "StdUtils.nsh"
-!include "LogicLib.nsh"
+!define UPDATE_MODE_FILE "$APPDATA\Cryptone\update-mode"
 
 Section "Install"
   WriteRegStr HKCR "*\shell\Cryptone" "" "Cryptone"
@@ -15,11 +14,13 @@ Section "Install"
 SectionEnd
 
 Section "Uninstall"
-  ${If} $INSTDIR != ""
-    DeleteRegKey HKCR "*\shell\Cryptone\command"
-	DeleteRegKey HKCR "*\shell\Cryptone"
+  IfFileExists "${UPDATE_MODE_FILE}" skipUninstall
   
-	DeleteRegKey HKCR "Directory\shell\Cryptone\command"
-	DeleteRegKey HKCR "Directory\shell\Cryptone"
-  ${EndIf}
+  DeleteRegKey HKCR "*\shell\Cryptone\command"
+  DeleteRegKey HKCR "*\shell\Cryptone"
+  
+  DeleteRegKey HKCR "Directory\shell\Cryptone\command"
+  DeleteRegKey HKCR "Directory\shell\Cryptone"
+  
+  skipUninstall:
 SectionEnd
