@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import { Injectable, NgZone } from '@angular/core';
+import {BehaviorSubject, interval, Observable} from 'rxjs';
 import {CFile} from '../models/cfile';
 
 @Injectable({providedIn: 'root'})
@@ -9,6 +9,14 @@ export class FilesService {
   private readonly selectedFilesSubject: BehaviorSubject<CFile[]> = new BehaviorSubject<CFile[]>([]);
   allFiles$: Observable<CFile[]> = this.allFilesSubject.asObservable();
   selectedFiles$: Observable<CFile[]> = this.selectedFilesSubject.asObservable();
+
+  constructor(private readonly ngZone: NgZone) {
+    this.ngZone.runOutsideAngular(() => {
+      interval(1000).subscribe(() => {
+        this.ngZone.run(() => this.syncFilesWithFileSystem());
+      });
+    });
+  }
 
   updateSelectedFiles(selectedFiles: CFile[]): void {
     this.selectedFilesSubject.next(selectedFiles);
