@@ -11,6 +11,7 @@ import {CryptoDialogService} from '../../services/crypto-dialog.service';
 import {FileEncryptionService} from '../../services/file-encryption.service';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {ProcessingResult} from "../../interfaces/processing-result";
+import {LoadingService} from '../../services/loading.service';
 
 @Component({
   selector: 'app-encrypt-dialog',
@@ -35,27 +36,34 @@ export class EncryptDialogComponent implements OnInit {
   doArchive: boolean = false;
   keyPath: string = "";
   password: string = "";
+  loading: boolean = false;
 
   constructor(
     private readonly encryptDialogService: CryptoDialogService,
     private readonly messageService: MessageService,
     private readonly fileEncryptionService: FileEncryptionService,
     private readonly translateService: TranslateService,
+    private readonly loadingService: LoadingService,
   ) {}
 
   ngOnInit(): void {
     this.encryptDialogService.encryptDialogVisible$.subscribe(value => {
       this.encryptDialogVisible = value;
     });
+    this.loadingService.loading$.subscribe(value => {
+      this.loading = value;
+    })
   }
 
   encrypt() {
+    this.loadingService.show();
     this.messageService.add({ severity: 'info', summary: 'Info', detail: this.translateService.instant("TOASTS.ENCRYPT.STARTED_MESSAGE") })
     this.fileEncryptionService.encryptFiles(this.password, this.keyPath, this.deleteAfter, this.doArchive)
-        .then(result => {
-          this.showResultToast(result);
-          this.encryptDialogService.hideEncryptDialog();
-        });
+      .then(result => {
+        this.showResultToast(result);
+        this.encryptDialogService.hideEncryptDialog();
+        this.loadingService.hide();
+      });
   }
 
   openKeysFolder(isPublic: boolean = true) {
