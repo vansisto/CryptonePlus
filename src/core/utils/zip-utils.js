@@ -3,6 +3,7 @@ const path = require('path');
 const archiver = require('archiver')
 const { exec } = require('child_process')
 const StreamZip = require('node-stream-zip');
+const {sendFilesToRenderer} = require("./file-utils");
 
 function archiveFiles(cfiles) {
   return new Promise((resolve, reject) => {
@@ -21,7 +22,7 @@ function archiveFiles(cfiles) {
   });
 }
 
-function unarchiveIfExists(archivePath) {
+function unarchiveIfExists(archivePath, mainWindow) {
   return new Promise(async (resolve, reject) => {
     if (!fs.existsSync(archivePath)) {
       return resolve(false);
@@ -36,6 +37,7 @@ function unarchiveIfExists(archivePath) {
         await zip.extract(null, outputDir);
         await zip.close();
         fs.rmSync(archivePath);
+        sendFilesToRenderer(mainWindow, [outputDir]);
         return resolve(true);
       }
       await zip.close();
