@@ -113,10 +113,10 @@ function initializeArchiveFilesHandler() {
   })
 }
 
-function initializeUnarchiveIfExistsHandler() {
+function initializeUnarchiveIfExistsHandler(mainWindow) {
   ipcMain.handle('unarchive-if-exists', (event, cfilePath) => {
     const archivePath = path.join(path.dirname(cfilePath), '.crtn.zip');
-    return unarchiveIfExists(archivePath);
+    return unarchiveIfExists(archivePath, mainWindow);
   })
 }
 
@@ -129,7 +129,7 @@ function initializeFileHandlers(mainWindow, pendingFiles) {
   initializeDeleteFilesHandler();
   initializeIsFileExistsHandler();
   initializeArchiveFilesHandler();
-  initializeUnarchiveIfExistsHandler();
+  initializeUnarchiveIfExistsHandler(mainWindow);
 }
 
 module.exports = {initializeFileHandlers}

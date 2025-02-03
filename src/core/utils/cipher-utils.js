@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { generateRandomUUIDCryptoneFileName } = require('./file-utils');
+const { generateRandomUUIDCryptoneFileName, sendFilesToRenderer} = require('./file-utils');
 const crypto = require('crypto');
 const { pipeline } = require('stream');
 const { exec } = require('child_process');
@@ -13,33 +13,35 @@ const IV_SIZE = 16;
 const SALT_SIZE = 32;
 const RSA_BLOCK_SIZE = 512;
 
-async function encryptFile(cfile, publicKeyPath, password) {
+async function encryptFile(cfile, publicKeyPath, password, mainWindow) {
   const fileMetadata = buildFileMetadata(cfile);
   const outputFilePath = buildEncodedFilePath(cfile);
   const outputStream = fs.createWriteStream(outputFilePath);
-
   const rsaEncryptedMetadata = encryptMetadataWithRSA(publicKeyPath, fileMetadata, cfile);
   outputStream.write(rsaEncryptedMetadata);
 
-  await encryptContentWithAESToFile(cfile, outputStream, password, fileMetadata);
+  await encryptContentWithAESToFile(cfile, outputStream, password, fileMetadata, outputFilePath, mainWindow);
 }
 
-async function decryptFile(privateKeyPath, cfile, password) {
+async function decryptFile(privateKeyPath, cfile, password, mainWindow) {
   const rsaPrivateKey = fs.readFileSync(privateKeyPath);
   const decryptedMetadata = decryptMetadataWithRSA(cfile, rsaPrivateKey);
   const {iv, salt, originalFileNameBuffer} = parseEncryptedMetadata(decryptedMetadata);
-  return await decryptContentWithAESToFile(cfile, password, salt, iv, originalFileNameBuffer);
+  return await decryptContentWithAESToFile(cfile, password, salt, iv, originalFileNameBuffer, mainWindow);
 }
 
-async function encryptContentWithAESToFile(cfile, outputStream, password, fileMetadata) {
+async function encryptContentWithAESToFile(cfile, outputStream, password, fileMetadata, outputFilePath, mainWindow) {
   await new Promise((resolve, reject) => {
     const aesKey = crypto.scryptSync(password, fileMetadata.salt, KEY_LENGTH);
     const {cipher, readStream} = createEncryptionPipelineComponents(aesKey, fileMetadata, cfile);
 
     readStream
       .on('close', () => {
-        outputStream.end(Buffer.from(FILE_TYPE_ENDING, 'ascii'));
-        resolve();
+        outputStream.end(Buffer.from(FILE_TYPE_ENDING, 'ascii'))
+        outputStream.on('finish', () => {
+          sendFilesToRenderer(mainWindow, [outputFilePath]);
+          resolve();
+        });
       })
       .on('error', reject)
       .pipe(cipher)
@@ -47,7 +49,7 @@ async function encryptContentWithAESToFile(cfile, outputStream, password, fileMe
   });
 }
 
-async function decryptContentWithAESToFile(cfile, password, salt, iv, originalFileNameBuffer) {
+async function decryptContentWithAESToFile(cfile, password, salt, iv, originalFileNameBuffer, mainWindow) {
   return await new Promise((resolve, reject) => {
     const { contentStart, contentEnd } = buildFileContentRange(cfile);
     const readStream = fs.createReadStream(cfile.path, { start: contentStart, end: contentEnd });
@@ -69,6 +71,7 @@ async function decryptContentWithAESToFile(cfile, password, salt, iv, originalFi
           }
           return reject(err);
         }
+        sendFilesToRenderer(mainWindow, [buildDecodedFilePath(cfile, originalFileNameBuffer)]);
         resolve();
       }
     );

@@ -33,6 +33,7 @@ function createFirstInstance() {
 
   initializeFileHandlers(mainWindow, pendingFiles);
   initializeRsaKeysHandlers();
+  initializeFileCrypterHandler(mainWindow);
 }
 
 function handleSecondInstance(event, commandLine) {
@@ -41,4 +42,3 @@ function handleSecondInstance(event, commandLine) {
 
 initializeUpdateHandlers();
 initializeApp();
-initializeFileCrypterHandler();
