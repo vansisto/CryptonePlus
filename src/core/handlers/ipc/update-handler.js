@@ -32,10 +32,10 @@ function initializeUpdateDownloadedHandler() {
 }
 
 function initializeUpdateErrorHandler() {
-  autoUpdater.on('error', (error) => {
+  autoUpdater.on('error', () => {
     dialog.showErrorBox(
       'Auto Update Error',
-      `An error occurred while updating: ${error == null ? 'unknown' : (error.stack || error).toString()}`
+      'An error occurred while updating'
     );
   });
 }

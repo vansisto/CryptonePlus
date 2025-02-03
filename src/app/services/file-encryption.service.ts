@@ -14,22 +14,17 @@ export class FileEncryptionService {
   constructor(
     private readonly filesService: FilesService,
     private readonly archivatorService: ArchivatorService,
-  ) {
-  }
+  ) {}
 
   async encryptFiles(password: string, keyPath: string, deleteAfter: boolean, doArchive: boolean): Promise<ProcessingResult> {
     let cachedFilesToBeDeleted: CFile[] = [];
-
-    if (doArchive) {
-      if (deleteAfter) {
-        cachedFilesToBeDeleted = [...this.pendingCryptingFiles];
-      }
-      const archive: CFile = await this.archivatorService.archive(this.pendingCryptingFiles);
-      this.pendingCryptingFiles = [archive];
-    }
-
+    cachedFilesToBeDeleted = await this.prepareArchiveForProcessing(doArchive, deleteAfter, cachedFilesToBeDeleted);
     const result: ProcessingResult = await this.processPending(true, password, keyPath);
+    this.postProcessDeleting(doArchive, result, cachedFilesToBeDeleted, deleteAfter);
+    return result;
+  }
 
+  private postProcessDeleting(doArchive: boolean, result: ProcessingResult, cachedFilesToBeDeleted: CFile[], deleteAfter: boolean) {
     if (doArchive) {
       this.deleteProcessedFilesExcludingFailed(result.failedFiles);
       this.pendingCryptingFiles = [...cachedFilesToBeDeleted];
@@ -37,7 +32,17 @@ export class FileEncryptionService {
     if (deleteAfter) {
       this.deleteProcessedFilesExcludingFailed(result.failedFiles);
     }
-    return result;
+  }
+
+  private async prepareArchiveForProcessing(doArchive: boolean, deleteAfter: boolean, cachedFilesToBeDeleted: CFile[]) {
+    if (doArchive) {
+      if (deleteAfter) {
+        cachedFilesToBeDeleted = [...this.pendingCryptingFiles];
+      }
+      const archive: CFile = await this.archivatorService.archive(this.pendingCryptingFiles);
+      this.pendingCryptingFiles = [archive];
+    }
+    return cachedFilesToBeDeleted;
   }
 
   async decryptFiles(password: string, keyPath: string, deleteAfter: boolean): Promise<ProcessingResult> {
@@ -84,8 +89,14 @@ export class FileEncryptionService {
     const actionFunction = isEncrypt
       ? (cfile: CFile) => this.electron.encryptFile(cfile, password, keyPath)
       : (cFile: CFile) => this.electron.decryptFile(cFile, password, keyPath);
+    const promises = this.processFunction(files, actionFunction, processingResult);
 
-    const promises = files.map(cfile => {
+    await Promise.all(promises);
+    return processingResult;
+  }
+
+  private processFunction(files: CFile[], actionFunction: (cfile: CFile) => any, processingResult: ProcessingResult) {
+    return files.map(cfile => {
       return actionFunction(cfile).then((result: { success: boolean; message: string }) => {
         if (!result.success) {
           processingResult.failCount++;
@@ -95,8 +106,5 @@ export class FileEncryptionService {
         }
       });
     });
-
-    await Promise.all(promises);
-    return processingResult;
   }
 }
