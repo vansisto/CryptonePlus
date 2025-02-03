@@ -33,7 +33,10 @@
       "HEADER": "Generating key pair",
       "OWN_KEY_PAIR_NAME_CHECKBOX": "Set own key pair name",
       "KEY_PAIR_NAME_LABEL": "Key pair name",
-      "GENERATE_BUTTON": "Generate"
+      "GENERATE_BUTTON": "Generate",
+      "DIFFERENT_KEYS_NAMES_CHECKBOX": "Set different names for keys",
+      "PUBLIC_KEY_NAME_LABEL": "Public key name",
+      "PRIVATE_KEY_NAME_LABEL": "Private key name"
     },
     "ENCRYPT": {
       "TITLE": "Encrypt files",

@@ -115,7 +115,7 @@ function initializeArchiveFilesHandler() {
 
 function initializeUnarchiveIfExistsHandler() {
   ipcMain.handle('unarchive-if-exists', (event, cfilePath) => {
-    const archivePath = path.join(path.dirname(cfilePath), 'crtn.zip');
+    const archivePath = path.join(path.dirname(cfilePath), '.crtn.zip');
     return unarchiveIfExists(archivePath);
   })
 }

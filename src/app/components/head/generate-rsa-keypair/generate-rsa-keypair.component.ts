@@ -7,6 +7,7 @@ import {PrimeTemplate} from 'primeng/api';
 import {FloatLabel} from 'primeng/floatlabel';
 import {InputText} from 'primeng/inputtext';
 import {TranslatePipe} from '@ngx-translate/core';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-generate-rsa-keypair',
@@ -19,7 +20,8 @@ import {TranslatePipe} from '@ngx-translate/core';
     FloatLabel,
     InputText,
     Button,
-    TranslatePipe
+    TranslatePipe,
+    NgIf
   ],
   templateUrl: './generate-rsa-keypair.component.html',
   styleUrl: './generate-rsa-keypair.component.scss'
@@ -28,7 +30,10 @@ export class GenerateRsaKeypairComponent implements OnInit {
   electron: any = (window as any).electron;
   visible: boolean = false;
   useCustomName: boolean = false;
+  isDifferentKeysNames: boolean = false;
   customName: string = '';
+  publicKeyName: string = '';
+  privateKeyName: string = '';
   formGroup!: FormGroup;
 
   ngOnInit() {
@@ -44,7 +49,11 @@ export class GenerateRsaKeypairComponent implements OnInit {
   onGenerateClick() {
     let keyPairName: string = this.buildKeyPairName();
     this.electron.send('create-rsa-keypair-folder', keyPairName);
-    this.electron.generateKeyPair(keyPairName);
+    if (this.isDifferentKeysNames) {
+      this.electron.generateKeysWithDifferentNames(this.publicKeyName, this.privateKeyName);
+    } else {
+      this.electron.generateKeyPair(keyPairName);
+    }
     this.visible = false;
     this.electron.send('open-keys-folder', keyPairName);
   }
@@ -54,7 +63,7 @@ export class GenerateRsaKeypairComponent implements OnInit {
     if (!this.useCustomName) {
       keyPairName = this.buildDateTimeBasedKeyPairName();
     } else {
-      keyPairName = this.customName.trim()
+      keyPairName = this.isDifferentKeysNames ? this.buildDifferentNamesBasedKeyPairName() : this.customName.trim()
       if (!keyPairName) {
         keyPairName = this.buildDateTimeBasedKeyPairName();
       }
@@ -68,5 +77,9 @@ export class GenerateRsaKeypairComponent implements OnInit {
     const pad = (n: number) => n.toString().padStart(2, '0');
     const yy = now.getFullYear().toString().slice(-2);
     return `${pad(now.getDate())}-${pad(now.getMonth() + 1)}-${yy}_${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
+  }
+
+  private buildDifferentNamesBasedKeyPairName() {
+    return `${this.privateKeyName}_${this.publicKeyName}`;
   }
 }

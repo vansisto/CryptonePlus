@@ -3,6 +3,7 @@ const path = require("path");
 const { generateRandomUUIDCryptoneFileName } = require('./file-utils');
 const crypto = require('crypto');
 const { pipeline } = require('stream');
+const { exec } = require('child_process');
 
 const AES_ALGORITHM = 'aes-256-cbc';
 const KEY_LENGTH = 32;
@@ -105,6 +106,7 @@ function createDecryptionPipelineComponents(password, salt, iv, cfile, originalF
   const decipher = crypto.createDecipheriv(AES_ALGORITHM, aesKey, iv);
   const outputFilePath = buildDecodedFilePath(cfile, originalFileNameBuffer);
   const writeStream = fs.createWriteStream(outputFilePath);
+  hideDecryptedFileIfIsCryptoneArchive(writeStream, outputFilePath);
   return {decipher, writeStream};
 }
 
@@ -139,6 +141,18 @@ function buildFileMetadata(cfile) {
   const salt = crypto.randomBytes(SALT_SIZE);
   const fileNameBuffer = Buffer.from(cfile.name, 'utf8');
   return {iv, salt, fileNameBuffer};
+}
+
+function hideDecryptedFileIfIsCryptoneArchive(writeStream, outputFilePath) {
+  writeStream.on("open", () => {
+    if (process.platform === "win32" && path.basename(outputFilePath) === ".crtn.zip") {
+      exec(`attrib +h "${outputFilePath}"`, (err) => {
+        if (err) {
+          console.error("Error setting hidden attribute on output file:", err);
+        }
+      });
+    }
+  });
 }
 
 module.exports = {
