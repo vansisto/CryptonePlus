@@ -33,7 +33,10 @@
       "HEADER": "Генерування пари ключів",
       "OWN_KEY_PAIR_NAME_CHECKBOX": "Встановити власне ім'я пари ключів",
       "KEY_PAIR_NAME_LABEL": "Ім'я пари ключів",
-      "GENERATE_BUTTON": "Згенерувати"
+      "GENERATE_BUTTON": "Згенерувати",
+      "DIFFERENT_KEYS_NAMES_CHECKBOX": "Встановити різні імена для ключів",
+      "PUBLIC_KEY_NAME_LABEL": "Ім'я публічного ключа",
+      "PRIVATE_KEY_NAME_LABEL": "Ім'я приватного ключа"
     },
     "ENCRYPT": {
       "TITLE": "Зашифрувати файли",
