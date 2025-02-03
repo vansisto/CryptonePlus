@@ -4,7 +4,7 @@
   [modal]="true"
   [closable]="true"
   [baseZIndex]="10000"
-  [style]="{width: '25rem', cursor: 'default'}"
+  [style]="{width: '25rem', height: '22rem',  cursor: 'default'}"
 >
   <form [formGroup]="formGroup" style="cursor: pointer">
     <p-checkbox
@@ -19,7 +19,12 @@
     <label for="ownKeyPair" style="margin: 0 0 5px 10px; cursor: pointer">{{'DIALOGS.GENERATE_KEY_PAIR.OWN_KEY_PAIR_NAME_CHECKBOX' | translate}}</label>
   </form>
 
-  <div [class.hidden-field]="!useCustomName" class="mb-3" style="margin-top: 5px">
+  <div *ngIf="useCustomName" style="margin-top:5px">
+    <p-checkbox [binary]="true" [(ngModel)]="isDifferentKeysNames" inputId="differentKeysNames" />
+    <label for="differentKeysNames" class="ml-2">{{'DIALOGS.GENERATE_KEY_PAIR.DIFFERENT_KEYS_NAMES_CHECKBOX' | translate}}</label>
+  </div>
+
+  <div *ngIf="useCustomName && !isDifferentKeysNames" class="mb-3" style="margin-top: 5px">
     <p-floatlabel variant="on">
       <input
         pInputText
@@ -29,6 +34,29 @@
         style="width: 100%;"
       />
       <label for="keyPairName">{{'DIALOGS.GENERATE_KEY_PAIR.KEY_PAIR_NAME_LABEL' | translate}}</label>
+    </p-floatlabel>
+  </div>
+
+  <div *ngIf="useCustomName && isDifferentKeysNames" class="mb-3" style="margin-top: 5px">
+    <p-floatlabel variant="on" style="margin-top: 5px">
+      <input
+        pInputText
+        id="publicKeyName"
+        [(ngModel)]="publicKeyName"
+        autocomplete="off"
+        style="width: 100%;"
+      />
+      <label for="publicKeyName">{{'DIALOGS.GENERATE_KEY_PAIR.PUBLIC_KEY_NAME_LABEL' | translate}}</label>
+    </p-floatlabel>
+    <p-floatlabel variant="on" style="margin-top: 10px">
+      <input
+        pInputText
+        id="privateKeyName"
+        [(ngModel)]="privateKeyName"
+        autocomplete="off"
+        style="width: 100%;"
+      />
+      <label for="privateKeyName">{{'DIALOGS.GENERATE_KEY_PAIR.PRIVATE_KEY_NAME_LABEL' | translate}}</label>
     </p-floatlabel>
   </div>
 

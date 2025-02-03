@@ -8,22 +8,22 @@ const baseKeysPath = path.join(userDataPath, 'CryptoneKeys', 'Offline');
 
 function initializeGenerateKeyPairHandler() {
   ipcMain.handle('generate-key-pair', (event, keyPairName) => {
-    const {publicKey, privateKey} = generateKeyPairSync('rsa', {
-      modulusLength: 4096,
-      publicKeyEncoding: {
-        type: 'spki',
-        format: 'pem',
-      },
-      privateKeyEncoding: {
-        type: 'pkcs1',
-        format: 'pem',
-      },
-    });
+    const {publicKey, privateKey} = generateKeyPair();
 
     const finalKeysFolderPath = path.join(baseKeysPath, keyPairName);
     writeFileSync(path.join(finalKeysFolderPath, `${keyPairName}.crtn_public_key`), publicKey);
     writeFileSync(path.join(finalKeysFolderPath, `${keyPairName}.crtn_private_key`), privateKey);
   })
+}
+
+function initializeGenerateKeysWithDifferentNamesHandler() {
+  ipcMain.handle('generate-keys-with-different-names', (event, publicKeyName, privateKeyName) => {
+    const {publicKey, privateKey} = generateKeyPair();
+
+    const finalKeysFolderPath = path.join(baseKeysPath, `${privateKeyName}_${publicKeyName}`);
+    writeFileSync(path.join(finalKeysFolderPath, `${publicKeyName}.crtn_public_key`), publicKey);
+    writeFileSync(path.join(finalKeysFolderPath, `${privateKeyName}.crtn_private_key`), privateKey);
+  });
 }
 
 function initializeOpenKeysFolderHandler() {
@@ -53,6 +53,21 @@ function initializeRsaKeysHandlers() {
   initializeCreateRSAKeyPairFolderHandler();
   initializeOpenKeysFolderHandler();
   initializeGenerateKeyPairHandler();
+  initializeGenerateKeysWithDifferentNamesHandler();
+}
+
+function generateKeyPair() {
+  return generateKeyPairSync('rsa', {
+    modulusLength: 4096,
+    publicKeyEncoding: {
+      type: 'spki',
+      format: 'pem',
+    },
+    privateKeyEncoding: {
+      type: 'pkcs1',
+      format: 'pem',
+    },
+  });
 }
 
 module.exports = {initializeRsaKeysHandlers};
