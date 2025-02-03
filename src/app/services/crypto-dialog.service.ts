@@ -10,8 +10,6 @@ export class CryptoDialogService {
   encryptDialogVisible$ = this.encryptDialogVisibleSubject.asObservable()
   decryptDialogVisible$ = this.decryptDialogVisibleSubject.asObservable()
 
-  constructor() { }
-
   showEncryptDialog() {
     this.encryptDialogVisibleSubject.next(true);
   }

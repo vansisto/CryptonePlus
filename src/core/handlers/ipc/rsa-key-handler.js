@@ -1,7 +1,7 @@
 const {app, ipcMain, shell} = require("electron");
 const {generateKeyPairSync} = require("crypto");
 const path = require("path");
-const {writeFileSync, mkdirSync, readFileSync} = require("node:fs");
+const {writeFileSync, mkdirSync} = require("node:fs");
 
 const userDataPath = app.getPath('userData');
 const baseKeysPath = path.join(userDataPath, 'CryptoneKeys', 'Offline');
@@ -29,8 +29,8 @@ function initializeGenerateKeyPairHandler() {
 function initializeOpenKeysFolderHandler() {
   ipcMain.on('open-keys-folder', (event, exactKeysFolder) => {
     try {
-      const fullPath = path.join(...[baseKeysPath, exactKeysFolder].filter(Boolean));
-      shell.openPath(fullPath);
+      const fullKeysPath = path.join(baseKeysPath, exactKeysFolder || '');
+      shell.openPath(fullKeysPath);
     } catch (err) {
       console.error('Error during open folder:', err);
     }

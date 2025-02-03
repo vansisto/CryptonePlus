@@ -7,8 +7,6 @@ import {CFile} from '../models/cfile';
 export class ArchivatorService {
   electron = (window as any).electron;
 
-  constructor() { }
-
   async archive(pendingCryptingFiles: CFile[]): Promise<CFile> {
     return await this.electron.archiveFiles(pendingCryptingFiles);
   }

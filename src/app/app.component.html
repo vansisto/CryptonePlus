@@ -9,3 +9,7 @@
 <app-decrypt-dialog />
 
 <p-toast position="bottom-left"/>
+
+<div *ngIf="loading" class="global-loading-overlay">
+  <p-progressSpinner strokeWidth="8" [style]="{ width: '75px', height: '75px' }" />
+</div>

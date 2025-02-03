@@ -25,17 +25,31 @@
   </div>
 
   <p-floatlabel variant="on">
-    <p-password id="password_encrypt_label" [(ngModel)]="password" autocomplete="off" [inputStyle]="{'width': '100%'}" [style]="{'width': '100%'}" />
+    <p-password
+      id="password_encrypt_label"
+      [(ngModel)]="password"
+      autocomplete="off"
+      [inputStyle]="{'width': '100%'}"
+      [style]="{'width': '100%'}"
+    />
     <label for="password_encrypt_label">{{'DIALOGS.PASSWORD' | translate}}</label>
   </p-floatlabel>
 
   <div style="margin-top:5px">
-    <p-checkbox [binary]="true" [(ngModel)]="deleteAfter" inputId="deleteOriginalFile" />
+    <p-checkbox
+      [binary]="true"
+      [(ngModel)]="deleteAfter"
+      inputId="deleteOriginalFile"
+    />
     <label for="deleteOriginalFile" class="ml-2">{{'DIALOGS.DELETE_ORIGINAL_FILE_LABEL' | translate}}</label>
   </div>
 
   <div style="margin-top:5px">
-    <p-checkbox [binary]="true" [(ngModel)]="doArchive" inputId="archive" />
+    <p-checkbox
+      [binary]="true"
+      [(ngModel)]="doArchive"
+      inputId="archive"
+    />
     <label for="archive" class="ml-2">{{'DIALOGS.ARCHIVE_LABEL' | translate}}</label>
   </div>
 
