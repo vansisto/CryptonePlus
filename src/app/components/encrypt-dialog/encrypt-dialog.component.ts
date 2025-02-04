@@ -7,7 +7,7 @@ import {FormsModule} from "@angular/forms";
 import {InputText} from "primeng/inputtext";
 import {Password} from "primeng/password";
 import {MessageService, PrimeTemplate} from "primeng/api";
-import {CryptoDialogService} from '../../services/crypto-dialog.service';
+import {DialogService} from '../../services/dialog.service';
 import {FileEncryptionService} from '../../services/file-encryption.service';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {ProcessingResult} from "../../interfaces/processing-result";
@@ -39,7 +39,7 @@ export class EncryptDialogComponent implements OnInit {
   loading: boolean = false;
 
   constructor(
-    private readonly encryptDialogService: CryptoDialogService,
+    private readonly dialogService: DialogService,
     private readonly messageService: MessageService,
     private readonly fileEncryptionService: FileEncryptionService,
     private readonly translateService: TranslateService,
@@ -47,7 +47,7 @@ export class EncryptDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.encryptDialogService.encryptDialogVisible$.subscribe(value => {
+    this.dialogService.encryptDialogVisible$.subscribe(value => {
       this.encryptDialogVisible = value;
     });
     this.loadingService.loading$.subscribe(value => {
@@ -61,7 +61,7 @@ export class EncryptDialogComponent implements OnInit {
     this.fileEncryptionService.encryptFiles(this.password, this.keyPath, this.deleteAfter, this.doArchive)
       .then(result => {
         this.showResultToast(result);
-        this.encryptDialogService.hideEncryptDialog();
+        this.dialogService.hideEncryptDialog();
         this.loadingService.hide();
       });
   }

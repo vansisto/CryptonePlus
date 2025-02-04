@@ -1,4 +1,4 @@
-const {ipcMain, dialog, app} = require("electron");
+const {ipcMain, dialog, app, shell} = require("electron");
 const {collectRecursivelyFilePaths, sendFilesToRenderer} = require("../../utils/file-utils")
 const {isCryptoneEncoded} = require("../../utils/file-utils")
 const path = require("path");
@@ -8,7 +8,6 @@ const {
   unarchiveIfExists
 } = require("../../utils/zip-utils");
 
-const ADD_FILES_CHANNEL = 'add-files';
 const userDataPath = app.getPath('userData');
 const baseKeysPath = path.join(userDataPath, 'CryptoneKeys', 'Offline');
 
@@ -33,7 +32,7 @@ function extractCFilesRecursively(paths) {
 function initializeDroppedFilesHandler() {
   ipcMain.on('dropped-files', (event, paths) => {
     const mappedFilesToCFiles = extractCFilesRecursively(paths);
-    event.reply(ADD_FILES_CHANNEL, mappedFilesToCFiles);
+    event.reply('add-files', mappedFilesToCFiles);
   });
 }
 
@@ -120,6 +119,23 @@ function initializeUnarchiveIfExistsHandler(mainWindow) {
   })
 }
 
+function initializeOpenKeysFolderHandler() {
+  ipcMain.on('open-keys-folder', (event, exactKeysFolder) => {
+    try {
+      const fullKeysPath = path.join(baseKeysPath, exactKeysFolder || '');
+      shell.openPath(fullKeysPath);
+    } catch (err) {
+      console.error('Error during open folder:', err);
+    }
+  });
+}
+
+function initializeShowFileInFolderHandler() {
+  ipcMain.handle('show-file-in-folder', (event, cfile) => {
+    shell.showItemInFolder(cfile.path);
+  });
+}
+
 function initializeFileHandlers(mainWindow, pendingFiles) {
   initializeDidFinishLoadHandler(mainWindow, pendingFiles);
   initializeGetPendingFilesHandler(mainWindow, pendingFiles);
@@ -130,6 +146,8 @@ function initializeFileHandlers(mainWindow, pendingFiles) {
   initializeIsFileExistsHandler();
   initializeArchiveFilesHandler();
   initializeUnarchiveIfExistsHandler(mainWindow);
+  initializeOpenKeysFolderHandler();
+  initializeShowFileInFolderHandler();
 }
 
 module.exports = {initializeFileHandlers}

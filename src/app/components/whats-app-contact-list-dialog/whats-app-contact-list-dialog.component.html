@@ -1,0 +1,22 @@
+<p-dialog
+  [(visible)]="whatsAppContactListDialogVisible"
+  [header]="'WhatsApp Contacts'"
+  [modal]="true"
+  [style]="{ width: '25rem', height: '25rem' }"
+>
+  <p-listbox
+    [options]="cContacts"
+    [(ngModel)]="cContact"
+    [filter]="true"
+    (onChange)="onSelectWhatsAppContact($event)"
+    optionLabel="name"
+    class="w-full md:w-56"
+  >
+    <ng-template let-ccontact #item>
+      <div class="flex items-center gap-2">
+        <img [src]="ccontact.profilePicUrl" style="width: 18px" />
+        <div>{{ ccontact.name }}</div>
+      </div>
+    </ng-template>
+  </p-listbox>
+</p-dialog>

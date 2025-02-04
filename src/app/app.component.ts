@@ -12,6 +12,10 @@ import {MessageService} from 'primeng/api';
 import {ProgressSpinner} from 'primeng/progressspinner';
 import {NgIf, CommonModule} from '@angular/common';
 import {LoadingService} from './services/loading.service';
+import {
+  WhatsAppContactListDialogComponent
+} from './components/whats-app-contact-list-dialog/whats-app-contact-list-dialog.component';
+import {WhatsAppQRDialogComponent} from './components/whats-app-qrdialog/whats-app-qrdialog.component';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +32,8 @@ import {LoadingService} from './services/loading.service';
     ProgressSpinner,
     NgIf,
     CommonModule,
+    WhatsAppContactListDialogComponent,
+    WhatsAppQRDialogComponent,
   ],
   providers: [
     MessageService,
