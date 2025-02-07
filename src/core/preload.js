@@ -14,6 +14,9 @@ window.electron = {
   deleteFiles: (cfiles) => ipcRenderer.invoke('delete-files', cfiles),
   archiveFiles: (cfiles) => ipcRenderer.invoke('archive-files', cfiles),
   unarchiveIfExists: (cfilePath) => ipcRenderer.invoke('unarchive-if-exists', cfilePath),
+  sendFilesViaWhatsApp: (ccontact, cfiles) => ipcRenderer.invoke('send-files-via-whatsapp', ccontact, cfiles),
+  getWhatsAppContactList: () => ipcRenderer.invoke('get-whatsapp-contacts'),
+  showFileInFolder: (cfile) => ipcRenderer.invoke('show-file-in-folder', cfile),
 };
 
 window.addEventListener('dragover', (event) => {

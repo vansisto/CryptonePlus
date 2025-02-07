@@ -77,9 +77,18 @@ body {
   --p-progressspinner-color-3: var(--third-color);
   --p-progressspinner-color-4: var(--third-color);
 
+  --p-listbox-background: var(--primary-color);
+  --p-listbox-border-color: var(--primary-color-additional);
+  --p-listbox-option-focus-background: var(--third-color);
+  --p-listbox-option-color: var(--table-color);
+  --p-listbox-option-focus-color: var(--table-color);
+  --p-listbox-option-selected-color: var(--third-color-additional);
+
   background-color: var(--primary-color) !important;
   color: var(--second-color) !important;
   font-family: 'Jura', serif;
+
+  --p-popover-background: var(--primary-color-additional);
 }
 
 .p-button, .p-select, .p-dialog, .p-table {

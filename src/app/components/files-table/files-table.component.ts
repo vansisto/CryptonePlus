@@ -4,11 +4,18 @@ import {TableModule} from 'primeng/table';
 import {TranslatePipe} from '@ngx-translate/core';
 import {InputFile} from '../../interfaces/input-file'
 import {Button} from 'primeng/button';
-import {NgIf} from '@angular/common';
+import {NgIf, NgOptimizedImage} from '@angular/common';
+import {Tooltip} from 'primeng/tooltip';
 import {FilesService} from '../../services/files.service';
-import {MessageService} from 'primeng/api';
-import {CryptoDialogService} from '../../services/crypto-dialog.service';
+import {DialogService} from '../../services/dialog.service';
 import {FileEncryptionService} from '../../services/file-encryption.service';
+import {Popover} from 'primeng/popover';
+import { QRCodeComponent } from 'angularx-qrcode';
+import {Dialog} from 'primeng/dialog';
+import {ProgressSpinner} from 'primeng/progressspinner';
+import {FormsModule} from '@angular/forms';
+import {SendFilesService} from '../../services/send-files.service';
+import {WhatsAppService} from '../../services/whats-app.service';
 
 @Component({
   selector: 'app-files-table',
@@ -16,9 +23,15 @@ import {FileEncryptionService} from '../../services/file-encryption.service';
     TableModule,
     Button,
     NgIf,
+    Tooltip,
     TranslatePipe,
+    Popover,
+    NgOptimizedImage,
+    QRCodeComponent,
+    Dialog,
+    ProgressSpinner,
+    FormsModule,
   ],
-  providers: [MessageService],
   templateUrl: './files-table.component.html',
   styleUrl: './files-table.component.scss'
 })
@@ -26,18 +39,26 @@ export class FilesTableComponent implements OnInit {
   electron = (window as any).electron;
   allFiles!: CFile[];
   selectedFiles: CFile[] = [];
+  isWhatsAppLoading: boolean = false;
 
   constructor(
     private readonly ngZone: NgZone,
     private readonly filesService: FilesService,
     private readonly fileEncryptionService: FileEncryptionService,
-    private readonly encryptDialogService: CryptoDialogService,
+    private readonly dialogService: DialogService,
+    private readonly sendFilesService: SendFilesService,
+    private readonly whatsAppService: WhatsAppService,
   ) {}
 
   ngOnInit() {
     this.subscribeToAllFiles();
     this.subscribeToSelectedFiles();
     this.setupElectronHandlers();
+
+    this.whatsAppService.isWhatsAppLoading$.subscribe(value => {
+      this.isWhatsAppLoading = value;
+    });
+
     this.electron.send('get-pending-files');
   }
 
@@ -61,16 +82,17 @@ export class FilesTableComponent implements OnInit {
 
   showEncryptDialog(cfile: CFile) {
     this.fileEncryptionService.addFileToPending(cfile);
-    this.encryptDialogService.showEncryptDialog();
+    this.dialogService.showEncryptDialog();
   }
 
   showDecryptDialog(cfile: CFile) {
     this.fileEncryptionService.addFileToPending(cfile);
-    this.encryptDialogService.showDecryptDialog();
+    this.dialogService.showDecryptDialog();
   }
 
   onSelectionChange(selectedFiles: CFile[]) {
     this.filesService.updateSelectedFiles(selectedFiles);
+    this.sendFilesService.filesToSend = selectedFiles;
   }
 
   private setupElectronHandlers(): void {
@@ -92,5 +114,21 @@ export class FilesTableComponent implements OnInit {
       this.filesService.addFileToAll(newCFile);
       this.selectedFiles = this.selectedFiles.filter(file => file.path !== newCFile.path);
     }
+  }
+
+  sendViaWhatsApp(cfile: CFile) {
+    this.whatsAppService.sendViaWhatsApp([cfile]);
+  }
+
+  sendViaSignal(cfile: CFile) {
+
+  }
+
+  sendViaThreema(cfile: CFile) {
+
+  }
+
+  openFolderWithSelectedFile(cfile: CFile) {
+    this.electron.showFileInFolder(cfile);
   }
 }

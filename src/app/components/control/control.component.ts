@@ -5,9 +5,12 @@ import {FileSizeConverterUtil} from '../../utils/file-size-converter-util';
 import {FilesService} from '../../services/files.service';
 import {TableModule} from 'primeng/table';
 import {CFile} from '../../models/cfile';
-import {NgIf} from '@angular/common';
-import {CryptoDialogService} from '../../services/crypto-dialog.service';
+import {NgIf, NgOptimizedImage} from '@angular/common';
+import {DialogService} from '../../services/dialog.service';
 import {FileEncryptionService} from '../../services/file-encryption.service';
+import {WhatsAppService} from '../../services/whats-app.service';
+import {Popover} from 'primeng/popover';
+import {ProgressSpinner} from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-control',
@@ -16,6 +19,9 @@ import {FileEncryptionService} from '../../services/file-encryption.service';
     TranslatePipe,
     TableModule,
     NgIf,
+    NgOptimizedImage,
+    Popover,
+    ProgressSpinner,
   ],
   templateUrl: './control.component.html',
   styleUrl: './control.component.scss'
@@ -24,11 +30,13 @@ export class ControlComponent implements OnInit {
   electron: any = (window as any).electron;
   allFiles!: CFile[];
   selectedFiles!: CFile[];
+  isWhatsAppLoading: boolean = false;
 
   constructor(
     private readonly filesService: FilesService,
-    private readonly encryptDialogService: CryptoDialogService,
-    private readonly fileEncryptionService: FileEncryptionService
+    private readonly encryptDialogService: DialogService,
+    private readonly fileEncryptionService: FileEncryptionService,
+    private readonly whatsAppService: WhatsAppService,
   ) {}
 
   ngOnInit() {
@@ -38,6 +46,10 @@ export class ControlComponent implements OnInit {
 
     this.filesService.allFiles$.subscribe(files => {
       this.allFiles = files;
+    });
+
+    this.whatsAppService.isWhatsAppLoading$.subscribe(value => {
+      this.isWhatsAppLoading = value;
     });
   }
 
@@ -80,5 +92,13 @@ export class ControlComponent implements OnInit {
 
   selectedContainEncrypted(): boolean {
     return this.selectedFiles.some(file => file.encrypted);
+  }
+
+  sendSelectedFiles() {
+    this.whatsAppService.sendViaWhatsApp(this.selectedFiles);
+  }
+
+  sendAllFiles() {
+    this.whatsAppService.sendViaWhatsApp(this.allFiles);
   }
 }

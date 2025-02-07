@@ -10,7 +10,9 @@ export class FilesService {
   allFiles$: Observable<CFile[]> = this.allFilesSubject.asObservable();
   selectedFiles$: Observable<CFile[]> = this.selectedFilesSubject.asObservable();
 
-  constructor(private readonly ngZone: NgZone) {
+  constructor(
+    private readonly ngZone: NgZone,
+  ) {
     this.ngZone.runOutsideAngular(() => {
       interval(1000).subscribe(() => {
         this.ngZone.run(() => this.syncFilesWithFileSystem());
