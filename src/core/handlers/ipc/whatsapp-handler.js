@@ -11,9 +11,8 @@ let isClientReady = false;
 const userDataPath = app.getPath('userData');
 
 async function initializeWhatsAppClient(mainWindow) {
-  log('## Initializing WhatsApp client...');
+  log('Initializing WhatsApp client...');
   if (!client) {
-    log('### No WhatsApp client. Creating new client...');
 
     let chromePath = puppeteer.executablePath();
     chromePath = chromePath.replace('app.asar', 'app.asar.unpacked');
@@ -47,16 +46,16 @@ async function initializeWhatsAppClient(mainWindow) {
         await handleReceivedQR(mainWindow, qr);
       })
       .on('authenticated', () => {
-        log('#### WhatsApp Client authenticated. Sending to renderer whatsapp-authenticated...');
+        log('WhatsApp Client authenticated');
         store.set('lastAuthenticated', Date.now());
         mainWindow.webContents.send('whatsapp-authenticated');
       })
       .on('auth_failure', () => {
-        log('#### WhatsApp Authentication failure');
+        log('[ERROR] WhatsApp Authentication failure');
         isClientReady = false;
       })
       .on('change_state', (state) => {
-        log('#### WhatsApp State changed:', state);
+        log('WhatsApp State changed:', state);
         isClientReady = state === 'CONNECTED';
       })
       .on('disconnected', async (reason) => {
@@ -64,18 +63,17 @@ async function initializeWhatsAppClient(mainWindow) {
       });
 
     client.once('ready', () => {
-      log('### WhatsApp Client once \'ready\' event');
+      log('WhatsApp Client ready');
       isClientReady = true;
     });
   }
 
   if (!isClientReady) {
-    log('### WhatsApp Client not ready. Initializing client...');
     try {
       await client.initialize();
-      log('#### WhatsApp Client initialized');
+      log('WhatsApp Client initialized');
     } catch (err) {
-      log('#### WhatsApp Error initializing client:', err);
+      log('WhatsApp Error initializing client:', err);
       throw err;
     }
   }
@@ -83,7 +81,7 @@ async function initializeWhatsAppClient(mainWindow) {
 
 function initializeSendFileViaWhatsAppHandler() {
   return ipcMain.handle('send-files-via-whatsapp', async (event, ccontact, cfiles) => {
-    log('# send-files-via-whatsapp handler called...');
+    log('Sending files via WhatsApp...');
     try {
       for (const cfile of cfiles) {
         log('[FILE]', JSON.stringify(cfile));
@@ -99,16 +97,14 @@ function initializeSendFileViaWhatsAppHandler() {
 
 function initializeGetContactsHandler(mainWindow) {
   return ipcMain.handle('get-whatsapp-contacts', async (event) => {
-    log('# get-whatsapp-contacts handler called...');
     try {
       await initializeWhatsAppClient(mainWindow);
       if (!isClientReady) {
-        log('### Waiting for client to be ready...');
         await waitForClientReady();
       }
       return await getWhatsAppContacts();
     } catch (err) {
-      log('### Error in get-whatsapp-contacts:', err);
+      log('[ERROR] Error in get-whatsapp-contacts:', err);
       throw err;
     }
   });
@@ -116,14 +112,14 @@ function initializeGetContactsHandler(mainWindow) {
 
 
 async function getWhatsAppContacts() {
-  log('# Getting WhatsApp contacts...');
+  log('Getting WhatsApp contacts...');
   try {
     const contacts = (await client.getContacts())
       .filter(contact => (contact.isMyContact && contact.id.server === 'c.us') || contact.isGroup);
 
     return await getSortedContactsWithProfilesPictures(contacts);
   } catch (err) {
-    log('### Error getting WhatsApp contacts:', err);
+    log('[ERROR] getting WhatsApp contacts:', err);
     throw err;
   }
 }
@@ -144,7 +140,7 @@ async function getSortedContactsWithProfilesPictures(contacts) {
       try {
         profilePicUrl = await contact.getProfilePicUrl();
       } catch (err) {
-        log('### Error getting profile picture for contact:', contact.id._serialized);
+        log('[ERROR] getting profile picture for contact:', contact.id._serialized);
       }
       const lastActive = lastActivityMap.get(contact.id._serialized) || 0;
       return {...contact, profilePicUrl, lastActive};
@@ -156,10 +152,10 @@ async function getSortedContactsWithProfilesPictures(contacts) {
 }
 
 async function reinitializeClient(reason, mainWindow) {
-  log('#### WhatsApp Client disconnected:', reason);
+  log('WhatsApp Client disconnected:', reason);
   isClientReady = false;
   if (reason && reason.toLowerCase().includes('logout')) {
-    log('#### Client logged out. Reinitializing client...');
+    log('WhatsApp Client logged out. Reinitializing client...');
 
     await resetClient();
     mainWindow.webContents.send('whatsapp-logged-out');
@@ -167,7 +163,7 @@ async function reinitializeClient(reason, mainWindow) {
     try {
       await initializeWhatsAppClient(mainWindow);
     } catch (err) {
-      log('#### Error reinitializing client:', err);
+      log('[ERROR] while reinitializing client:', err);
     }
   }
 }
@@ -183,22 +179,19 @@ function clearSessionsFolder() {
   const sessionPath = path.join(userDataPath, 'whatsapp-sessions');
   try {
     fs.rmSync(sessionPath, {recursive: true, force: true});
-    log('#### Deleted old session files:', sessionPath);
+    log('Deleted old WhatsApp session files');
   } catch (err) {
-    log('#### Error deleting session files:', err);
+    log('[ERROR] Error deleting session files:', err);
   }
 }
 
 async function handleReceivedQR(mainWindow, qr) {
-  log('#### WhatsApp QR received. Sending to renderer...');
   try {
     const state = await client.getState();
     if (state !== 'CONNECTED') {
-      log('##### WhatsApp Client state - not CONNECTED');
       mainWindow.webContents.send('whatsapp-qr-received', qr);
     }
   } catch (err) {
-    log('##### Error getting WhatsApp client state. Sending QR to renderer...');
     mainWindow.webContents.send('whatsapp-qr-received', qr);
   }
 }

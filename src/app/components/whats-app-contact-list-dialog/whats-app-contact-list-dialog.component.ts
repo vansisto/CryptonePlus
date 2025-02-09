@@ -41,6 +41,7 @@ export class WhatsAppContactListDialogComponent implements OnInit{
   }
 
   onSelectWhatsAppContact(event: any) {
+    this.dialogService.hideWhatsAppContactListDialog();
     this.whatsAppService.isWhatsAppLoadingSubject.next(true);
     this.sendFilesService.sendFiles(event.value as CContact)
       .then((result: {status: string}) => {
