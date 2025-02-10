@@ -10,8 +10,6 @@ import {FilesService} from '../../services/files.service';
 import {DialogService} from '../../services/dialog.service';
 import {FileEncryptionService} from '../../services/file-encryption.service';
 import {Popover} from 'primeng/popover';
-import { QRCodeComponent } from 'angularx-qrcode';
-import {Dialog} from 'primeng/dialog';
 import {ProgressSpinner} from 'primeng/progressspinner';
 import {FormsModule} from '@angular/forms';
 import {SendFilesService} from '../../services/send-files.service';
@@ -27,8 +25,6 @@ import {WhatsAppService} from '../../services/whats-app.service';
     TranslatePipe,
     Popover,
     NgOptimizedImage,
-    QRCodeComponent,
-    Dialog,
     ProgressSpinner,
     FormsModule,
   ],
