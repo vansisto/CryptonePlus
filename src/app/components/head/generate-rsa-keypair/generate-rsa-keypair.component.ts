@@ -8,6 +8,7 @@ import {FloatLabel} from 'primeng/floatlabel';
 import {InputText} from 'primeng/inputtext';
 import {TranslatePipe} from '@ngx-translate/core';
 import {NgIf} from '@angular/common';
+import {KeyPairsService} from '../../../services/key-pairs.service';
 
 @Component({
   selector: 'app-generate-rsa-keypair',
@@ -36,6 +37,10 @@ export class GenerateRsaKeypairComponent implements OnInit {
   privateKeyName: string = '';
   formGroup!: FormGroup;
 
+  constructor(
+    private readonly keyPairsService: KeyPairsService
+  ) {}
+
   ngOnInit() {
     this.formGroup = new FormGroup({
       ownKeyPairName: new FormControl<string | null>(null)
@@ -52,10 +57,12 @@ export class GenerateRsaKeypairComponent implements OnInit {
     if (this.isDifferentKeysNames) {
       this.electron.generateKeysWithDifferentNames(this.publicKeyName, this.privateKeyName);
     } else {
-      this.electron.generateKeyPair(keyPairName);
+      this.electron.generateKeyPair(keyPairName).then(() => {
+        this.keyPairsService.checkKeysFolderExisting();
+        this.visible = false;
+        this.electron.send('open-keys-folder', keyPairName);
+      });
     }
-    this.visible = false;
-    this.electron.send('open-keys-folder', keyPairName);
   }
 
   private buildKeyPairName(): string {

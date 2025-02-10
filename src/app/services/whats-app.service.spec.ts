@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CryptoDialogService } from './crypto-dialog.service';
+import { WhatsAppService } from './whats-app.service';
 
-describe('EncryptDialogService', () => {
-  let service: CryptoDialogService;
+describe('WhatsAppService', () => {
+  let service: WhatsAppService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(CryptoDialogService);
+    service = TestBed.inject(WhatsAppService);
   });
 
   it('should be created', () => {

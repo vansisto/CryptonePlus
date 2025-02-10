@@ -10,6 +10,7 @@
     <ng-template #header>
       <tr>
         <th id="checkbox" style="width: 4rem"><p-tableHeaderCheckbox /></th>
+        <th id="openFolder"></th>
         <th id="path" style="min-width:350px">{{'TABLE_HEADERS.PATH' | translate}}</th>
         <th id="name" style="min-width:150px">{{'TABLE_HEADERS.NAME' | translate}}</th>
         <th id="type" style="min-width:30px">{{ 'TABLE_HEADERS.TYPE' | translate }}</th>
@@ -23,6 +24,9 @@
       <tr [pSelectableRow]="cfile">
         <td>
           <p-tableCheckbox [value]="cfile" />
+        </td>
+        <td class="buttons-cell">
+          <p-button icon="pi pi-folder" size="small" variant="text" (onClick)="openFolderWithSelectedFile(cfile)"/>
         </td>
         <td>{{cfile.path}}</td>
         <td>&nbsp;&nbsp;{{cfile.name}}</td>
@@ -49,15 +53,31 @@
           <p-button icon="pi pi-minus-circle" size="small" variant="text" (onClick)="removeFile(cfile)"/>
         </td>
         <td>
-<!--          <p-button-->
-<!--            icon="pi pi-send"-->
-<!--            size="small"-->
-<!--            variant="text"-->
-<!--            [pTooltip]="'TOOLTIPS.SEND_WITH_MESSENGER' | translate"-->
-<!--            showDelay="1000"-->
-<!--            hideDelay="300"/>-->
+          <p-button
+            icon="pi pi-send"
+            size="small"
+            variant="text"
+            [pTooltip]="'TOOLTIPS.SEND_WITH_MESSENGER' | translate"
+            showDelay="1000"
+            hideDelay="300"
+            (click)="op.toggle($event)"
+          />
         </td>
       </tr>
+      <p-popover #op>
+        <div class="flex justify-content-center align-items-center gap-1" style="width: 100px; height: 25px">
+          <span style="cursor: pointer;" (click)="sendViaWhatsApp(cfile)">
+            <img *ngIf="!isWhatsAppLoading" ngSrc="icons/whatsapp.svg" width="36" height="36" alt="WhatsApp" />
+            <p-progressSpinner *ngIf="isWhatsAppLoading" strokeWidth="4" [style]="{ width: '25px', height: '25px' }" />
+          </span>
+<!--          <span style="cursor: pointer;" (click)="sendViaSignal(cfile)">-->
+<!--            <img ngSrc="icons/signal.svg" width="36" height="36" alt="Signal" />-->
+<!--          </span>-->
+<!--          <span style="cursor: pointer;" (click)="sendViaThreema(cfile)">-->
+<!--            <img ngSrc="icons/threema.svg" width="36" height="36" alt="Threema" />-->
+<!--          </span>-->
+        </div>
+      </p-popover>
     </ng-template>
   </p-table>
 </div>

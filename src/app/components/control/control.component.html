@@ -15,11 +15,12 @@
     />
   </div>
   <div class="col-3">
-<!--    <p-button-->
-<!--      *ngIf="allFiles.length > 0"-->
-<!--      icon="pi pi-send"-->
-<!--      [label]="'CONTROL_SECTION.SEND_ALL_BUTTON' | translate"-->
-<!--    />-->
+    <p-button
+      *ngIf="allFiles.length > 0"
+      icon="pi pi-send"
+      [label]="'CONTROL_SECTION.SEND_ALL_BUTTON' | translate"
+      (onClick)="opAll.toggle($event)"
+    />
   </div>
 </div>
 
@@ -81,11 +82,43 @@
     />
   </div>
   <div class="col-3">
-<!--    <p-button-->
-<!--      *ngIf="selectedFiles.length > 0"-->
-<!--      icon="pi pi-send"-->
-<!--      size="small"-->
-<!--      [label]="'CONTROL_SECTION.SEND_SELECTED_BUTTON' | translate"-->
-<!--    />-->
+    <p-button
+      *ngIf="selectedFiles.length > 0"
+      icon="pi pi-send"
+      size="small"
+      [label]="'CONTROL_SECTION.SEND_SELECTED_BUTTON' | translate"
+      (onClick)="opSelected.toggle($event)"
+    />
   </div>
 </div>
+
+<p-popover #opAll>
+  <div class="flex justify-content-center align-items-center gap-1" style="width: 100px; height: 25px">
+          <span style="cursor: pointer;" (click)="sendAllFiles()">
+            <img *ngIf="!isWhatsAppLoading" ngSrc="icons/whatsapp.svg" width="36" height="36" alt="WhatsApp" />
+            <p-progressSpinner *ngIf="isWhatsAppLoading" strokeWidth="4" [style]="{ width: '25px', height: '25px' }" />
+          </span>
+    <!--          <span style="cursor: pointer;" (click)="sendViaSignal(cfile)">-->
+    <!--            <img ngSrc="icons/signal.svg" width="36" height="36" alt="Signal" />-->
+    <!--          </span>-->
+    <!--          <span style="cursor: pointer;" (click)="sendViaThreema(cfile)">-->
+    <!--            <img ngSrc="icons/threema.svg" width="36" height="36" alt="Threema" />-->
+    <!--          </span>-->
+  </div>
+</p-popover>
+
+<p-popover #opSelected>
+  <div class="flex justify-content-center align-items-center gap-1" style="width: 100px; height: 25px">
+          <span style="cursor: pointer;" (click)="sendSelectedFiles()">
+            <img *ngIf="!isWhatsAppLoading" ngSrc="icons/whatsapp.svg" width="36" height="36" alt="WhatsApp" />
+            <p-progressSpinner *ngIf="isWhatsAppLoading" strokeWidth="4" [style]="{ width: '25px', height: '25px' }" />
+          </span>
+    <!--          <span style="cursor: pointer;" (click)="sendViaSignal(cfile)">-->
+    <!--            <img ngSrc="icons/signal.svg" width="36" height="36" alt="Signal" />-->
+    <!--          </span>-->
+    <!--          <span style="cursor: pointer;" (click)="sendViaThreema(cfile)">-->
+    <!--            <img ngSrc="icons/threema.svg" width="36" height="36" alt="Threema" />-->
+    <!--          </span>-->
+  </div>
+</p-popover>
+

@@ -26,17 +26,6 @@ function initializeGenerateKeysWithDifferentNamesHandler() {
   });
 }
 
-function initializeOpenKeysFolderHandler() {
-  ipcMain.on('open-keys-folder', (event, exactKeysFolder) => {
-    try {
-      const fullKeysPath = path.join(baseKeysPath, exactKeysFolder || '');
-      shell.openPath(fullKeysPath);
-    } catch (err) {
-      console.error('Error during open folder:', err);
-    }
-  });
-}
-
 function initializeCreateRSAKeyPairFolderHandler() {
   ipcMain.on('create-rsa-keypair-folder', (event, folderName) => {
     try {
@@ -51,7 +40,6 @@ function initializeCreateRSAKeyPairFolderHandler() {
 
 function initializeRsaKeysHandlers() {
   initializeCreateRSAKeyPairFolderHandler();
-  initializeOpenKeysFolderHandler();
   initializeGenerateKeyPairHandler();
   initializeGenerateKeysWithDifferentNamesHandler();
 }

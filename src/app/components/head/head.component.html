@@ -10,6 +10,7 @@
       variant="text"
     />
     <p-button
+      *ngIf="isKeysFolderExists"
       (onClick)="openKeysFolder()"
       icon="pi pi-folder"
       size="large"
