@@ -16,4 +16,8 @@ function log(message, ...args) {
   });
 }
 
-module.exports = { log };
+function error(message, ...args) {
+  log(`[ERROR] ${message}`, ...args);
+}
+
+module.exports = { log, error };

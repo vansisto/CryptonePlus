@@ -2,7 +2,7 @@ const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const { ipcMain, app } = require('electron');
 const path = require('path');
 const fs = require('fs');
-const { log } = require('../../utils/log-util');
+const { log, error } = require('../../utils/log-util');
 const puppeteer = require('puppeteer');
 const { store } = require('../../utils/store-util');
 
@@ -51,7 +51,7 @@ async function initializeWhatsAppClient(mainWindow) {
         mainWindow.webContents.send('whatsapp-authenticated');
       })
       .on('auth_failure', () => {
-        log('[ERROR] WhatsApp Authentication failure');
+        error('WhatsApp Authentication failure');
         isClientReady = false;
       })
       .on('change_state', (state) => {
@@ -104,7 +104,7 @@ function initializeGetContactsHandler(mainWindow) {
       }
       return await getWhatsAppContacts();
     } catch (err) {
-      log('[ERROR] Error in get-whatsapp-contacts:', err);
+      error('Error in get-whatsapp-contacts:', err);
       throw err;
     }
   });
@@ -119,7 +119,7 @@ async function getWhatsAppContacts() {
 
     return await getSortedContactsWithProfilesPictures(contacts);
   } catch (err) {
-    log('[ERROR] getting WhatsApp contacts:', err);
+    error('getting WhatsApp contacts:', err);
     throw err;
   }
 }
@@ -140,7 +140,7 @@ async function getSortedContactsWithProfilesPictures(contacts) {
       try {
         profilePicUrl = await contact.getProfilePicUrl();
       } catch (err) {
-        log('[ERROR] getting profile picture for contact:', contact.id._serialized);
+        error('getting profile picture for contact:', contact.id._serialized);
       }
       const lastActive = lastActivityMap.get(contact.id._serialized) || 0;
       return {...contact, profilePicUrl, lastActive};
@@ -163,7 +163,7 @@ async function reinitializeClient(reason, mainWindow) {
     try {
       await initializeWhatsAppClient(mainWindow);
     } catch (err) {
-      log('[ERROR] while reinitializing client:', err);
+      error('while reinitializing client:', err);
     }
   }
 }
@@ -181,7 +181,7 @@ function clearSessionsFolder() {
     fs.rmSync(sessionPath, {recursive: true, force: true});
     log('Deleted old WhatsApp session files');
   } catch (err) {
-    log('[ERROR] Error deleting session files:', err);
+    error('Error deleting session files:', err);
   }
 }
 
