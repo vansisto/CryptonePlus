@@ -3,7 +3,7 @@
   "main": "src/core/electron-main.js",
   "description": "Application to encrypt files",
   "author": "Van Sisto <vansisto@gmail.com>",
-  "version": "0.7.15",
+  "version": "0.7.16",
   "scripts": {
     "build": "ng build --base-href ./",
     "start": "electron .",
@@ -40,12 +40,12 @@
       {
         "ext": "crtn_public_key",
         "name": "Cryptone Public Key",
-        "icon": "src/assets/icons/key.ico"
+        "icon": "src/assets/icons/public_key.ico"
       },
       {
         "ext": "crtn_private_key",
         "name": "Cryptone Private Key",
-        "icon": "src/assets/icons/key.ico"
+        "icon": "src/assets/icons/private_key.ico"
       }
     ],
     "publish": [
