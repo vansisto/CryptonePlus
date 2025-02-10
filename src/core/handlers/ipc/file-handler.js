@@ -7,6 +7,7 @@ const {
   archiveFiles,
   unarchiveIfExists
 } = require("../../utils/zip-utils");
+const {error} = require("../../utils/log-util");
 
 const userDataPath = app.getPath('userData');
 const baseKeysPath = path.join(userDataPath, 'CryptoneKeys', 'Offline');
@@ -63,7 +64,7 @@ function initializeOpenFileDialogHandler(mainWindow) {
         }
       })
       .catch((err) => {
-        console.error('Error opening file dialog:', err);
+        error('Error opening file dialog:', err);
       });
   });
 }
@@ -87,7 +88,7 @@ function initializeSelectKeyDialogHandler() {
         }
       })
       .catch((err) => {
-        console.error('Error opening key selection dialog:', err);
+        error('Error opening key selection dialog:', err);
       });
   });
 }
@@ -123,10 +124,18 @@ function initializeOpenKeysFolderHandler() {
   ipcMain.on('open-keys-folder', (event, exactKeysFolder) => {
     try {
       const fullKeysPath = path.join(baseKeysPath, exactKeysFolder || '');
-      shell.openPath(fullKeysPath);
+      if (fs.existsSync(fullKeysPath)) {
+        shell.openPath(fullKeysPath);
+      } else {
+        error('Keys folder does not exist:', fullKeysPath);
+      }
     } catch (err) {
-      console.error('Error during open folder:', err);
+      error('Error during open folder:', err);
     }
+  });
+
+  ipcMain.handle('is-keys-folder-exists', () => {
+    return fs.existsSync(path.join(baseKeysPath));
   });
 }
 

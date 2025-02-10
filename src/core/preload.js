@@ -5,6 +5,7 @@ window.electron = {
   receive: (channel, func) => ipcRenderer.on(channel, (event, ...args) => func(...args)),
   generateKeyPair: (keyPairName) => ipcRenderer.invoke('generate-key-pair', keyPairName),
   generateKeysWithDifferentNames: (publicKeyName, privateKeyName) => ipcRenderer.invoke('generate-keys-with-different-names', publicKeyName, privateKeyName),
+  isKeysFolderExists: () => ipcRenderer.invoke('is-keys-folder-exists'),
   openFileDialog: () => ipcRenderer.invoke('open-file-dialog'),
   encryptFile: (cfile, password, publicKeyPath) => ipcRenderer.invoke('encrypt-file', cfile, password, publicKeyPath),
   decryptFile: (cfile, password, privateKeyPath) => ipcRenderer.invoke('decrypt-file', cfile, password, privateKeyPath),

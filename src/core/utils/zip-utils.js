@@ -4,6 +4,7 @@ const archiver = require('archiver')
 const { exec } = require('child_process')
 const StreamZip = require('node-stream-zip');
 const {sendFilesToRenderer} = require("./file-utils");
+const { log, error } = require('./log-util');
 
 function archiveFiles(cfiles) {
   return new Promise((resolve, reject) => {
@@ -19,6 +20,7 @@ function archiveFiles(cfiles) {
     });
 
     archiverInstance.finalize();
+    log(`Files ${JSON.stringify(cfiles)} archived to: `, archivePath);
   });
 }
 
@@ -55,7 +57,7 @@ function createWriteStream(archivePath, archive, resolve, reject) {
     if (process.platform === "win32") {
       exec(`attrib +h "${archivePath}"`, (err) => {
         if (err) {
-          console.error("Error setting hidden attribute:", err);
+          error("Error setting hidden attribute:", err);
         }
       });
     }
