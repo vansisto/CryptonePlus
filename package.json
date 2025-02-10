@@ -3,7 +3,7 @@
   "main": "src/core/electron-main.js",
   "description": "Application to encrypt files",
   "author": "Van Sisto",
-  "version": "0.7.11",
+  "version": "0.7.12",
   "scripts": {
     "build": "ng build --base-href ./",
     "start": "electron .",
@@ -75,7 +75,7 @@
         "AppImage",
         "deb"
       ],
-      "icon": "src/assets/favicon.ico"
+      "icon": "src/assets/favicon.png"
     }
   },
   "private": true,
