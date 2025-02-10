@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [windows-latest, ubuntu-latest]
 
     steps:
       - name: Checkout Code
@@ -36,7 +36,15 @@ jobs:
       - name: Build front
         run: npm run build
 
-      - name: Electron Builder (Win + Publish)
-        run: npx electron-builder -w --publish always
+      - name: Electron Builder (Windows Publish)
+        if: runner.os == 'Windows'
+        run: npx electron-builder --win --publish always
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Electron Builder (Linux Publish)
+        if: runner.os == 'Linux'
+        run: npx electron-builder --linux --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
