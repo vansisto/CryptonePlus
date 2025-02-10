@@ -1,4 +1,4 @@
-const {ipcMain, dialog, app} = require("electron");
+const {ipcMain, dialog, app, shell} = require("electron");
 const {collectRecursivelyFilePaths, sendFilesToRenderer} = require("../../utils/file-utils")
 const {isCryptoneEncoded} = require("../../utils/file-utils")
 const path = require("path");
@@ -7,8 +7,8 @@ const {
   archiveFiles,
   unarchiveIfExists
 } = require("../../utils/zip-utils");
+const {error} = require("../../utils/log-util");
 
-const ADD_FILES_CHANNEL = 'add-files';
 const userDataPath = app.getPath('userData');
 const baseKeysPath = path.join(userDataPath, 'CryptoneKeys', 'Offline');
 
@@ -33,7 +33,7 @@ function extractCFilesRecursively(paths) {
 function initializeDroppedFilesHandler() {
   ipcMain.on('dropped-files', (event, paths) => {
     const mappedFilesToCFiles = extractCFilesRecursively(paths);
-    event.reply(ADD_FILES_CHANNEL, mappedFilesToCFiles);
+    event.reply('add-files', mappedFilesToCFiles);
   });
 }
 
@@ -64,7 +64,7 @@ function initializeOpenFileDialogHandler(mainWindow) {
         }
       })
       .catch((err) => {
-        console.error('Error opening file dialog:', err);
+        error('Error opening file dialog:', err);
       });
   });
 }
@@ -88,7 +88,7 @@ function initializeSelectKeyDialogHandler() {
         }
       })
       .catch((err) => {
-        console.error('Error opening key selection dialog:', err);
+        error('Error opening key selection dialog:', err);
       });
   });
 }
@@ -120,6 +120,31 @@ function initializeUnarchiveIfExistsHandler(mainWindow) {
   })
 }
 
+function initializeOpenKeysFolderHandler() {
+  ipcMain.on('open-keys-folder', (event, exactKeysFolder) => {
+    try {
+      const fullKeysPath = path.join(baseKeysPath, exactKeysFolder || '');
+      if (fs.existsSync(fullKeysPath)) {
+        shell.openPath(fullKeysPath);
+      } else {
+        error('Keys folder does not exist:', fullKeysPath);
+      }
+    } catch (err) {
+      error('Error during open folder:', err);
+    }
+  });
+
+  ipcMain.handle('is-keys-folder-exists', () => {
+    return fs.existsSync(path.join(baseKeysPath));
+  });
+}
+
+function initializeShowFileInFolderHandler() {
+  ipcMain.handle('show-file-in-folder', (event, cfile) => {
+    shell.showItemInFolder(cfile.path);
+  });
+}
+
 function initializeFileHandlers(mainWindow, pendingFiles) {
   initializeDidFinishLoadHandler(mainWindow, pendingFiles);
   initializeGetPendingFilesHandler(mainWindow, pendingFiles);
@@ -130,6 +155,8 @@ function initializeFileHandlers(mainWindow, pendingFiles) {
   initializeIsFileExistsHandler();
   initializeArchiveFilesHandler();
   initializeUnarchiveIfExistsHandler(mainWindow);
+  initializeOpenKeysFolderHandler();
+  initializeShowFileInFolderHandler();
 }
 
 module.exports = {initializeFileHandlers}

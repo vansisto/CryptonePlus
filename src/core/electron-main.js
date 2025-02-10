@@ -7,6 +7,10 @@ const {initializeMainWindow} = require("./handlers/app/main-instance-handler")
 const {initializeSecondInstanceHandler} = require("./handlers/app/second-instance-handler")
 const {handleAllWindowsClosed} = require("./handlers/app/close-handler")
 const {initializeFileCrypterHandler} = require("./handlers/crypto/file-crypter-handler");
+const {initializeWhatsAppHandlers} = require("./handlers/ipc/whatsapp-handler");
+const {log} = require('./utils/log-util');
+
+log('');
 
 let mainWindow;
 let pendingFiles = [];
@@ -34,6 +38,7 @@ function createFirstInstance() {
   initializeFileHandlers(mainWindow, pendingFiles);
   initializeRsaKeysHandlers();
   initializeFileCrypterHandler(mainWindow);
+  initializeWhatsAppHandlers(mainWindow);
 }
 
 function handleSecondInstance(event, commandLine) {

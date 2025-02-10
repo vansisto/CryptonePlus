@@ -3,6 +3,7 @@ const {dialog} = require("electron");
 const path = require("path");
 const fs = require("fs");
 const { app } = require('electron');
+const { error } = require('../../utils/log-util');
 
 function initializeUpdateAvailableHandler() {
   autoUpdater.on('update-available', () => {
@@ -33,10 +34,7 @@ function initializeUpdateDownloadedHandler() {
 
 function initializeUpdateErrorHandler() {
   autoUpdater.on('error', () => {
-    dialog.showErrorBox(
-      'Auto Update Error',
-      'An error occurred while updating'
-    );
+    error('An error occurred while updating');
   });
 }
 

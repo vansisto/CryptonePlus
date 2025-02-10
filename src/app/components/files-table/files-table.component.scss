@@ -15,3 +15,7 @@ td {
   width: 20px !important;
   height: 20px !important;
 }
+
+::ng-deep .p-popover {
+  --p-popover-arrow-offset: 7rem !important;
+}

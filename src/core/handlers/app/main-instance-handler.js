@@ -3,7 +3,7 @@ const path = require("path");
 
 function initializeMainWindow() {
   let mainWindow = new BrowserWindow({
-    width: 1250,
+    width: 1300,
     height: 650,
     resizable: false,
     icon: path.join(__dirname, '../../../', 'assets', 'favicon.ico'),

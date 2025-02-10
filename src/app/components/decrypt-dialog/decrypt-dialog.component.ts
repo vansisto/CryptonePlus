@@ -7,7 +7,7 @@ import {Password} from 'primeng/password';
 import {Checkbox} from 'primeng/checkbox';
 import {InputText} from 'primeng/inputtext';
 import {MessageService, PrimeTemplate} from 'primeng/api';
-import {CryptoDialogService} from '../../services/crypto-dialog.service';
+import {DialogService} from '../../services/dialog.service';
 import {FileEncryptionService} from '../../services/file-encryption.service';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {ProcessingResult} from '../../interfaces/processing-result';
@@ -38,7 +38,7 @@ export class DecryptDialogComponent implements OnInit {
   loading: boolean = false;
 
   constructor(
-    private readonly encryptDialogService: CryptoDialogService,
+    private readonly encryptDialogService: DialogService,
     private readonly messageService: MessageService,
     private readonly fileEncryptionService: FileEncryptionService,
     private readonly translateService: TranslateService,
