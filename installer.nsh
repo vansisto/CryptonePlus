@@ -1,5 +1,11 @@
 !include "MUI2.nsh"
+!include "LogicLib.nsh"
 !define UPDATE_MODE_FILE "$APPDATA\Cryptone\update-mode"
+
+Section -PreInstall
+  IfFileExists "$INSTDIR\Uninstall Cryptone.exe" 0 +2
+  ExecWait '"$INSTDIR\Uninstall Cryptone.exe" /S'
+SectionEnd
 
 Section "Install"
   WriteRegStr HKCU "Software\Classes\*\shell\Cryptone" "" "Cryptone"
