@@ -3,7 +3,7 @@
   "main": "src/core/electron-main.js",
   "description": "Application to encrypt files",
   "author": "Van Sisto <vansisto@gmail.com>",
-  "version": "0.7.19",
+  "version": "0.7.20",
   "scripts": {
     "build": "ng build --base-href ./",
     "start": "electron .",
@@ -73,7 +73,7 @@
         "dmg"
       ],
       "icon": "src/assets/favicon.icns",
-      "defaultArch": ["universal"],
+      "defaultArch": "universal",
       "minimumSystemVersion": "10.12"
     },
     "linux": {
