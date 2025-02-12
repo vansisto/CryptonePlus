@@ -10,7 +10,7 @@
 <div class="flex flex-row-reverse flex-wrap pr-2">
   <div class="flex align-items-center justify-content-center w-15rem h-2rem m-1">
     <p-button
-      *ngIf="allFiles.length > 0"
+      *ngIf="allFiles.length > 1"
       icon="pi pi-send"
       [label]="'CONTROL_SECTION.SEND_ALL_BUTTON' | translate"
       (onClick)="opAll.toggle($event)"
@@ -18,7 +18,7 @@
   </div>
   <div class="flex align-items-center justify-content-center w-15rem h-2rem m-1">
     <p-button
-      *ngIf="allFiles.length > 0"
+      *ngIf="allFiles.length > 1"
       icon="pi pi-minus-circle"
       severity="danger"
       [label]="'CONTROL_SECTION.REMOVE_ALL_BUTTON' | translate"
@@ -33,7 +33,7 @@
 <div class="flex flex-row-reverse flex-wrap pr-2">
   <div class="flex align-items-center justify-content-center w-15rem h-2rem m-1">
     <p-button
-      *ngIf="allFiles.length > 0 && containEncrypted()"
+      *ngIf="allFiles.length > 1 && containEncrypted()"
       icon="pi pi-lock-open"
       size="small"
       [label]="'CONTROL_SECTION.DECRYPT_ALL_BUTTON' | translate"
@@ -42,7 +42,7 @@
   </div>
   <div class="flex align-items-center justify-content-center w-15rem h-2rem m-1">
     <p-button
-      *ngIf="allFiles.length > 0"
+      *ngIf="allFiles.length > 1"
       icon="pi pi-lock"
       size="small"
       [label]="'CONTROL_SECTION.ENCRYPT_ALL_BUTTON' | translate"

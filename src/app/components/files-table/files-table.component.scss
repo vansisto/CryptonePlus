@@ -19,3 +19,7 @@ td {
 ::ng-deep .p-popover {
   --p-popover-arrow-offset: 7rem !important;
 }
+
+::ng-deep .remove-button {
+  color: var(--danger-color) !important;
+}
