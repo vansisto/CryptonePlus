@@ -19,6 +19,10 @@
     />
   </div>
   <div class="header-right-section">
+    <div>
+      <p-button variant="text" icon="pi pi-search-minus" size="small" (onClick)="zoomOut()"/>
+      <p-button variant="text" icon="pi pi-search-plus" size="small" (onClick)="zoomIn()"/>
+    </div>
     <p-toggleswitch (ngModelChange)="onThemeToggle()" [(ngModel)]="isDarkTheme" [style]="{'margin': '5px 10px'}">
       <ng-template #handle let-checked="checked">
         <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-moon' : 'pi-sun']"></i>

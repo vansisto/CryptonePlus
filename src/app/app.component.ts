@@ -51,6 +51,11 @@ export class AppComponent implements OnInit {
     private readonly loadingService: LoadingService,
   ) {
     this.themeService.loadTheme()
+    const savedZoomItem = localStorage.getItem('zoom');
+    if (savedZoomItem) {
+      const zoom = parseFloat(savedZoomItem)
+      this.electron.setZoom(zoom);
+    }
   }
 
   ngOnInit(): void {
