@@ -5,15 +5,22 @@ import {FormsModule} from '@angular/forms';
 import {DialogService} from '../../services/dialog.service';
 import {CContact} from '../../models/ccontact';
 import {WhatsAppService} from '../../services/whats-app.service';
-import {MessageService} from 'primeng/api';
+import {MessageService, PrimeTemplate} from 'primeng/api';
 import {SendFilesService} from '../../services/send-files.service';
+import {Button} from 'primeng/button';
+import {TranslatePipe} from '@ngx-translate/core';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-whats-app-contact-list-dialog',
   imports: [
     Dialog,
     Listbox,
-    FormsModule
+    FormsModule,
+    Button,
+    PrimeTemplate,
+    TranslatePipe,
+    NgIf
   ],
   templateUrl: './whats-app-contact-list-dialog.component.html',
   styleUrl: './whats-app-contact-list-dialog.component.scss'
@@ -40,10 +47,10 @@ export class WhatsAppContactListDialogComponent implements OnInit{
     })
   }
 
-  onSelectWhatsAppContact(event: any) {
+  send() {
     this.dialogService.hideWhatsAppContactListDialog();
     this.whatsAppService.isWhatsAppLoadingSubject.next(true);
-    this.sendFilesService.sendFiles(event.value as CContact)
+    this.sendFilesService.sendFiles(this.cContact as CContact)
       .then((result: {status: string}) => {
         if (result.status === 'ok') {
           this.messageService.add({severity: 'success', summary: 'Success', detail: 'File sent successfully'});

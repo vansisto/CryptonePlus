@@ -2,13 +2,12 @@
   [(visible)]="whatsAppContactListDialogVisible"
   [header]="'WhatsApp Contacts'"
   [modal]="true"
-  [style]="{ width: '25rem', height: '25rem' }"
+  [style]="{ width: '25rem', height: '29rem' }"
 >
   <p-listbox
     [options]="cContacts"
     [(ngModel)]="cContact"
     [filter]="true"
-    (onChange)="onSelectWhatsAppContact($event)"
     optionLabel="name"
     class="w-full md:w-56"
   >
@@ -19,4 +18,13 @@
       </div>
     </ng-template>
   </p-listbox>
+  <ng-template pTemplate="footer">
+    <p-button
+      *ngIf="this.cContact"
+      icon="pi pi-send"
+      styleClass="footerButton"
+      [label]="'SEND' | translate"
+      (onClick)="send()"
+    />
+  </ng-template>
 </p-dialog>
