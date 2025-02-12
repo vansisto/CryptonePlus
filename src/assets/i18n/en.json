@@ -17,7 +17,6 @@
   "TABLE_HEADERS": {
     "PATH": "Path",
     "NAME": "Name",
-    "TYPE": "Type",
     "SIZE": "Size",
     "ENCRYPT_DECRYPT": "Encrypt/Decrypt"
   },
