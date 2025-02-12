@@ -4,10 +4,11 @@
       (onClick)="generateRSAKeyPair()"
       [label]="'GENERATE_KEY_PAIR' | translate"
       [raised]="true"
-      [style]="{'width': '300px'}"
+      [style]="{'width': '300px', 'font-size': '1.1rem', 'font-weight': 'bold'}"
       icon="pi pi-key"
       size="large"
       variant="text"
+      styleClass="generate-keypair-button"
     />
     <p-button
       *ngIf="isKeysFolderExists"

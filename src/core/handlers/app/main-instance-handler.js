@@ -3,9 +3,10 @@ const path = require("path");
 
 function initializeMainWindow() {
   let mainWindow = new BrowserWindow({
-    width: 1300,
-    height: 650,
-    resizable: false,
+    width: 1000,
+    height: 550,
+    resizable: true,
+    fullscreenable: true,
     icon: path.join(__dirname, '../../../', 'assets', 'favicon.ico'),
     autoHideMenuBar: true,
     webPreferences: {
