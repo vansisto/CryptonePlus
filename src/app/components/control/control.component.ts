@@ -11,6 +11,7 @@ import {FileEncryptionService} from '../../services/file-encryption.service';
 import {WhatsAppService} from '../../services/whats-app.service';
 import {Popover} from 'primeng/popover';
 import {ProgressSpinner} from 'primeng/progressspinner';
+import {Divider} from 'primeng/divider';
 
 @Component({
   selector: 'app-control',
@@ -22,6 +23,7 @@ import {ProgressSpinner} from 'primeng/progressspinner';
     NgOptimizedImage,
     Popover,
     ProgressSpinner,
+    Divider,
   ],
   templateUrl: './control.component.html',
   styleUrl: './control.component.scss'

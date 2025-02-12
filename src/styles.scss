@@ -6,11 +6,11 @@
 body.light-theme {
   --second-color: #504021;
   --second-color-additional: #755c31;
-  --third-color: #ffde86;
-  --third-color-additional: #bc9a4f;
-  --primary-color: #dcd5cf;
-  --primary-color-additional: #ccc2ad;
-  --primary-color-hover: #857a65;
+  --third-color: var(--p-static-color-light-yellow);
+  --third-color-additional: var(--p-static-color-yellow);
+  --primary-color: var(--p-static-color-cream);
+  --primary-color-additional: var(--p-static-color-yellow-cream);
+  --primary-color-hover: var(--p-static-color-dark-yellow-cream);
 
   --table-color: #2e2d2b;
   --table-row-hover-background: #d5c7b3;
@@ -20,16 +20,16 @@ body.light-theme {
 }
 
 body.dark-theme {
-  --second-color: #bc9a4f;
-  --second-color-additional: #ffde86;
-  --third-color: #bc9a4f;
-  --third-color-additional: #ffde86;
-  --primary-color: #45433c;
-  --primary-color-additional: #1e1c19;
-  --primary-color-hover: #55534b;
+  --second-color: var(--p-static-color-yellow);
+  --second-color-additional: var(--p-static-color-light-yellow);
+  --third-color: var(--p-static-color-yellow);
+  --third-color-additional: var(--p-static-color-light-yellow);
+  --primary-color: var(--p-static-color-grey);
+  --primary-color-additional: var(--p-static-color-dark-brown);
+  --primary-color-hover: var(--p-static-color-light-grey);
 
-  --table-color: #ede8e2;
-  --table-row-hover-background: #60594d;
+  --table-color: var(--p-static-color-white-cream);
+  --table-row-hover-background: var(--p-static-color-light-hue-grey);
   --table-row-selected-background: #dcad6c;
 
   --danger-color: #d55d2a;
@@ -38,6 +38,18 @@ body.dark-theme {
 body {
   user-select: none;
   --p-button-label-font-weight: none;
+
+  --p-static-color-yellow: #bc9a4f;
+  --p-static-color-light-yellow: #ffde86;
+  --p-static-color-grey: #45433c;
+  --p-static-color-light-grey: #55534b;
+  --p-static-color-light-hue-grey: #60594d;
+  --p-static-color-dark-brown: #1e1c19;
+  --p-static-color-cream: #dcd5cf;
+  --p-static-color-white-cream: #ede8e2;
+  --p-static-color-yellow-cream: #ccc2ad;
+  --p-static-color-dark-yellow-cream: #857a65;
+
 
   --p-button-primary-border-color: var(--second-color);
   --p-button-primary-hover-border-color: var(--second-color);
@@ -89,6 +101,8 @@ body {
   font-family: 'Jura', serif;
 
   --p-popover-background: var(--primary-color-additional);
+
+  --p-divider-border-color: var(--second-color);
 }
 
 .p-button, .p-select, .p-dialog, .p-table {
