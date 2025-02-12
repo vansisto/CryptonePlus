@@ -12,6 +12,7 @@ import {FileEncryptionService} from '../../services/file-encryption.service';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {ProcessingResult} from "../../interfaces/processing-result";
 import {LoadingService} from '../../services/loading.service';
+import {NgForOf} from '@angular/common';
 
 @Component({
   selector: 'app-encrypt-dialog',
@@ -25,6 +26,7 @@ import {LoadingService} from '../../services/loading.service';
     Password,
     PrimeTemplate,
     TranslatePipe,
+    NgForOf,
   ],
   templateUrl: './encrypt-dialog.component.html',
   styleUrl: './encrypt-dialog.component.scss'
@@ -95,5 +97,9 @@ export class EncryptDialogComponent implements OnInit {
 
   clearFilesToProcess() {
     this.fileEncryptionService.pendingCryptingFiles = [];
+  }
+
+  getPendingCryptingFiles() {
+    return this.fileEncryptionService.pendingCryptingFiles;
   }
 }
