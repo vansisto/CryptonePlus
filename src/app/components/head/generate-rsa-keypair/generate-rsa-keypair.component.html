@@ -43,6 +43,7 @@
         pInputText
         id="publicKeyName"
         [(ngModel)]="publicKeyName"
+        [pTooltip]="'TOOLTIPS.PUBLIC_KEY_NAME' | translate"
         autocomplete="off"
         style="width: 100%;"
       />
@@ -53,6 +54,7 @@
         pInputText
         id="privateKeyName"
         [(ngModel)]="privateKeyName"
+        [pTooltip]="'TOOLTIPS.PRIVATE_KEY_NAME' | translate"
         autocomplete="off"
         style="width: 100%;"
       />

@@ -9,6 +9,7 @@ import {InputText} from 'primeng/inputtext';
 import {TranslatePipe} from '@ngx-translate/core';
 import {NgIf} from '@angular/common';
 import {KeyPairsService} from '../../../services/key-pairs.service';
+import {Tooltip} from 'primeng/tooltip';
 
 @Component({
   selector: 'app-generate-rsa-keypair',
@@ -22,7 +23,8 @@ import {KeyPairsService} from '../../../services/key-pairs.service';
     InputText,
     Button,
     TranslatePipe,
-    NgIf
+    NgIf,
+    Tooltip
   ],
   templateUrl: './generate-rsa-keypair.component.html',
   styleUrl: './generate-rsa-keypair.component.scss'

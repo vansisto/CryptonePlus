@@ -1,7 +1,11 @@
 !include "MUI2.nsh"
+!include "LogicLib.nsh"
 !define UPDATE_MODE_FILE "$APPDATA\Cryptone\update-mode"
 
 Section "Install"
+  FileOpen $0 "${UPDATE_MODE_FILE}" w
+  FileClose $0
+  
   WriteRegStr HKCU "Software\Classes\*\shell\Cryptone" "" "Cryptone"
   WriteRegStr HKCU "Software\Classes\*\shell\Cryptone" "Icon" "$INSTDIR\Cryptone.exe"
   WriteRegStr HKCU "Software\Classes\*\shell\Cryptone\command" "" '"$INSTDIR\Cryptone.exe" "%1"'

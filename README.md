@@ -1,11 +1,39 @@
-# Cryptone
-### Priorities (GitHub issues):
-- 🔴 Critical: Requires immediate attention and resolution. These tasks are blocking or essential for the core functionality of the project.
-- 🟠 High: Important tasks that should be addressed after resolving critical issues. These significantly impact user experience or key features.
-- 🟡 Medium: Moderate priority tasks. While not urgent, they are important for the project's overall quality and progression.
-- 🟢 Low: Minor tasks or enhancements. These can be addressed when higher-priority issues are resolved.
-- 🔵 Optional: Tasks that are not essential. They can be addressed if time permits but have minimal impact on the project.
-- 🟣 Lowest Priority: Non-essential or purely cosmetic tasks. These can be considered only if all other priorities are completed and there is additional time or interest.
+
+![GitHub package.json version](https://img.shields.io/github/package-json/v/vansisto/CryptonePlus?color=black)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/vansisto/CryptonePlus/total)
+
+![GitHub Release Date](https://img.shields.io/github/release-date/vansisto/CryptonePlus)
+![GitHub last commit](https://img.shields.io/github/last-commit/vansisto/CryptonePlus)
+
+![Angular Version](https://img.shields.io/badge/v19-red?logo=angular&logoColor=red&label=Angular&labelColor=grey&color=red)
+![NodeJS Version](https://img.shields.io/badge/v22-white?logo=node.js&label=NodeJS&labelColor=grey&color=green)
+![Electron Version](https://img.shields.io/badge/v33-grey?logo=electron&label=Electron&labelColor=white&color=blue)
+
+# <img src="https://raw.githubusercontent.com/vansisto/CryptonePlus/refs/heads/main/src/assets/favicon.png" width="50" alt="Logo"> Cryptone
+
+## Overview
+This application allows you to encrypt files using two encryption algorithms, 
+AES256 and RSA4096. Before encryption, you (or the recipient) need to generate 
+a pair of keys - a private and a public key. Files are encrypted with the 
+public key and decrypted with the private key. To encrypt, you need to send 
+the public key to the person who has the file you need so that they can encrypt 
+the file with this key. Then you, in turn, will decrypt the received file with 
+your private key.
+
+### Features:
+* __Password__: You can set a password of any complexity for additional protection 
+(it can be without a password).
+* __Archiving__: If you encrypt several files, each of them will be encrypted 
+separately, and you will receive the same number of encrypted files as the 
+original ones. But there is also an option to archive files before encryption. 
+Files are archived into a zip archive without compression, and then this archive 
+is encrypted. Thus, you get one output file regardless of the number of input files.
+* __WhatsApp__: You have the option to send encrypted files (or the original files) 
+directly from the application to the WhatsApp messenger (only for your contacts). 
+To do this, at the first login, the application will ask you to scan a QR code. 
+Then you will be able to see a list of your contacts and send your file to the 
+selected contact with one click.
+
 
 ## Run locally
 ### Prerequisites
@@ -34,6 +62,16 @@ For Windows:
 or
 ```shell
   npx electron-builder -w
+```
+
+For Linux:
+```shell
+  electron-builder --linux
+```
+
+For MacOS:
+```shell
+  electron-builder --mac
 ```
 
 ## Encrypting logic

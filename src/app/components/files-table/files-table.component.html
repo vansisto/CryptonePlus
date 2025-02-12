@@ -1,10 +1,10 @@
-<div class="card" style="margin-top: 20px; max-height: 40vh">
+<div class="card" style="margin-top: 20px;">
   <p-table
     [value]="allFiles"
     [scrollable]="true"
     [(selection)]="selectedFiles"
     (selectionChange)="onSelectionChange(selectedFiles)"
-    scrollHeight="55vh"
+    scrollHeight="calc(100vh - 280px)"
     [size]="'small'"
   >
     <ng-template #header>
@@ -13,7 +13,7 @@
         <th id="openFolder"></th>
         <th id="path" style="min-width:350px">{{'TABLE_HEADERS.PATH' | translate}}</th>
         <th id="name" style="min-width:150px">{{'TABLE_HEADERS.NAME' | translate}}</th>
-        <th id="type" style="min-width:30px">{{ 'TABLE_HEADERS.TYPE' | translate }}</th>
+        <th id="type" style="min-width:30px"></th>
         <th id="size" style="min-width:100px">{{ 'TABLE_HEADERS.SIZE' | translate }}</th>
         <th id="encryptDecrypt" style="min-width:30px">{{ 'TABLE_HEADERS.ENCRYPT_DECRYPT' | translate }}</th>
         <th id="remove" style="min-width:20px"></th>
@@ -28,7 +28,7 @@
         <td class="buttons-cell">
           <p-button icon="pi pi-folder" size="small" variant="text" (onClick)="openFolderWithSelectedFile(cfile)"/>
         </td>
-        <td>{{cfile.path}}</td>
+        <td>{{getFilePathDirectory(cfile.path)}}</td>
         <td>&nbsp;&nbsp;{{cfile.name}}</td>
         <td style="color: var(--second-color)">&nbsp;&nbsp;{{cfile.encrypted ? "Encrypted" : ""}}</td>
         <td>&nbsp;&nbsp;{{cfile.formattedSize}}</td>
@@ -50,7 +50,13 @@
           </div>
         </td>
         <td class="buttons-cell">
-          <p-button icon="pi pi-minus-circle" size="small" variant="text" (onClick)="removeFile(cfile)"/>
+          <p-button
+            icon="pi pi-minus-circle"
+            size="small"
+            variant="text"
+            (onClick)="removeFile(cfile)"
+            styleClass="remove-button"
+          />
         </td>
         <td>
           <p-button

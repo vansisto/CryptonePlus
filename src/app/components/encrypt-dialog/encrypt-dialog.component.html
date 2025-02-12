@@ -2,9 +2,13 @@
   [header]="'DIALOGS.ENCRYPT.TITLE' | translate"
   [(visible)]="encryptDialogVisible"
   [modal]="true"
-  [style]="{ width: '25rem', height: '22rem' }"
+  [style]="{ width: '25rem', height: '27rem' }"
   (onHide)="clearFilesToProcess()"
 >
+  <div>{{'DIALOGS.ENCRYPT.FILES_TO_BE_ENCRYPTED_LABEL' | translate}}</div>
+  <ul>
+    <li *ngFor="let cfile of getPendingCryptingFiles()">{{cfile.name}}</li>
+  </ul>
   <div class="grid" style="margin-top: 5px">
     <p-floatlabel variant="on" class="col-10">
       <input
