@@ -127,4 +127,10 @@ export class FilesTableComponent implements OnInit {
   openFolderWithSelectedFile(cfile: CFile) {
     this.electron.showFileInFolder(cfile);
   }
+
+  getFilePathDirectory(filePath: string) {
+    const separator = filePath.indexOf('\\') !== -1 ? '\\' : '/';
+    const lastIndex = filePath.lastIndexOf(separator);
+    return lastIndex !== -1 ? filePath.substring(0, lastIndex) : filePath;
+  }
 }

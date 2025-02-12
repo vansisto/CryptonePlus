@@ -28,7 +28,7 @@
         <td class="buttons-cell">
           <p-button icon="pi pi-folder" size="small" variant="text" (onClick)="openFolderWithSelectedFile(cfile)"/>
         </td>
-        <td>{{cfile.path}}</td>
+        <td>{{getFilePathDirectory(cfile.path)}}</td>
         <td>&nbsp;&nbsp;{{cfile.name}}</td>
         <td style="color: var(--second-color)">&nbsp;&nbsp;{{cfile.encrypted ? "Encrypted" : ""}}</td>
         <td>&nbsp;&nbsp;{{cfile.formattedSize}}</td>
