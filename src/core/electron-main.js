@@ -1,4 +1,4 @@
-const { app} = require('electron');
+const { app, BrowserWindow} = require('electron');
 const {initializeRsaKeysHandlers} = require("./handlers/ipc/rsa-key-handler");
 const {initializeFileHandlers} = require("./handlers/ipc/file-handler")
 const {extractFilesFromCommandLine} = require("./utils/file-utils");
@@ -24,6 +24,11 @@ function initializeApp() {
     app.on('ready', createFirstInstance);
     app.on('second-instance', handleSecondInstance);
     app.on('window-all-closed', handleAllWindowsClosed);
+    app.on('activate', () => {
+      if (BrowserWindow.getAllWindows().length === 0) {
+        createFirstInstance();
+      }
+    });
   }
 }
 
