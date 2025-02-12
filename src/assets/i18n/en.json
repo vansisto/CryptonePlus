@@ -22,7 +22,9 @@
   },
   "TOOLTIPS": {
     "SEND_WITH_MESSENGER": "Send with messenger",
-    "SHOW_INFO": "Show info"
+    "SHOW_INFO": "Show info",
+    "PUBLIC_KEY_NAME": "Usually this is the name of the key owner (Your name) so that the person You are sending the key to knows whose key it is",
+    "PRIVATE_KEY_NAME": "Usually this is the name of the person You are sending the key to so that You know which key to use to decrypt the files received from this person"
   },
   "DIALOGS": {
     "PASSWORD": "Password",
