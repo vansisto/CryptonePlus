@@ -1,4 +1,4 @@
-const { app, BrowserWindow} = require('electron');
+const { app} = require('electron');
 const {initializeRsaKeysHandlers} = require("./handlers/ipc/rsa-key-handler");
 const {initializeFileHandlers} = require("./handlers/ipc/file-handler")
 const {extractFilesFromCommandLine} = require("./utils/file-utils");
@@ -8,6 +8,7 @@ const {initializeSecondInstanceHandler} = require("./handlers/app/second-instanc
 const {handleAllWindowsClosed} = require("./handlers/app/close-handler")
 const {initializeFileCrypterHandler} = require("./handlers/crypto/file-crypter-handler");
 const {initializeWhatsAppHandlers} = require("./handlers/ipc/whatsapp-handler");
+const {initializeWindowHandlers} = require("./handlers/ipc/window-handlers");
 const {log} = require('./utils/log-util');
 
 log('');
@@ -25,7 +26,7 @@ function initializeApp() {
     app.on('second-instance', handleSecondInstance);
     app.on('window-all-closed', handleAllWindowsClosed);
     app.on('activate', () => {
-      if (BrowserWindow.getAllWindows().length === 0) {
+      if (mainWindow.getAllWindows().length === 0) {
         createFirstInstance();
       }
     });
@@ -44,6 +45,7 @@ function createFirstInstance() {
   initializeRsaKeysHandlers();
   initializeFileCrypterHandler(mainWindow);
   initializeWhatsAppHandlers(mainWindow);
+  initializeWindowHandlers(mainWindow);
 }
 
 function handleSecondInstance(event, commandLine) {

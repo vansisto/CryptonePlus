@@ -18,6 +18,9 @@ window.electron = {
   sendFilesViaWhatsApp: (ccontact, cfiles) => ipcRenderer.invoke('send-files-via-whatsapp', ccontact, cfiles),
   getWhatsAppContactList: () => ipcRenderer.invoke('get-whatsapp-contacts'),
   showFileInFolder: (cfile) => ipcRenderer.invoke('show-file-in-folder', cfile),
+  zoomIn: () => ipcRenderer.invoke('zoom-in'),
+  zoomOut: () => ipcRenderer.invoke('zoom-out'),
+  setZoom: (zoom) => ipcRenderer.invoke('set-zoom', zoom),
 };
 
 window.addEventListener('dragover', (event) => {
