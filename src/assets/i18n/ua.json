@@ -17,7 +17,6 @@
   "TABLE_HEADERS": {
     "PATH": "Шлях",
     "NAME": "Ім'я",
-    "TYPE": "Тип",
     "SIZE": "Розмір",
     "ENCRYPT_DECRYPT": "Шифр/Дешифр"
   },
