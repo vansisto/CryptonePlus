@@ -8,9 +8,11 @@ export class DialogService {
   private readonly encryptDialogVisibleSubject = new BehaviorSubject<boolean>(false);
   private readonly decryptDialogVisibleSubject = new BehaviorSubject<boolean>(false);
   private readonly whatsAppContactListDialogVisibleSubject = new BehaviorSubject<boolean>(false);
-  encryptDialogVisible$ = this.encryptDialogVisibleSubject.asObservable()
-  decryptDialogVisible$ = this.decryptDialogVisibleSubject.asObservable()
-  whatsAppContactListDialogVisible$ = this.whatsAppContactListDialogVisibleSubject.asObservable()
+  private readonly whatsAppFileTooLargeDialogVisibleSubject = new BehaviorSubject<boolean>(false);
+  encryptDialogVisible$ = this.encryptDialogVisibleSubject.asObservable();
+  decryptDialogVisible$ = this.decryptDialogVisibleSubject.asObservable();
+  whatsAppContactListDialogVisible$ = this.whatsAppContactListDialogVisibleSubject.asObservable();
+  whatsAppFileTooLargeDialogVisible$ = this.whatsAppFileTooLargeDialogVisibleSubject.asObservable();
 
   showEncryptDialog() {
     this.encryptDialogVisibleSubject.next(true);
@@ -38,5 +40,9 @@ export class DialogService {
 
   isWhatsAppContactListDialogVisible(): boolean {
     return this.whatsAppContactListDialogVisibleSubject.value;
+  }
+
+  showWhatsAppFileTooLargeDialog() {
+    this.whatsAppFileTooLargeDialogVisibleSubject.next(true)
   }
 }
