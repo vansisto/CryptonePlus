@@ -3,10 +3,10 @@ import {Dialog} from 'primeng/dialog';
 import {Checkbox} from 'primeng/checkbox';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Button} from 'primeng/button';
-import {PrimeTemplate} from 'primeng/api';
+import {MessageService, PrimeTemplate} from 'primeng/api';
 import {FloatLabel} from 'primeng/floatlabel';
 import {InputText} from 'primeng/inputtext';
-import {TranslatePipe} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {NgIf} from '@angular/common';
 import {KeyPairsService} from '../../../services/key-pairs.service';
 import {Tooltip} from 'primeng/tooltip';
@@ -40,7 +40,9 @@ export class GenerateRsaKeypairComponent implements OnInit {
   formGroup!: FormGroup;
 
   constructor(
-    private readonly keyPairsService: KeyPairsService
+    private readonly keyPairsService: KeyPairsService,
+    private readonly messageService: MessageService,
+    private readonly translateService: TranslateService,
   ) {}
 
   ngOnInit() {
@@ -57,14 +59,36 @@ export class GenerateRsaKeypairComponent implements OnInit {
     let keyPairName: string = this.buildKeyPairName();
     this.electron.send('create-rsa-keypair-folder', keyPairName);
     if (this.isDifferentKeysNames) {
-      this.electron.generateKeysWithDifferentNames(this.publicKeyName, this.privateKeyName);
+      this.handleStartedGeneration();
+      this.electron.generateKeysWithDifferentNames(this.publicKeyName, this.privateKeyName)
+        .then((keypairFolderName: string) => {
+          this.handleFinishGeneration(keypairFolderName);
+        });
     } else {
+      this.handleStartedGeneration();
       this.electron.generateKeyPair(keyPairName).then(() => {
-        this.keyPairsService.checkKeysFolderExisting();
-        this.visible = false;
-        this.electron.send('open-keys-folder', keyPairName);
+        this.handleFinishGeneration(keyPairName);
       });
     }
+  }
+
+  private handleFinishGeneration(keypairFolderName: string) {
+    this.keyPairsService.checkKeysFolderExisting();
+    this.electron.send('open-keys-folder', keypairFolderName);
+    this.messageService.add({
+      severity: 'success',
+      summary: this.translateService.instant("TOASTS.SUCCESS_TITLE"),
+      detail: this.translateService.instant("TOASTS.GENERATE_KEY_PAIR.SUCCESS")
+    });
+  }
+
+  private handleStartedGeneration() {
+    this.visible = false;
+    this.messageService.add({
+      severity: 'info',
+      summary: this.translateService.instant("TOASTS.GENERATE_KEY_PAIR.IN_PROGRESS_TITLE"),
+      detail: this.translateService.instant("TOASTS.GENERATE_KEY_PAIR.IN_PROGRESS_MESSAGE")
+    });
   }
 
   private buildKeyPairName(): string {

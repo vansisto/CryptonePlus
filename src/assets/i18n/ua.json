@@ -50,6 +50,10 @@
       "TITLE": "Дешифрувати файли",
       "KEY_PATH_LABEL": "Шлях до приватного ключа",
       "BUTTON": "Дешифрувати"
+    },
+    "WHATSAPP": {
+      "FILE_TOO_LARGE": "Файл занадто великий",
+      "FILE_TOO_LARGE_MESSAGE": "Неможливо надіслати файли більші ніж 2Gb"
     }
   },
   "TOASTS": {
@@ -71,6 +75,14 @@
       "FILES_FAILED_MESSAGE": "Файлів не дешифровано",
       "FAILED_FILES_MESSAGE": "Файли з помилками",
       "ERROR_MESSAGE": "Не вдалося дешифрувати файли"
+    },
+    "WHATSAPP": {
+      "FILE_TOO_LARGE": "Файл надто великий"
+    },
+    "GENERATE_KEY_PAIR": {
+      "IN_PROGRESS_TITLE": "Почато",
+      "IN_PROGRESS_MESSAGE": "Генерацію пари ключів почато",
+      "SUCCESS": "Пара ключів була успішно створена"
     }
   }
 }

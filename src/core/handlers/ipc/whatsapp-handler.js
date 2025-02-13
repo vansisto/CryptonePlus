@@ -90,7 +90,8 @@ function initializeSendFileViaWhatsAppHandler() {
       }
       return { status: 'ok' };
     } catch (err) {
-      throw err;
+      log('Error sending file via WhatsApp:', err);
+      return { status: 'error', reason: err.code };
     }
   });
 }

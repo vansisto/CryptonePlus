@@ -50,6 +50,10 @@
       "TITLE": "Decrypt files",
       "KEY_PATH_LABEL": "Private key path",
       "BUTTON": "Decrypt"
+    },
+    "WHATSAPP": {
+      "FILE_TOO_LARGE": "File is too large",
+      "FILE_TOO_LARGE_MESSAGE": "It is impossible to send files greater than 2Gb"
     }
   },
   "TOASTS": {
@@ -71,6 +75,14 @@
       "FILES_FAILED_MESSAGE": "Files failed",
       "FAILED_FILES_MESSAGE": "Failed files",
       "ERROR_MESSAGE": "Files have not been decrypted"
+    },
+    "WATSAPP": {
+      "FILE_TOO_LARGE": "File is too large"
+    },
+    "GENERATE_KEY_PAIR": {
+      "IN_PROGRESS_TITLE": "Started",
+      "IN_PROGRESS_MESSAGE": "Generating keypair has been started",
+      "SUCCESS": "Key pair has been successfully created"
     }
   }
 }
