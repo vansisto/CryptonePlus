@@ -7,11 +7,11 @@ import {Password} from 'primeng/password';
 import {Checkbox} from 'primeng/checkbox';
 import {InputText} from 'primeng/inputtext';
 import {MessageService, PrimeTemplate} from 'primeng/api';
-import {DialogService} from '../../services/dialog.service';
-import {FileEncryptionService} from '../../services/file-encryption.service';
+import {DialogService} from '../../../services/dialog.service';
+import {FileEncryptionService} from '../../../services/file-encryption.service';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {ProcessingResult} from '../../interfaces/processing-result';
-import {LoadingService} from '../../services/loading.service';
+import {ProcessingResult} from '../../../interfaces/processing-result';
+import {LoadingService} from '../../../services/loading.service';
 
 @Component({
   selector: 'app-decrypt-dialog',

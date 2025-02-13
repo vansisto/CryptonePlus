@@ -83,4 +83,18 @@ export class HeadComponent implements OnInit {
   showHelp() {
     this.isHelpModalVisible = true;
   }
+
+  zoomOut() {
+    this.electron.zoomOut()
+      .then((updatedZoom: number) => {
+        localStorage.setItem('zoom', updatedZoom.toString());
+      });
+  }
+
+  zoomIn() {
+    this.electron.zoomIn()
+      .then((updatedZoom: number) => {
+        localStorage.setItem('zoom', updatedZoom.toString());
+      });
+  }
 }

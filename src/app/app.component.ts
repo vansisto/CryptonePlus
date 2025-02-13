@@ -5,8 +5,8 @@ import {FilesTableComponent} from './components/files-table/files-table.componen
 import {ControlComponent} from './components/control/control.component';
 import {ThemeService} from './services/theme.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {EncryptDialogComponent} from './components/encrypt-dialog/encrypt-dialog.component';
-import {DecryptDialogComponent} from './components/decrypt-dialog/decrypt-dialog.component';
+import {EncryptDialogComponent} from './components/dialogs/encrypt-dialog/encrypt-dialog.component';
+import {DecryptDialogComponent} from './components/dialogs/decrypt-dialog/decrypt-dialog.component';
 import {Toast} from 'primeng/toast';
 import {MessageService} from 'primeng/api';
 import {ProgressSpinner} from 'primeng/progressspinner';
@@ -14,8 +14,11 @@ import {NgIf, CommonModule} from '@angular/common';
 import {LoadingService} from './services/loading.service';
 import {
   WhatsAppContactListDialogComponent
-} from './components/whats-app-contact-list-dialog/whats-app-contact-list-dialog.component';
-import {WhatsAppQRDialogComponent} from './components/whats-app-qrdialog/whats-app-qrdialog.component';
+} from './components/dialogs/whats-app-contact-list-dialog/whats-app-contact-list-dialog.component';
+import {WhatsAppQRDialogComponent} from './components/dialogs/whats-app-qrdialog/whats-app-qrdialog.component';
+import {
+  WhatsAppFileTooLargeComponent
+} from './components/dialogs/whats-app-file-too-large/whats-app-file-too-large.component';
 
 @Component({
   selector: 'app-root',
@@ -34,6 +37,7 @@ import {WhatsAppQRDialogComponent} from './components/whats-app-qrdialog/whats-a
     CommonModule,
     WhatsAppContactListDialogComponent,
     WhatsAppQRDialogComponent,
+    WhatsAppFileTooLargeComponent,
   ],
   providers: [
     MessageService,
@@ -51,6 +55,11 @@ export class AppComponent implements OnInit {
     private readonly loadingService: LoadingService,
   ) {
     this.themeService.loadTheme()
+    const savedZoomItem = localStorage.getItem('zoom');
+    if (savedZoomItem) {
+      const zoom = parseFloat(savedZoomItem)
+      this.electron.setZoom(zoom);
+    }
   }
 
   ngOnInit(): void {

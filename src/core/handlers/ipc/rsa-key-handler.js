@@ -20,9 +20,12 @@ function initializeGenerateKeysWithDifferentNamesHandler() {
   ipcMain.handle('generate-keys-with-different-names', (event, publicKeyName, privateKeyName) => {
     const {publicKey, privateKey} = generateKeyPair();
 
-    const finalKeysFolderPath = path.join(baseKeysPath, `${privateKeyName}_${publicKeyName}`);
+    const folderName = `${privateKeyName}_${publicKeyName}`
+    const finalKeysFolderPath = path.join(baseKeysPath, folderName);
     writeFileSync(path.join(finalKeysFolderPath, `${publicKeyName}.crtn_public_key`), publicKey);
     writeFileSync(path.join(finalKeysFolderPath, `${privateKeyName}.crtn_private_key`), privateKey);
+
+    return folderName;
   });
 }
 
