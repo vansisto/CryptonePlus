@@ -3,11 +3,11 @@
   "main": "src/core/electron-main.js",
   "description": "Application to encrypt files",
   "author": "Van Sisto <vansisto@gmail.com>",
-  "version": "0.7.33",
+  "version": "0.7.35",
   "scripts": {
     "build": "ng build --base-href ./",
     "start": "electron .",
-    "test": "ng test"
+    "test": "ng test --code-coverage"
   },
   "build": {
     "appId": "com.vansisto.cryptone",

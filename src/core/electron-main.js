@@ -25,11 +25,6 @@ function initializeApp() {
     app.on('ready', createFirstInstance);
     app.on('second-instance', handleSecondInstance);
     app.on('window-all-closed', handleAllWindowsClosed);
-    app.on('activate', () => {
-      if (mainWindow.getAllWindows().length === 0) {
-        createFirstInstance();
-      }
-    });
   }
 }
 
