@@ -2,6 +2,7 @@ const {app, ipcMain, shell} = require("electron");
 const {generateKeyPairSync} = require("crypto");
 const path = require("path");
 const {writeFileSync, mkdirSync} = require("node:fs");
+const {error} = require("../../utils/log-util")
 
 const userDataPath = app.getPath('userData');
 const baseKeysPath = path.join(userDataPath, 'CryptoneKeys', 'Offline');
@@ -36,7 +37,7 @@ function initializeCreateRSAKeyPairFolderHandler() {
       const finalFolderPath = path.join(baseKeysPath, folderName);
       mkdirSync(finalFolderPath);
     } catch (err) {
-      console.error('Error during folder creation:', err);
+      error('Error during folder creation:', err);
     }
   });
 }

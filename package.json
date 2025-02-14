@@ -3,11 +3,23 @@
   "main": "src/core/electron-main.js",
   "description": "Application to encrypt files",
   "author": "Van Sisto <vansisto@gmail.com>",
-  "version": "0.7.35",
+  "version": "0.7.37",
   "scripts": {
     "build": "ng build --base-href ./",
     "start": "electron .",
-    "test": "ng test --code-coverage"
+    "test": "npm run test:angular && npm run test:electron",
+    "test:angular": "ng test --code-coverage --browsers=ChromeHeadless --no-progress --no-watch",
+    "test:electron": "jest src/__tests__"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/dist/",
+      "<rootDir>/node_modules/"
+    ],
+    "testMatch": [
+      "<rootDir>/src/__tests__/**/*.spec.js"
+    ]
   },
   "build": {
     "appId": "com.vansisto.cryptone",
@@ -104,6 +116,7 @@
     "crypto": "^1.0.1",
     "electron-log": "^5.2.4",
     "electron-updater": "^6.3.9",
+    "jest": "^29.7.0",
     "node-stream-zip": "^1.15.0",
     "primeflex": "^3.3.1",
     "primeicons": "^7.0.0",
