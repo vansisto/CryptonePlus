@@ -9,7 +9,7 @@ import {BehaviorSubject} from 'rxjs';
   providedIn: 'root'
 })
 export class WhatsAppService {
-  electron: any = (window as any).electron;
+  electron: any;
   ccontactsSubject = new BehaviorSubject<CContact[]>([]);
   ccontacts$ = this.ccontactsSubject.asObservable();
   isWhatsAppLoadingSubject = new BehaviorSubject<boolean>(false);
@@ -22,6 +22,7 @@ export class WhatsAppService {
     private readonly sendFilesService: SendFilesService,
     private readonly dialogService: DialogService,
   ) {
+    this.electron = (window as any).electron;
     this.electron.receive('whatsapp-authenticated', () => {
       this.isAuthenticated = true;
       this.showCachedContactsIfExist();
@@ -54,7 +55,8 @@ export class WhatsAppService {
   private showCachedContactsIfExist() {
     const cachedCContacts: string | null = localStorage.getItem(this.CCONTACTS_LOCAL_STORAGE_RECORD);
     if (cachedCContacts && cachedCContacts.length > 0) {
-      this.ccontactsSubject.next(JSON.parse(cachedCContacts));
+      const ccontacts = JSON.parse(cachedCContacts).map((contact: object) => CContact.fromContact(contact));
+      this.ccontactsSubject.next(ccontacts);
       this.dialogService.showWhatsAppContactListDialog();
     }
   }
