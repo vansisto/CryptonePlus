@@ -3,12 +3,12 @@
   "main": "src/core/electron-main.js",
   "description": "Application to encrypt files",
   "author": "Van Sisto <vansisto@gmail.com>",
-  "version": "0.7.36",
+  "version": "0.7.37",
   "scripts": {
     "build": "ng build --base-href ./",
     "start": "electron .",
     "test": "npm run test:angular && npm run test:electron",
-    "test:angular": "ng test --code-coverage",
+    "test:angular": "ng test --code-coverage --browsers=ChromeHeadless --no-progress --no-watch",
     "test:electron": "jest src/__tests__"
   },
   "jest": {
