@@ -2,17 +2,9 @@ import { InputFile } from "../interfaces/input-file";
 import {FileSizeConverterUtil} from '../utils/file-size-converter-util';
 
 export class CFile {
-  path: string;
-  name: string;
-  encrypted: boolean;
-  formattedSize: string;
-  size: number;
+  public formattedSize: string;
 
-  constructor(path: string, name: string, encrypted: boolean, size: number) {
-    this.path = path;
-    this.name = name;
-    this.encrypted = encrypted;
-    this.size = size;
+  constructor(public path: string, public name: string, public encrypted: boolean, public size: number) {
     this.formattedSize = FileSizeConverterUtil.formatFileSize(size);
   }
 
