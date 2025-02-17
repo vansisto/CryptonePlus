@@ -89,7 +89,6 @@ describe('Archive Utils', () => {
 
       archiveFiles(mockFiles);
 
-      // Trigger 'open' event
       const openCallback = mockWriteStream.on.mock.calls
         .find(call => call[0] === 'open')[1];
       openCallback();
