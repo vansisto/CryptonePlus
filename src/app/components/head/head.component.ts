@@ -32,7 +32,7 @@ import {KeyPairsService} from '../../services/key-pairs.service';
   styleUrl: './head.component.scss'
 })
 export class HeadComponent implements OnInit {
-  @ViewChild('generateRSAKeyPairComponent') generateRsaKeypairComponent: GenerateRsaKeypairComponent | undefined;
+  @ViewChild('generateRSAKeyPairComponent') generateRsaKeypairComponent?: GenerateRsaKeypairComponent;
   electron: any = (window as any).electron;
   languages: Language[] = [
     {language: "UA"},
