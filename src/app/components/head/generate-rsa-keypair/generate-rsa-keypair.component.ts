@@ -113,6 +113,11 @@ export class GenerateRsaKeypairComponent implements OnInit {
   }
 
   private buildDifferentNamesBasedKeyPairName() {
-    return `${this.privateKeyName}_${this.publicKeyName}`;
+    if (this.privateKeyName.trim() !== '' && this.publicKeyName.trim() !== '') {
+      return `${this.privateKeyName}_${this.publicKeyName}`;
+    } else {
+      this.isDifferentKeysNames = false;
+      return '';
+    }
   }
 }
