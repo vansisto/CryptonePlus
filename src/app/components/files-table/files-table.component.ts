@@ -116,14 +116,6 @@ export class FilesTableComponent implements OnInit {
     this.whatsAppService.sendViaWhatsApp([cfile]);
   }
 
-  sendViaSignal(cfile: CFile) {
-
-  }
-
-  sendViaThreema(cfile: CFile) {
-
-  }
-
   openFolderWithSelectedFile(cfile: CFile) {
     this.electron.showFileInFolder(cfile);
   }
