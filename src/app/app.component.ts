@@ -10,15 +10,8 @@ import {DecryptDialogComponent} from './components/dialogs/decrypt-dialog/decryp
 import {Toast} from 'primeng/toast';
 import {MessageService} from 'primeng/api';
 import {ProgressSpinner} from 'primeng/progressspinner';
-import {NgIf, CommonModule} from '@angular/common';
+import {CommonModule, NgIf} from '@angular/common';
 import {LoadingService} from './services/loading.service';
-import {
-  WhatsAppContactListDialogComponent
-} from './components/dialogs/whats-app-contact-list-dialog/whats-app-contact-list-dialog.component';
-import {WhatsAppQRDialogComponent} from './components/dialogs/whats-app-qrdialog/whats-app-qrdialog.component';
-import {
-  WhatsAppFileTooLargeComponent
-} from './components/dialogs/whats-app-file-too-large/whats-app-file-too-large.component';
 
 @Component({
   selector: 'app-root',
@@ -35,9 +28,6 @@ import {
     ProgressSpinner,
     NgIf,
     CommonModule,
-    WhatsAppContactListDialogComponent,
-    WhatsAppQRDialogComponent,
-    WhatsAppFileTooLargeComponent,
   ],
   providers: [
     MessageService,

@@ -28,12 +28,6 @@ separately, and you will receive the same number of encrypted files as the
 original ones. But there is also an option to archive files before encryption. 
 Files are archived into a zip archive without compression, and then this archive 
 is encrypted. Thus, you get one output file regardless of the number of input files.
-* __WhatsApp__: You have the option to send encrypted files (or the original files) 
-directly from the application to the WhatsApp messenger (only for your contacts). 
-To do this, at the first login, the application will ask you to scan a QR code. 
-Then you will be able to see a list of your contacts and send your file to the 
-selected contact with one click.
-
 
 ## Run locally
 ### Prerequisites
@@ -49,7 +43,7 @@ selected contact with one click.
   npm run build
 ```
 
-### 2. Start
+### 3. Start
 ```shell
   npm run start
 ```

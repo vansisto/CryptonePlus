@@ -3,7 +3,6 @@ import { FilesTableComponent } from './files-table.component';
 import { FilesService } from '../../services/files.service';
 import { FileEncryptionService } from '../../services/file-encryption.service';
 import { DialogService } from '../../services/dialog.service';
-import { WhatsAppService } from '../../services/whats-app.service';
 import { TranslateModule, TranslateLoader, TranslateFakeLoader } from '@ngx-translate/core';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -20,7 +19,6 @@ describe('FilesTableComponent', () => {
   let filesService: jasmine.SpyObj<FilesService>;
   let fileEncryptionService: jasmine.SpyObj<FileEncryptionService>;
   let dialogService: jasmine.SpyObj<DialogService>;
-  let whatsAppService: jasmine.SpyObj<WhatsAppService>;
 
   const mockFiles: CFile[] = [
     {
@@ -58,13 +56,6 @@ describe('FilesTableComponent', () => {
       ['showEncryptDialog', 'showDecryptDialog']
     );
 
-    whatsAppService = jasmine.createSpyObj('WhatsAppService',
-      ['sendViaWhatsApp'],
-      {
-        isWhatsAppLoading$: new BehaviorSubject<boolean>(false)
-      }
-    );
-
     (window as any).electron = {
       send: jasmine.createSpy('send'),
       receive: jasmine.createSpy('receive'),
@@ -90,7 +81,6 @@ describe('FilesTableComponent', () => {
         { provide: FilesService, useValue: filesService },
         { provide: FileEncryptionService, useValue: fileEncryptionService },
         { provide: DialogService, useValue: dialogService },
-        { provide: WhatsAppService, useValue: whatsAppService }
       ]
     }).compileComponents();
 
@@ -110,7 +100,6 @@ describe('FilesTableComponent', () => {
   it('should initialize with correct data', () => {
     expect(component.allFiles).toEqual(mockFiles);
     expect(component.selectedFiles).toEqual([]);
-    expect(component.isWhatsAppLoading).toBeFalse();
   });
 
   it('should setup electron handlers on init', () => {
@@ -134,11 +123,6 @@ describe('FilesTableComponent', () => {
       component.showDecryptDialog(mockFiles[1]);
       expect(fileEncryptionService.addFileToPending).toHaveBeenCalledWith(mockFiles[1]);
       expect(dialogService.showDecryptDialog).toHaveBeenCalled();
-    });
-
-    it('should send via WhatsApp', () => {
-      component.sendViaWhatsApp(mockFiles[0]);
-      expect(whatsAppService.sendViaWhatsApp).toHaveBeenCalledWith([mockFiles[0]]);
     });
 
     it('should open folder with selected file', () => {
@@ -193,7 +177,7 @@ describe('FilesTableComponent', () => {
   describe('UI elements', () => {
     it('should render table with correct columns', () => {
       const headers = fixture.nativeElement.querySelectorAll('th');
-      expect(headers.length).toBe(9);
+      expect(headers.length).toBe(8);
     });
 
     it('should show decrypt button only for encrypted files', () => {

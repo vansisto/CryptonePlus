@@ -3,7 +3,7 @@
   "main": "src/core/electron-main.js",
   "description": "Application to encrypt files",
   "author": "Van Sisto <vansisto@gmail.com>",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "scripts": {
     "build": "ng build --base-href ./",
     "start": "electron .",
@@ -110,7 +110,6 @@
     "@ngx-translate/core": "^16.0.4",
     "@ngx-translate/http-loader": "^16.0.1",
     "@primeng/themes": "^19.0.5",
-    "angularx-qrcode": "^19.0.0",
     "archiver": "^7.0.1",
     "archiver-utils": "^5.0.2",
     "electron-log": "^5.2.4",
@@ -122,7 +121,6 @@
     "primeng": "^19.0.5",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "whatsapp-web.js": "^1.26.0",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
