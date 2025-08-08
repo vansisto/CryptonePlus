@@ -1,9 +1,13 @@
 jest.mock('electron', () => ({
-  BrowserWindow: jest.fn()
+  BrowserWindow: jest.fn(),
+  Menu: {
+    buildFromTemplate: jest.fn(),
+    setApplicationMenu: jest.fn()
+  }
 }));
 
 const path = require('path');
-const { BrowserWindow } = require('electron');
+const { BrowserWindow, Menu } = require('electron');
 const { initializeMainWindow } = require('../../../../core/handlers/app/main-instance-handler');
 
 describe('Main Window', () => {
@@ -15,6 +19,7 @@ describe('Main Window', () => {
     };
 
     BrowserWindow.mockImplementation(() => mockWindow);
+    Menu.buildFromTemplate.mockReturnValue({});
   });
 
   afterEach(() => {

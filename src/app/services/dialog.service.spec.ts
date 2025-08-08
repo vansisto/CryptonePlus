@@ -56,47 +56,6 @@ describe('DialogService', () => {
     });
   });
 
-  describe('WhatsApp Contact List Dialog', () => {
-    it('should initially be hidden', async () => {
-      const isVisible = await firstValueFrom(service.whatsAppContactListDialogVisible$);
-      expect(isVisible).toBeFalse();
-    });
-
-    it('should show WhatsApp contact list dialog', async () => {
-      service.showWhatsAppContactListDialog();
-      const isVisible = await firstValueFrom(service.whatsAppContactListDialogVisible$);
-      expect(isVisible).toBeTrue();
-    });
-
-    it('should hide WhatsApp contact list dialog', async () => {
-      service.showWhatsAppContactListDialog();
-      service.hideWhatsAppContactListDialog();
-      const isVisible = await firstValueFrom(service.whatsAppContactListDialogVisible$);
-      expect(isVisible).toBeFalse();
-    });
-
-    it('should return correct visibility state', () => {
-      service.showWhatsAppContactListDialog();
-      expect(service.isWhatsAppContactListDialogVisible()).toBeTrue();
-
-      service.hideWhatsAppContactListDialog();
-      expect(service.isWhatsAppContactListDialogVisible()).toBeFalse();
-    });
-  });
-
-  describe('WhatsApp File Too Large Dialog', () => {
-    it('should initially be hidden', async () => {
-      const isVisible = await firstValueFrom(service.whatsAppFileTooLargeDialogVisible$);
-      expect(isVisible).toBeFalse();
-    });
-
-    it('should show WhatsApp file too large dialog', async () => {
-      service.showWhatsAppFileTooLargeDialog();
-      const isVisible = await firstValueFrom(service.whatsAppFileTooLargeDialogVisible$);
-      expect(isVisible).toBeTrue();
-    });
-  });
-
   describe('Multiple Dialogs Interaction', () => {
     it('should handle multiple dialogs independently', async () => {
       service.showEncryptDialog();

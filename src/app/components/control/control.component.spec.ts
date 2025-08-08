@@ -3,7 +3,6 @@ import { ControlComponent } from './control.component';
 import { FilesService } from '../../services/files.service';
 import { DialogService } from '../../services/dialog.service';
 import { FileEncryptionService } from '../../services/file-encryption.service';
-import { WhatsAppService } from '../../services/whats-app.service';
 import { BehaviorSubject } from 'rxjs';
 import { CFile } from '../../models/cfile';
 import { Button } from 'primeng/button';
@@ -20,7 +19,6 @@ describe('ControlComponent', () => {
   let filesService: jasmine.SpyObj<FilesService>;
   let dialogService: jasmine.SpyObj<DialogService>;
   let fileEncryptionService: jasmine.SpyObj<FileEncryptionService>;
-  let whatsAppService: jasmine.SpyObj<WhatsAppService>;
   let electronSpy: jasmine.SpyObj<any>;
 
   const mockFiles: CFile[] = [
@@ -50,10 +48,6 @@ describe('ControlComponent', () => {
       'addFilesToPending'
     ]);
 
-    const whatsAppServiceSpy = jasmine.createSpyObj('WhatsAppService', ['sendViaWhatsApp'], {
-      isWhatsAppLoading$: new BehaviorSubject<boolean>(false)
-    });
-
     await TestBed.configureTestingModule({
       imports: [
         ControlComponent,
@@ -70,14 +64,12 @@ describe('ControlComponent', () => {
         { provide: FilesService, useValue: filesServiceSpy },
         { provide: DialogService, useValue: dialogServiceSpy },
         { provide: FileEncryptionService, useValue: fileEncryptionServiceSpy },
-        { provide: WhatsAppService, useValue: whatsAppServiceSpy }
       ]
     }).compileComponents();
 
     filesService = TestBed.inject(FilesService) as jasmine.SpyObj<FilesService>;
     dialogService = TestBed.inject(DialogService) as jasmine.SpyObj<DialogService>;
     fileEncryptionService = TestBed.inject(FileEncryptionService) as jasmine.SpyObj<FileEncryptionService>;
-    whatsAppService = TestBed.inject(WhatsAppService) as jasmine.SpyObj<WhatsAppService>;
   });
 
   beforeEach(() => {
@@ -103,11 +95,6 @@ describe('ControlComponent', () => {
   it('should update all files when FilesService emits', () => {
     (filesService.allFiles$ as BehaviorSubject<CFile[]>).next(mockFiles);
     expect(component.allFiles).toEqual(mockFiles);
-  });
-
-  it('should update WhatsApp loading state when service emits', () => {
-    (whatsAppService.isWhatsAppLoading$ as BehaviorSubject<boolean>).next(true);
-    expect(component.isWhatsAppLoading).toBeTrue();
   });
 
   it('should call electron.openFileDialog when addFiles is called', () => {
@@ -189,20 +176,6 @@ describe('ControlComponent', () => {
     it('should return false when no selected files are encrypted', () => {
       component.selectedFiles = [mockFiles[0]]; // unencrypted file
       expect(component.selectedContainEncrypted()).toBeFalse();
-    });
-  });
-
-  describe('WhatsApp integration', () => {
-    it('should send selected files via WhatsApp', () => {
-      component.selectedFiles = [mockFiles[0]];
-      component.sendSelectedFiles();
-      expect(whatsAppService.sendViaWhatsApp).toHaveBeenCalledWith([mockFiles[0]]);
-    });
-
-    it('should send all files via WhatsApp', () => {
-      component.allFiles = mockFiles;
-      component.sendAllFiles();
-      expect(whatsAppService.sendViaWhatsApp).toHaveBeenCalledWith(mockFiles);
     });
   });
 });
