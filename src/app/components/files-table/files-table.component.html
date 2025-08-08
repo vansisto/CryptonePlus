@@ -17,7 +17,6 @@
         <th id="size" style="min-width:100px">{{ 'TABLE_HEADERS.SIZE' | translate }}</th>
         <th id="encryptDecrypt" style="min-width:30px">{{ 'TABLE_HEADERS.ENCRYPT_DECRYPT' | translate }}</th>
         <th id="remove" style="min-width:20px"></th>
-        <th id="send" style="min-width:10px"></th>
       </tr>
     </ng-template>
     <ng-template #body let-cfile>
@@ -58,26 +57,7 @@
             styleClass="remove-button"
           />
         </td>
-        <td>
-          <p-button
-            icon="pi pi-send"
-            size="small"
-            variant="text"
-            [pTooltip]="'TOOLTIPS.SEND_WITH_MESSENGER' | translate"
-            showDelay="1000"
-            hideDelay="300"
-            (click)="op.toggle($event)"
-          />
-        </td>
       </tr>
-      <p-popover #op>
-        <div class="flex justify-content-center align-items-center gap-1" style="width: 100px; height: 25px">
-          <span style="cursor: pointer;" (click)="sendViaWhatsApp(cfile)">
-            <img *ngIf="!isWhatsAppLoading" ngSrc="icons/whatsapp.svg" width="36" height="36" alt="WhatsApp" />
-            <p-progressSpinner *ngIf="isWhatsAppLoading" strokeWidth="4" [style]="{ width: '25px', height: '25px' }" />
-          </span>
-        </div>
-      </p-popover>
     </ng-template>
   </p-table>
 </div>

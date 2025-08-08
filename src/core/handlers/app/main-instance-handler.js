@@ -1,4 +1,4 @@
-const {BrowserWindow} = require("electron");
+const {BrowserWindow, Menu} = require("electron");
 const path = require("path");
 
 function initializeMainWindow() {
@@ -17,6 +17,50 @@ function initializeMainWindow() {
   });
 
   mainWindow.loadFile(path.join(__dirname, '../../../../', 'dist', 'cryptone', 'browser', 'index.html'));
+
+  const menu = Menu.buildFromTemplate([
+    {
+      label: 'File',
+      submenu: [
+        { role: 'quit' }
+      ]
+    },
+    {
+      label: 'Edit',
+      submenu: [
+        { role: 'undo' },
+        { role: 'redo' },
+        { type: 'separator' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+        { role: 'selectall' }
+      ]
+    },
+    {
+      label: 'View',
+      submenu: [
+        { role: 'reload' },
+        { role: 'forceReload' },
+        { role: 'toggleDevTools' },
+        { type: 'separator' },
+        { role: 'resetZoom' },
+        { role: 'zoomIn' },
+        { role: 'zoomOut' },
+        { type: 'separator' },
+        { role: 'togglefullscreen' }
+      ]
+    },
+    {
+      label: 'Window',
+      submenu: [
+        { role: 'minimize' },
+        { role: 'close' }
+      ]
+    }
+  ]);
+  
+  Menu.setApplicationMenu(menu);
 
   return mainWindow;
 }

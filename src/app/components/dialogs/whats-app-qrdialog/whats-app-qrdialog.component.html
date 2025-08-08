@@ -1,8 +1,0 @@
-<p-dialog
-  [(visible)]="isWhatsAppQrDialogVisible"
-  [header]="'WhatsApp QR Code'"
-  [modal]="true"
-  [style]="{ width: '20rem', height: '25rem' }"
->
-  <qrcode [qrdata]="whatsAppQR" [width]="270" [errorCorrectionLevel]="'M'" [allowEmptyString]="true"></qrcode>
-</p-dialog>

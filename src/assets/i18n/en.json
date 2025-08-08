@@ -2,7 +2,6 @@
   "TITLE": "Cryptone",
   "GENERATE_KEY_PAIR": "Generate key pair",
   "HELP_TEXT": "<div><div><h2>How does it work?</h2><p>This program allows you to encrypt and decrypt files to protect your information from unauthorized access. It uses two main mechanisms for this: </p> <ol> <li> <strong>Public and Private Keys</strong> <ul> <li><strong><u>Public Key</u></strong> — this is something that can be shared with anyone through any means, including open communication channels. It is used for file encryption. </li> <li><strong><u>Private Key</u></strong> — this is your personal key that is required for decrypting (unlocking) the file. <strong><u>IMPORTANT!!!</u></strong> It must be kept secret and not shared with anyone. </li> </ul> </li> <li> <strong><u>Password (optional)</u></strong> <ul> <li>A password adds an additional layer of security.</li> <li>If you set a password, even someone with the correct private key won't be able to unlock the file without entering this password. </li> <li>If no password is set, the system relies only on the keys.</li> </ul> </li> </ol> </div> <div> <h2>How does it work in practice?</h2> <h3>File encryption</h3> <div>If you want to receive an encrypted file from someone, you:</div> <ol> <li>Generate a pair of private and public keys.</li> <li>Share the <u>PUBLIC</u> key with the person who has the file you need.</li> <li>That person selects YOUR public key and encrypts the necessary file/files using this key.</li> <li>Optionally adds a password.</li> </ol> <p> The program will create an encrypted file that cannot be read without the private key and, if present, the password. </p> <h3>File decryption:</h3> <ol> <li>The person sends you the encrypted file in any way (even through open channels).</li> <li>You select the encrypted file and choose your <u>PRIVATE</u> key for decryption. If the file is password-protected, enter the password. </li> <li>Click the \"Decrypt\" button. If the key and password are correct, the program will restore the original file. </li> </ol> </div> <div> <h3>What’s important to know?</h3> <ul> <li><strong><u>Key Security:</u></strong> Your private key is the most critical element of security. If someone gains access to it, they will be able to unlock your encrypted files. </li> <li><strong><u>Password as Additional Security:</u></strong> Even if your private key is stolen, having a password will make access to the file nearly impossible. </li> <li><strong><u>Don’t Lose Your Keys:</u></strong> If you lose your private key or forget your password, it will be <u>IMPOSSIBLE</u> to recover the files!!! </li> </ul> </div> </div>",
-  "SEND": "Send",
   "CONTROL_SECTION": {
     "ADD_FILES_BUTTON": "Add files",
     "REMOVE_ALL_BUTTON": "Remove all",
@@ -12,7 +11,6 @@
     "ENCRYPT_SELECTED_BUTTON": "Encrypt selected",
     "DECRYPT_SELECTED_BUTTON": "Decrypt selected",
     "REMOVE_SELECTED_BUTTON": "Remove selected",
-    "SEND_SELECTED_BUTTON": "Send selected",
     "TOTAL_SIZE_LABEL": "Total size: {{totalSize}}"
   },
   "TABLE_HEADERS": {
@@ -22,7 +20,6 @@
     "ENCRYPT_DECRYPT": "Encrypt/Decrypt"
   },
   "TOOLTIPS": {
-    "SEND_WITH_MESSENGER": "Send with messenger",
     "SHOW_INFO": "Show info",
     "PUBLIC_KEY_NAME": "Usually this is the name of the key owner (Your name) so that the person You are sending the key to knows whose key it is",
     "PRIVATE_KEY_NAME": "Usually this is the name of the person You are sending the key to so that You know which key to use to decrypt the files received from this person"
@@ -50,10 +47,6 @@
       "TITLE": "Decrypt files",
       "KEY_PATH_LABEL": "Private key path",
       "BUTTON": "Decrypt"
-    },
-    "WHATSAPP": {
-      "FILE_TOO_LARGE": "File is too large",
-      "FILE_TOO_LARGE_MESSAGE": "It is impossible to send files greater than 2Gb"
     }
   },
   "TOASTS": {
@@ -75,9 +68,6 @@
       "FILES_FAILED_MESSAGE": "Files failed",
       "FAILED_FILES_MESSAGE": "Failed files",
       "ERROR_MESSAGE": "Files have not been decrypted"
-    },
-    "WATSAPP": {
-      "FILE_TOO_LARGE": "File is too large"
     },
     "GENERATE_KEY_PAIR": {
       "IN_PROGRESS_TITLE": "Started",

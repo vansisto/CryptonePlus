@@ -5,12 +5,9 @@ import {FileSizeConverterUtil} from '../../utils/file-size-converter-util';
 import {FilesService} from '../../services/files.service';
 import {TableModule} from 'primeng/table';
 import {CFile} from '../../models/cfile';
-import {NgIf, NgOptimizedImage} from '@angular/common';
+import {NgIf} from '@angular/common';
 import {DialogService} from '../../services/dialog.service';
 import {FileEncryptionService} from '../../services/file-encryption.service';
-import {WhatsAppService} from '../../services/whats-app.service';
-import {Popover} from 'primeng/popover';
-import {ProgressSpinner} from 'primeng/progressspinner';
 import {Divider} from 'primeng/divider';
 
 @Component({
@@ -20,9 +17,6 @@ import {Divider} from 'primeng/divider';
     TranslatePipe,
     TableModule,
     NgIf,
-    NgOptimizedImage,
-    Popover,
-    ProgressSpinner,
     Divider,
   ],
   templateUrl: './control.component.html',
@@ -32,13 +26,11 @@ export class ControlComponent implements OnInit {
   electron: any = (window as any).electron;
   allFiles!: CFile[];
   selectedFiles!: CFile[];
-  isWhatsAppLoading: boolean = false;
 
   constructor(
     private readonly filesService: FilesService,
     private readonly encryptDialogService: DialogService,
     private readonly fileEncryptionService: FileEncryptionService,
-    private readonly whatsAppService: WhatsAppService,
   ) {}
 
   ngOnInit() {
@@ -48,10 +40,6 @@ export class ControlComponent implements OnInit {
 
     this.filesService.allFiles$.subscribe(files => {
       this.allFiles = files;
-    });
-
-    this.whatsAppService.isWhatsAppLoading$.subscribe(value => {
-      this.isWhatsAppLoading = value;
     });
   }
 
@@ -94,13 +82,5 @@ export class ControlComponent implements OnInit {
 
   selectedContainEncrypted(): boolean {
     return this.selectedFiles.some(file => file.encrypted);
-  }
-
-  sendSelectedFiles() {
-    this.whatsAppService.sendViaWhatsApp(this.selectedFiles);
-  }
-
-  sendAllFiles() {
-    this.whatsAppService.sendViaWhatsApp(this.allFiles);
   }
 }

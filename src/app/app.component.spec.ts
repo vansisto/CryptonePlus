@@ -16,9 +16,6 @@ class MockHeadComponent {}
 @Component({selector: 'app-control', template: ''}) class MockControlComponent {}
 @Component({selector: 'app-encrypt-dialog', template: ''}) class MockEncryptDialogComponent {}
 @Component({selector: 'app-decrypt-dialog', template: ''}) class MockDecryptDialogComponent {}
-@Component({selector: 'app-whats-app-contact-list-dialog', template: ''}) class MockWhatsAppContactListDialogComponent {}
-@Component({selector: 'app-whats-app-qrdialog', template: ''}) class MockWhatsAppQRDialogComponent {}
-@Component({selector: 'app-whats-app-file-too-large', template: ''}) class MockWhatsAppFileTooLargeComponent {}
 
 describe('AppComponent', () => {
   let mockThemeService: jasmine.SpyObj<ThemeService>;
